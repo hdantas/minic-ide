@@ -1,0 +1,42 @@
+module MiniC-LexAndCFSyntax-testcases
+
+language MiniC
+start symbol FLOAT
+
+//positive test cases
+test float decimal [[2.3]] parse succeeds
+test float negative decimal [[-2.3]] parse succeeds
+test double float decimal [[12.3]] parse succeeds
+test double float negative decimal [[-12.3]] parse succeeds
+test float double decimal [[1.23]] parse succeeds
+test float negative double decimal [[-1.23]] parse succeeds
+
+test float empty decimal [[4.]] parse succeeds
+test float negative empty decimal [[-4.]] parse succeeds
+test float empty integer [[.4]] parse succeeds
+test float negative empty integer [[-.4]] parse succeeds
+test float min e [[2e2]] parse succeeds
+test float negative min e [[-2e2]] parse succeeds
+test float cap e [[2E4]] parse succeeds
+test float negative cap e [[-2E4]] parse succeeds
+test float cap e plus [[2.2E+2]] parse succeeds
+test float negative cap e plus [[-2.2E+2]] parse succeeds
+test float cap e minus [[2.4e-2]] parse succeeds
+test float negative cap e minus [[-2.4e-2]] parse succeeds
+test float cap e empty integer [[.1E3]] parse succeeds
+test float negative cap e empty integer [[-.1E3]] parse succeeds
+test float min e minus empty decimal [[1.e-1]] parse succeeds
+test float negative min e minus empty decimal [[-1.e-1]] parse succeeds
+
+
+//negative test cases
+test string [["abc"]] parse fails
+test char[['a']] parse fails
+test multiple points [[1.2.3]] parse fails
+test negative multiple points [[-1.2.3]] parse fails
+test mix char float [[1.a]] parse fails
+test mix char float [[a.1]] parse fails
+test mix float string [["a".1]] parse fails
+test mix string float [[1."a"]] parse fails
+test mix char char [[a.a]] parse fails
+

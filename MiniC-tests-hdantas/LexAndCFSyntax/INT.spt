@@ -1,0 +1,27 @@
+module MiniC-LexAndCFSyntax-testcases
+
+language MiniC
+start symbol INT
+
+// positive test cases
+test positive digit [[4]]  parse succeeds
+test negative digit [[-4]]  parse succeeds
+test double digit   [[42]]  parse succeeds
+test negative double digit [[-42]]  parse succeeds
+test leading zero [[04]]  parse succeeds
+test leading zeros [[004]]  parse succeeds
+test negative leading zero [[-04]]  parse succeeds
+test negative leading zeros [[-004]]  parse succeeds
+
+// negative test cases
+test double digit   [[42]]  parse fails
+
+test mix digit char [[4a]] parse fails
+test mix char digit [[a4]] parse fails
+test floating point [[4.2]] parse fails
+test floating point char[[4.'a']] parse fails
+test char floating point [['a'.4]] parse fails
+test floating point string [[4."a"]] parse fails
+test string floating point [["a".4]] parse fails
+test string [["ab"]] parse fails
+test char [['a']] parse fails

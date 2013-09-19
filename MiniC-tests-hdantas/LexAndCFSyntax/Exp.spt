@@ -1,0 +1,8 @@
+module MiniC-LexAndCFSyntax-testcases
+
+language MiniC
+start symbol Exp
+
+//positive test cases
+
+//negative test cases

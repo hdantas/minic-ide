@@ -1,0 +1,7 @@
+module MiniC-ASTSyntax-testcases
+
+language MiniC
+start symbol MainClass
+
+
+

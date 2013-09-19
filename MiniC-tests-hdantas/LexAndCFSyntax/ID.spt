@@ -1,0 +1,77 @@
+module MiniC-LexAndCFSyntax-testcases
+
+language MiniC
+start symbol ID
+
+//positive test cases
+test single char ID [[a]] parse succeeds
+test single char underscore ID [[a_]] parse succeeds
+test single cap char [[B]] parse succeeds
+test single cap char underscore[[B_]] parse succeeds
+test double char ID [[ab]]  parse succeeds
+test double char underscore ID [[a_a]] parse succeeds
+test mix capitalization ID [[aB]]  parse succeeds
+test mix capitalization ID [[Ba]]  parse succeeds
+test double capitalization ID [[BB]]  parse succeeds
+test double char mix captitalization underscore ID [[a_b]] parse succeeds
+test double char mix captitalization underscore ID [[B_b]] parse succeeds
+test double cap char underscore ID [[B_B]] parse succeeds
+test char digit ID [[a1]] parse succeeds
+test char double digit ID [[a11]] parse succeeds
+test char digit underscore ID [[a_1]] parse succeeds
+test char digit underscore ID [[a1_]] parse succeeds
+test char double underscore ID [[a__]] parse succeeds
+
+//negative test cases
+test digit [[1]] parse fails
+test double digit [[21]] parse fails
+test float [[1.1]] parse fails
+test string [["a"]] parse fails
+test underscore [[_]] parse fails
+test underscore digit [[_1]] parse fails
+test underscore char [[_a]] parse fails
+test digit char [[1a]] parse fails
+test digit char underscore [[1a_]] parse fails
+test digit char underscore [[1_a]] parse fails
+test special symbols [[a*]] parse fails
+test special symbols [[a/]] parse fails
+test special symbols [[a-]] parse fails
+test special symbols [[a+]] parse fails
+test special symbols [[a=]] parse fails
+test special symbols [[a\]] parse fails
+test special symbols [[a!]] parse fails
+
+//all C reserved keywords
+test reserved keywords [[_Packed]] parse fails
+test reserved keywords [[auto]] parse fails
+test reserved keywords [[break]] parse fails
+test reserved keywords [[case]] parse fails
+test reserved keywords [[char]] parse fails
+test reserved keywords [[const]] parse fails
+test reserved keywords [[continue]] parse fails
+test reserved keywords [[default]] parse fails
+test reserved keywords [[do]] parse fails
+test reserved keywords [[double]] parse fails
+test reserved keywords [[else]] parse fails
+test reserved keywords [[enum]] parse fails
+test reserved keywords [[extern]] parse fails
+test reserved keywords [[float]] parse fails
+test reserved keywords [[for]] parse fails
+test reserved keywords [[goto]] parse fails
+test reserved keywords [[if]] parse fails
+test reserved keywords [[int]] parse fails
+test reserved keywords [[long]] parse fails
+test reserved keywords [[register]] parse fails
+test reserved keywords [[return]] parse fails
+test reserved keywords [[short]] parse fails
+test reserved keywords [[signed]] parse fails
+test reserved keywords [[sizeof]] parse fails
+test reserved keywords [[static]] parse fails
+test reserved keywords [[struct]] parse fails
+test reserved keywords [[switch]] parse fails
+test reserved keywords [[typedef]] parse fails
+test reserved keywords [[union]] parse fails
+test reserved keywords [[unsigned]] parse fails
+test reserved keywords [[void]] parse fails
+test reserved keywords [[volatile]] parse fails
+test reserved keywords [[while]] parse fails

@@ -1,0 +1,40 @@
+module MiniC-ASTSyntax-testcases
+
+language MiniC
+start symbol INT
+
+test integer constant [[42]] parse to Integer("42")
+test negative integer constant [[-42]] parse to NInteger("42") //NInteger stands for negative integer
+
+test integer addition [[4 + 2]] parse to Plus(Integer("4"), Integer("2"))
+test negative integer addition [[-4 + 2]] parse to Plus(NInteger("4"), Integer("2"))
+
+test integer subtraction [[4 - 2]] parse to Minus(Integer("4"), Integer("2"))
+test negative integer subtraction [[-4 - 2]] parse to Minus(NInteger("4"), Integer("2"))
+
+test integer multiplication [[4 * 2]] parse to Times(Integer("4"), Integer("2"))
+test negative integer multiplication [[-4 * 2]] parse to Times(NInteger("4"), Integer("2"))
+test negative integer multiplication [[4 * -2]] parse to Times(Integer("4"), NInteger("2"))
+
+test integer division [[4 / 2]] parse to Divide(Integer("4"), Integer("2"))
+test negative integer division [[-4 / 2]] parse to Divide(NInteger("4"), Integer("2"))
+test negative integer division [[4 / -2]] parse to Divide(Integer("4"), NInteger("2"))
+
+test left associative addition [[1 + 2 + 3]] parse to [[(1 + 2) + 3]]
+test left associative subtraction [[1 - 2 - 3]] parse to [[(1 - 2) - 3]]
+test left associative multiplication [[1 * 2 * 3]] parse to [[(1 * 2) * 3]]
+test left associative division [[8 / 4 / 2]] parse to [[(8 / 4) / 2]]
+
+
+test addition and multiplication priorities [[1 + 2 * 3]] parse to [[1 + (2 * 3)]]
+test addition and division priorities [[1 + 2 / 3]] parse to [[1 + (2 / 3)]]
+test subtraction and addition priorities [[1 - 2 + 3]] parse to [[(1 - 2) + 3]]
+test addition and subtraction priorities [[1 + 2 - 3]] parse to [[(1 + 2) - 3]]
+test division and multiplication priorities [[1 / 2 * 3]] parse to [[(1 / 2) * 3]]
+test multiplication and division priorities [[1 * 2 / 3]] parse to [[(1 * 2) / 3]]
+
+test parentheses priority addition [[1 + (2 + 3)]] parse to Plus(Integer("1"), Plus(Integer("2"), Integer("3")))
+test parentheses priority addition [[(1 + 2) + 3)]] parse to Plus(Plus(Integer("1"), Integer("2")), Integer("3"))
+test parentheses priority subtraction [[1 - (2 - 3)]] parse to Minus(Integer("1"), Minus(Integer("2"), Integer("3")))
+test parentheses priority multiplication [[1 * (2 * 3)]] parse to Times(Integer("1"), Times(Integer("2"), Integer("3")))
+test parentheses priority division [[1 / (2 / 3)]] parse to Divide(Integer("1"), Divide(Integer("2"), Integer("3")))
