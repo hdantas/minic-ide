@@ -4,5 +4,11 @@ language MiniC
 start symbol Type
 
 //positive test cases
+test int [[int]] parse succeeds
+test float [[float]] parse succeeds
+test struct [[struct x]] parse succeeds
+
+
 
 //negative test cases
+

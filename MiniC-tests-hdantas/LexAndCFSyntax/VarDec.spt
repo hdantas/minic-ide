@@ -4,5 +4,10 @@ language MiniC
 start symbol VarDec
 
 //positive test cases
+test int [[int a;]] parse succeeds
+test float [[float a;]] parse succeeds
+test struct [[struct a;]] parse succeeds
+test int array [[int a[1];]] parse succeeds
+test float array [[float a[1];]] parse succeeds
 
 //negative test cases

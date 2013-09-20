@@ -4,5 +4,21 @@ language MiniC
 start symbol Exp
 
 //positive test cases
+test assignment to int [[x = 2]] parse succeeds
+test assignment to float [[x = 2.0]] parse succeeds
+test assignment to ID [[x = y]] parse succeeds
+test assignment to array [[x = y[z] ]] parse succeeds
+test assignment to struct [[x = y.z]] parse succeeds
+test assignment to plus ID [[x = x + y]] parse succeeds
+test assignment to minus ID [[x = x - y]] parse succeeds
+test assignment to times ID [[x = x * y]] parse succeeds
+test assignment to division ID [[x = x / y]] parse succeeds
+test assignment to negation [[x = !y ]] parse succeeds
+test assignment with parentheses [[x = (y + z) ]] parse succeeds
+test assignment to sizeof [[x = sizeof(y)]] parse succeeds
+test assignment to list [[x = foo(a)]] parse succeeds
+test assignment to expression list [[x = foo(a, b)]] parse succeeds
+
 
 //negative test cases
+

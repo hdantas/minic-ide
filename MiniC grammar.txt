@@ -17,6 +17,7 @@ Program   = TypeDec* VarDec* FunctionDec* Exp
 
   
   FunctionDec = Type ID "(" FormalList ")" "{" VarDec* Statement* "return" Exp "}"
+  ??? MainDec = "int" "main"(" "int" "argc" "," "char" "*argv[]"  ")" "{" VarDec* Statement* "return" Exp "}"
 
   
   FormalList = Parameter FormalRest*

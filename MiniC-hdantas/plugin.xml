@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?eclipse version="3.0"?>
+
+<plugin>
+       <extension point="org.eclipse.imp.runtime.languageDescription">
+          <language extensions="mic" description="MiniC" language="MiniC" derivedFrom="DynamicRoot" validator="MiniChdantas.MiniCValidator" validatorClass="MiniChdantas.MiniCValidator"></language>
+       </extension>
+       <extension id="MiniChdantas.parser" name="MiniC Parser" point="org.eclipse.imp.runtime.parser">
+          <parser class="MiniChdantas.MiniCParseController" language="MiniC">
+          </parser>
+       </extension>    
+    </plugin>

@@ -4,5 +4,31 @@ language MiniC
 start symbol Statement
 
 //positive test cases
-
+test id assignment [[x = a;]] parse succeeds
+test int assignment [[x = 42;]] parse succeeds
+test float assignment [[x = 4.2;]] parse succeeds
+test array access [[x[0] = 2;]] parse succeeds
+test struct access[[x.y = 0;]] parse succeeds
+test if [[
+	if(1) x = 0;
+	else x = 1;
+]] parse succeeds
+test while [[
+	while (1)
+		i = i + 1;
+]] parse succeeds
+test while [[
+	while (1){
+		i = i + 1;
+	}
+]] parse succeeds
+test printf int [[
+	printf ("%i", a);
+]] parse succeeds
+test printf float[[
+	printf ("%f", a);
+]] parse succeeds
+test empty statement[[{}]] parse succeeds
+test block statement[[{x = 1;}]] parse succeeds
+test block statement[[{x = 1; y = 2;}]] parse succeeds
 //negative test cases

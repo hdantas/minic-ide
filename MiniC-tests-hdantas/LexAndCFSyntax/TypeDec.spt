@@ -4,5 +4,11 @@ language MiniC
 start symbol TypeDec
 
 //positive test cases
+test empty struct [[struct x {}]] parse succeeds
+test empty struct [[
+	struct x {
+		int x;
+	}
+]] parse succeeds
 
 //negative test cases

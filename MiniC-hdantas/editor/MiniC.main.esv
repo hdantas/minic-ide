@@ -1,0 +1,16 @@
+module MiniC.main
+
+imports MiniC-Builders MiniC-Refactorings MiniC-Colorer MiniC-Completions MiniC-Folding MiniC-Outliner MiniC-References MiniC-Syntax
+
+language General properties
+                  
+  name          : MiniC
+  id            : MiniChdantas
+  extends       : Root
+                  
+  description   : "Spoofax/IMP-generated editor for the MiniC language"
+  url           : http://strategoxt.org
+                  
+  extensions    : mic
+  table         : include/MiniC.tbl
+  start symbols : Start

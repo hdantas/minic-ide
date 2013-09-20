@@ -4,5 +4,9 @@ language MiniC
 start symbol Parameter
 
 //positive test cases
+test int [[int x]] parse succeeds
+test float [[float y]] parse succeeds
+test struct [[struct x]] parse succeeds
 
 //negative test cases
+

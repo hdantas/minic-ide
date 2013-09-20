@@ -4,5 +4,24 @@ language MiniC
 start symbol FunctionDec
 
 //positive test cases
+test empty function [[
+	int foo () {
+		return;
+	}
+]] parse succeeds
+
+test no arguments function [[
+	int foo () {
+		int a;
+		a = 42;
+		return a;
+	}
+]] parse succeeds
+
+test no body function [[
+	int foo (int a, float b) {
+		return;
+	}
+]] parse succeeds
 
 //negative test cases

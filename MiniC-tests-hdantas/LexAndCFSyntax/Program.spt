@@ -4,7 +4,21 @@ language MiniC
 start symbol Program
 
 //positive test cases
+test simple prog [[
+	struct z {
+		int a;
+		float b;
+		int c[42];
+	};
+	
+	int x;
+	float y;
+	
+	foo (int bar){
+		return;
+	}
+	
+	x = 0;
+]] parse succeeds
 
 //negative test cases
-
-// Program   = TypeDec* VarDec* FunctionDec* Exp
