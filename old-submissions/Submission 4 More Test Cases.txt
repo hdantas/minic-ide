@@ -1,0 +1,83 @@
+adjusted: 59
+total: 39.5/100 points
+
+organisation: 3/4 points
+no folder structure, good explanation, good file names, files need splitting
+tests for reference resolution: 10/24 points
+
+    classes: 3/6 points
+        -1: parent class forward
+        -2: new object
+    
+    fields and variables: 4/12 points
+        -1  : field reference to ancestor class
+        -0.5: field reference in assignment to parent class
+        -0.5: variable reference in expression
+        -4  : array assignment
+        -2  : variable reference with hidden field in parent/ancestor class
+
+    methods: 3/6 points
+        -1: method reference to ancestor class (this as callee)
+        -2: method reference to callee's parent/ancestor class (callee different from caller)
+    
+tests for error checking: 10.5/33 points
+    duplicates: 2/3 points
+        -0.5: fields in same class
+        -0.5: parameters
+
+    missing definitions: 1.5/3 points
+        -0.5: parent class
+        -0.5: new object
+        -0.5: method call due to wrong name (method does not exist in any class)
+
+    unused definitions: 1.5/2.5 points
+        -0.5: parameters
+        -0.5: methods
+    
+    cyclic inheritance: 1/3 points
+        -1: cycle of more classes
+        -1: cycle with incoming edge ( A -> B -> A, C -> B )
+    
+    hiding errors: 1/2 points
+        -1: field hiding field in ancestor class
+    
+    hiding warnings: 0.5/3 points
+        -1.5: parameter hiding field
+        -1  : variable hiding field in parent/ancestor class
+    
+    overloading: 0/6 points
+    
+    overriding: 2/8 points
+        -4: overriding with subtyping return type
+        -2: overriding in ancestor class
+     
+     main class: 1/2.5 points
+        -1.5: main class as type
+
+    tests for type projection: 6/20 points
+        constants: 0/3 points
+        fields and variables: 0/6 points
+        unary expressions: 0/3 points
+        binary expressions: 6/6 points
+        others: 0/2 points
+        type errors: 10/24 points
+    
+    statements: 3/8.5 points
+        -0.5: print
+        -1  : assignment int = int[]/class type
+        -1  : assignment boolean = int[]/class type
+        -2.5: assignment class type 
+        -0.5: variable in array assignment
+
+    unary expressions: 0/1.5 points
+    
+    binary expressions: 4/9 points
+        -1  : addition right/both
+        -1  : subtraction left/both
+        -1  : multiplication right/both
+        -0.5: comparison left
+        -1.5: array subscript
+    
+    method declarations & calls: 3/5 points
+        -1: callee not a class
+        -1: argument of super type

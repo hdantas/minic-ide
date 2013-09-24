@@ -1,0 +1,123 @@
+organisation: 3.5 out of 5 pts - no explanation, missing folder categorisation, good file naming, ok test names
+
+[General]
+Total points = 18.0 out of 95.0
+
+[Identifiers restrictive]
+Points earned = 2.0 out of 3.0
+restrictive-identifiers-digits-not-accepted.tbl = NOT detected
+restrictive-identifiers-underscores-not-accepted.tbl = NOT detected
+
+[Identifiers liberal]
+Points earned = 1.0 out of 1.5
+liberal-identifiers-additional-symbols-accepted.tbl = NOT detected
+ 
+[Identifiers reserved]
+Points earned = 0.0 out of 5.5
+Reason = No grammar from this group detected
+
+[Integer constants restrictive]
+Points earned = 1.0 out of 3.0
+restrictive-integer_constants-leading-zeros-not-accepted.tbl = NOT detected
+restrictive-integer_constants-multiple-digits-not-accepted.tbl = NOT detected
+ 
+[Integer constants liberal]
+Points earned = 0.0 out of 2.0
+Reason = No grammar from this group detected
+
+[Comments restrictive]
+Points earned = 0.0 out of 5.0
+Reason = No grammar from this group detected
+
+[Comments liberal]
+Points earned = 0.0 out of 1.0
+Reason = No grammar from this group detected
+
+[Layout inside System.out.println restrictive]
+Points earned = 0.0 out of 0.5
+Reason = No grammar from this group detected
+
+[Layout components restrictive]
+Points earned = 1.0 out of 1.0
+
+[Classes restrictive]
+Points earned = 2.0 out of 5.0
+restrictive-classes-fields-not-accepted.tbl = NOT detected
+restrictive-classes-methods-not-accepted.tbl = NOT detected
+restrictive-classes-multiple-fields-not-accepted.tbl = NOT detected
+restrictive-classes-multiple-methods-not-accepted.tbl = NOT detected
+restrictive-classes-single-field-not-accepted.tbl = NOT detected
+restrictive-classes-single-method-not-accepted.tbl = NOT detected
+
+[Main Class liberal]
+Points earned = 0.0 out of 3.0
+Reason = No grammar from this group detected
+
+[Classes liberal]
+Points earned = 0.0 out of 4.0
+Reason = No grammar from this group detected
+
+[Methods restrictive]
+Points earned = 0.0 out of 4.0
+Reason = No grammar from this group detected
+
+[Main Method liberal]
+Points earned = 0.0 out of 2.0
+Reason = No grammar from this group detected
+
+[Methods liberal]
+Points earned = 0.0 out of 4.0
+Reason = No grammar from this group detected
+
+[Types restrictive]
+Points earned = 1.0 out of 4.0
+restrictive-types-boolean-type-not-accepted.tbl = NOT detected
+restrictive-types-int-array-type-not-accepted.tbl = NOT detected
+restrictive-types-int-type-not-accepted.tbl = NOT detected
+
+[Types liberal]
+Points earned = 0.0 out of 2.0
+Reason = No grammar from this group detected
+
+[Statements restrictive]
+Points earned = 3.0 out of 10.0
+restrictive-statements-block-not-accepted.tbl = NOT detected
+restrictive-statements-empty-block-not-accepted.tbl = NOT detected
+restrictive-statements-ifelse-not-accepted.tbl = NOT detected
+restrictive-statements-multiple-statements-in-a-block-not-accepted.tbl = NOT detected
+restrictive-statements-unblocked-staments-in-if-not-accepted.tbl = NOT detected
+restrictive-statements-unblocked-statements-in-while-not-accepted.tbl = NOT detected
+restrictive-statements-while-not-accepted.tbl = NOT detected
+
+[Statements liberal]
+Points earned = 0.0 out of 2.0
+Reason = No grammar from this group detected
+
+[Expressions liberal]
+Points earned = 0.0 out of 6.0
+Reason = No grammar from this group detected
+
+[Expressions restrictive]
+Points earned = 7.0 out of 17.0
+restrictive-expressions-type-12-not-accepted.tbl = NOT detected
+restrictive-expressions-type-13-not-accepted.tbl = NOT detected
+restrictive-expressions-type-14-not-accepted.tbl = NOT detected
+restrictive-expressions-type-15-not-accepted.tbl = NOT detected
+restrictive-expressions-type-16-not-accepted.tbl = NOT detected
+restrictive-expressions-type-17-not-accepted.tbl = NOT detected
+restrictive-expressions-type-2-not-accepted.tbl = NOT detected
+restrictive-expressions-type-3-not-accepted.tbl = NOT detected
+restrictive-expressions-type-4-not-accepted.tbl = NOT detected
+restrictive-expressions-type-6-not-accepted.tbl = NOT detected
+
+[Call Expression No. of args.]
+Points earned = 0.0 out of 2.0
+Reason = No grammar from this group detected
+
+[Expressions associativity]
+Points earned = 0.0 out of 2.5
+Reason = No grammar from this group detected
+
+[Expressions precedence]
+Points earned = 0.0 out of 5.0
+Reason = No grammar from this group detected
