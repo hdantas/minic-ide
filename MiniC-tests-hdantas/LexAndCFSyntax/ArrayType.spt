@@ -10,3 +10,15 @@ test float [[float]] parse succeeds
 
 
 //negative test cases
+test unsigned int [[unsigned int]] parse fails
+test signed int [[signed int]] parse fails
+test short int[[short int]] parse fails
+test signed float [[signed float]] parse fails
+
+test char [[char]] parse fails
+test double [[double]] parse fails
+
+test unsigned [[unsigned]] parse fails
+test signed [[signed]] parse fails
+test short [[short]] parse fails
+test long [[long]] parse fails

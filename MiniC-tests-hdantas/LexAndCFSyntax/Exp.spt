@@ -4,21 +4,86 @@ language MiniC
 start symbol Exp
 
 //positive test cases
-test assignment to int [[x = 2]] parse succeeds
-test assignment to float [[x = 2.0]] parse succeeds
-test assignment to ID [[x = y]] parse succeeds
-test assignment to array [[x = y[z] ]] parse succeeds
-test assignment to struct [[x = y.z]] parse succeeds
-test assignment to plus ID [[x = x + y]] parse succeeds
-test assignment to minus ID [[x = x - y]] parse succeeds
-test assignment to times ID [[x = x * y]] parse succeeds
-test assignment to division ID [[x = x / y]] parse succeeds
-test assignment to negation [[x = !y ]] parse succeeds
-test assignment with parentheses [[x = (y + z) ]] parse succeeds
-test assignment to sizeof [[x = sizeof(y)]] parse succeeds
-test assignment to list [[x = foo(a)]] parse succeeds
-test assignment to expression list [[x = foo(a, b)]] parse succeeds
+test int   [[2]] parse succeeds
+test float [[2.0]] parse succeeds
 
+test ID [[x]] parse succeeds
+
+test array [[y[0] ]] parse succeeds
+test array [[y[z] ]] parse succeeds
+test array [[y[a + b] ]] parse succeeds
+test array [[y[a[b] ] ]] parse succeeds
+test array [[y[a[b.c] ] ]] parse succeeds
+
+test struct [[y.z]] parse succeeds
+test struct [[p.x[0] ]] parse succeeds
+test struct [[w.y.z]] parse succeeds
+test struct [[w.y[z[0] ] ]] parse succeeds
+test semantically invalid struct [[a.(1)]] parse succeeds // syntax correct, semantics incorrect
+test semantically invalid struct [[x.(a)]] parse succeeds // syntax correct, semantics incorrect
+test semantically invalid struct [[x.(a + b)]] parse succeeds // syntax correct, semantics incorrect
+test semantically invalid struct [[p.1]] parse succeeds // syntax correct, semantics incorrect
+
+test op ID [[x + y]] parse succeeds
+test op ID [[a.b + c.d]] parse succeeds
+test op ID [[x - y]] parse succeeds
+test op ID [[x * y]] parse succeeds
+test op ID [[x / y]] parse succeeds
+
+test NOT [[!y]] parse succeeds
+test NOT [[!(a + b)]] parse succeeds
+test NOT [[!!a]] parse succeeds
+test NOT [[!(!a)]] parse succeeds
+
+test parentheses [[(y)]] parse succeeds
+test double parentheses [[((0))]] parse succeeds
+test parentheses [[a * (b)]] parse succeeds
+test parentheses [[(y + z) ]] parse succeeds
+
+test sizeof [[sizeof(y)]] parse succeeds
+test sizeof [[sizeof(y.a)]] parse succeeds
+test sizeof [[sizeof(a + b)]] parse succeeds
+
+test ID with expression list [[foo()]] parse succeeds
+test ID with expression list [[foo(a)]] parse succeeds
+test ID with expression list [[foo(bar(a))]] parse succeeds
+test ID with expression list [[foo(a + b)]] parse succeeds
+test ID with expression list [[foo(a, b)]] parse succeeds
 
 //negative test cases
+test invalid array  [[ [1] ]] parse fails
+test invalid array  [[ [a] ]] parse fails
+test no index array [[a[] ]] parse fails
+test no index array [[a[ [] ] ]] parse fails
 
+test no member struct [[x.]] parse fails
+test no member struct [[x.a + y.]] parse fails
+test invalid struct [[x.[] ]] parse fails
+test invalid struct [[x.[0] ]] parse fails
+test invalid struct [[x..a]] parse fails
+test invalid struct init [[{1, 2}]] parse fails //albeit is valid in normal C
+test invalid struct init [[{.x = 1, .y = 2}]] parse fails //albeit is valid in normal C
+
+test too many op [[+x]] parse fails
+test too many op [[x+]] parse fails
+test too many op [[x++]] parse fails
+test too many op [[++x]] parse fails
+test too many op [[x ++ y]] parse fails
+
+test "!" must be at the start of Exp [[x!]] parse fails
+test "!" must be at the start of Exp [[!x!x]] parse fails
+test "!" must be at the start of Exp [[a!b]] parse fails
+
+test too many parentheses [[(()]] parse fails
+test too many parentheses [[())]] parse fails
+test empty parentheses    [[()]] parse fails
+test empty parentheses    [[)(]] parse fails
+test curly brackets       [[{}]] parse fails
+test square brackets      [[ [] ]] parse fails
+
+test sizeof w/o parentheses [[sizeof y]] parse fails
+test sizeof empty parentheses [[sizeof()]] parse fails
+
+test incomplete exp list [[foo( , )]] parse fails
+test incomplete exp list [[foo(a, )]] parse fails
+test incomplete exp list [[foo( , a)]] parse fails

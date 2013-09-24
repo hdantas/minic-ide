@@ -32,3 +32,57 @@ test empty statement[[{}]] parse succeeds
 test block statement[[{x = 1;}]] parse succeeds
 test block statement[[{x = 1; y = 2;}]] parse succeeds
 //negative test cases
+
+
+
+//positive test cases
+test assignment int   [[x = 2]] parse succeeds
+test assignment float [[x = 2.0]] parse succeeds
+
+test assignment ID [[x = y]] parse succeeds
+
+test assignment array  [[x = y[0] ]] parse succeeds
+test assignment array  [[x = y[z] ]] parse succeeds
+test assignment array  [[x = y[a + b] ]] parse succeeds
+test assignment array  [[x = y[a[b] ] ]] parse succeeds
+test assignment array  [[x = y[a[b.c] ] ]] parse succeeds
+
+test assignment struct [[x = y.z]] parse succeeds
+test assignment struct [[x = w.y[z[0] ] ]] parse succeeds
+test assignment struct [[x.y = 1]] parse succeeds
+test assignment struct [[x.y = z]] parse succeeds
+test assignment struct [[x.y = a.b]] parse succeeds
+test assignment struct [[x.y = a[b] ]] parse succeeds
+
+test assignment op ID [[x = x + y]] parse succeeds
+test assignment op ID [[x = a.b + c.d]] parse succeeds
+test assignment op ID [[x = x - y]] parse succeeds
+test assignment op ID [[x = x * y]] parse succeeds
+test assignment op ID [[x = x / y]] parse succeeds
+
+test assignment NOT [[x = !y ]] parse succeeds
+test assignment NOT [[x = !(a + b) ]] parse succeeds
+
+test assignment parentheses[[x = (y)]] parse succeeds
+test assignment parentheses[[x = a * (b)]] parse succeeds
+test assignment parentheses[[x = (y + z) ]] parse succeeds
+
+test assignment to sizeof [[x = sizeof(y)]] parse succeeds
+test assignment to list [[x = foo(a)]] parse succeeds
+test assignment to expression list [[x = foo(a, b)]] parse succeeds
+
+
+//negative test cases
+test more that one left operand [[x + y = 1]] parse fails
+test more that one left operand [[x + y = 1.0]] parse fails
+test more that one left operand [[x + y = z]] parse fails
+
+test assignment NOT [[x = a!b ]] parse fails
+
+test invalid struct init [[p = a.(1) ]] parse fails
+test invalid struct init [[p = x.(a)]] parse fails
+test invalid struct init [[p = x.(a+b)]] parse fails
+test invalid struct init [[p.1 = x]] parse fails
+test invalid struct init [[p.1 = 1]] parse fails
+test invalid struct init [[p = {1, 2}]] parse fails //albeit is valid in normal C
+test invalid struct init [[p = {.x = 1, .y = 2}]] parse fails //albeit is valid in normal C
