@@ -5,5 +5,15 @@ start symbol FormalRest
 
 //positive test cases
 
+test int [[, int a]] parse succeeds
+test mixed type [[, double a, int b]] parse succeeds
+test mixed type [[, int a[], struct b]] parse succeeds
 
 //negative test cases
+
+test empty list        [[]] parse fails
+test missign parameter [[, ]] parse fails
+test missign comma     [[int a]] parse fails
+test missign comma     [[int a, int b]] parse fails
+test missing type      [[, a]] parse fails
+test missing type      [[, double a, b]] parse fails

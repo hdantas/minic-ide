@@ -4,11 +4,25 @@ language MiniC
 start symbol VarDec
 
 //positive test cases
-test int [[int a;]] parse succeeds
-test float [[float a;]] parse succeeds
-test struct [[struct a;]] parse succeeds
-test int array [[int a[1];]] parse succeeds
+test int         [[int a;]] parse succeeds
+test float       [[float a;]] parse succeeds
+test struct      [[struct a b;]] parse succeeds
+test int array   [[int a[1];]] parse succeeds
 test float array [[float a[1];]] parse succeeds
 
 //negative test cases
-	
+
+test int no semicolon   [[int a]] parse fails
+test float no semicolon [[float a]] parse fails
+test struct no semicolon [[struct a b]] parse fails
+
+test struct missing ID [[struct a;]] parse fails
+test struct invalid ID [[int int;]] parse fails
+test struct invalid ID [[double double;]] parse fails
+test struct invalid ID [[struct struct;]] parse fails
+
+test array structs      [[struct a b[1];]] parse fails
+test array structs      [[struct a[1] b;]] parse fails
+test dynamic size array [[int a[];]] parse fails
+test not type array     [[a[];]] parse fails
+test not ID array       [[int [];]] parse fails

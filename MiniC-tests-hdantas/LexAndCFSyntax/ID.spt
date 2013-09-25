@@ -23,16 +23,17 @@ test char digit underscore ID [[a1_]] parse succeeds
 test char double underscore ID [[a__]] parse succeeds
 
 //negative test cases
-test digit [[1]] parse fails
-test double digit [[21]] parse fails
-test float [[1.1]] parse fails
-test string [["a"]] parse fails
-test underscore [[_]] parse fails
-test underscore digit [[_1]] parse fails
-test underscore char [[_a]] parse fails
-test digit char [[1a]] parse fails
+test digit                 [[1]] parse fails
+test double digit          [[21]] parse fails
+test float                 [[1.1]] parse fails
+test string                [["a"]] parse fails
+test underscore            [[_]] parse fails
+test underscore digit      [[_1]] parse fails
+test underscore char       [[_a]] parse fails
+test digit char            [[1a]] parse fails
 test digit char underscore [[1a_]] parse fails
 test digit char underscore [[1_a]] parse fails
+
 test special symbols [[a*]] parse fails
 test special symbols [[a/]] parse fails
 test special symbols [[a-]] parse fails
@@ -40,6 +41,14 @@ test special symbols [[a+]] parse fails
 test special symbols [[a=]] parse fails
 test special symbols [[a\]] parse fails
 test special symbols [[a!]] parse fails
+
+test special symbols [[*a]] parse fails
+test special symbols [[/a]] parse fails
+test special symbols [[-a]] parse fails
+test special symbols [[+a]] parse fails
+test special symbols [[=a]] parse fails
+test special symbols [[\a]] parse fails
+test special symbols [[!a]] parse fails
 
 //all C reserved keywords
 test reserved keywords [[_Packed]] parse fails

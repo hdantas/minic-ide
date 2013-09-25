@@ -4,7 +4,6 @@ language MiniC
 start symbol ArrayType
 
 //positive test cases
-
 test int [[int]] parse succeeds 
 test float [[float]] parse succeeds
 

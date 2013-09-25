@@ -3,7 +3,3 @@ module MiniC-ASTSyntax-testcases
 language MiniC
 start symbol FormalRest
 
-//positive test cases
-
-
-//negative test cases

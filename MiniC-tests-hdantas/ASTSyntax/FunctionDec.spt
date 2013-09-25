@@ -3,5 +3,12 @@ module MiniC-ASTSyntax-testcases
 language MiniC
 start symbol FunctionDec
 
+FunctionDec = Type ID "(" FormalList ")" "{" VarDec* Statement* "return" Exp "}"
 
-
+test function declaration [[
+int foo(int x) {
+	float a;
+	a = 1.0;
+	return a;
+}
+]] parse to FunctionDec(_, "foo", [_], [_], _)

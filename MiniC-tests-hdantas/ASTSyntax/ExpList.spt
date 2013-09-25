@@ -2,8 +2,3 @@ module MiniC-ASTSyntax-testcases
 
 language MiniC
 start symbol ExpList
-
-//positive test cases
-
-
-//negative test cases

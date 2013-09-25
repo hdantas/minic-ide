@@ -4,6 +4,15 @@ language MiniC
 start symbol ExpList
 
 //positive test cases
-
+test int       [[1]] parse suceeds
+test int op    [[1 + 1]] parse suceeds
+test empty exp [[]] parse succeds
+test exp list  [[1, 1]] parse suceeds
+test exp list  [[a, 1]] parse suceeds
+test exp list  [[a, a]] parse suceeds
 
 //negative test cases
+test exp list no comma   [[a 1]] parse fails
+test exp list no comma   [[a a]] parse fails
+test exp list no exp     [[,]] parse fails
+test exp list no 1st exp [[, a]] parse fails

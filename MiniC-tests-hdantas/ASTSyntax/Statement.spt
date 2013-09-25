@@ -3,5 +3,10 @@ module MiniC-ASTSyntax-testcases
 language MiniC
 start symbol Statement
 
-
-
+test assignment [[x = 1;]] parse to Assignment(_, _)
+test assignment [[x[0] = 1;]] parse to Assignment(_, _)
+test assignment [[x.y = 1;]] parse to Assignment(_, _)
+test if         [[if (x == 1) foo(); else bar();]] parse to IfElse(_,[_],[_])
+test while      [[while (x == 1) foo();]] parse to While(_,[_])
+test printf     [[printf("%i", x);]] parse to Printf([_],[_])
+test block      [[{x = 1;}]] parse to Block([_])

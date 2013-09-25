@@ -54,3 +54,20 @@ Program   = TypeDec* VarDec* FunctionDec* Exp
   ExpList = Exp ExpRest*
   ExpList = 
   ExpRest = "," Exp
+
+
+An identifier is a sequence of letters, digits, and under-
+scores, starting with a letter. Uppercase letters are
+distinguished from lowercase.
+A sequence of decimal digits is an integer constant that
+denotes the corresponding integer value.
+A binary operator is one of
+&&
+<
++
+-
+*
+A comment may appear between any two tokens.There
+are two forms of comments: One starts with /*, ends
+with */, and may be nested; another begins with // and
+goes to the end of the line.

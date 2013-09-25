@@ -4,24 +4,22 @@ language MiniC
 start symbol FunctionDec
 
 //positive test cases
-test empty function [[
-	int foo () {
-		return;
-	}
-]] parse succeeds
-
-test no arguments function [[
-	int foo () {
-		int a;
-		a = 42;
-		return a;
-	}
-]] parse succeeds
-
-test no body function [[
-	int foo (int a, float b) {
-		return;
-	}
-]] parse succeeds
+test empty function        [[int foo () {return 0;}]] parse succeeds
+test no arguments function [[int foo () {int a;	a = 42;	return a;}]] parse succeeds
+test no body function      [[int foo (int a, float b) {return 0;}]] parse succeeds
 
 //negative test cases
+test wrong order       [[int foo (int x) {x = 0; int a; return 0;}]] parse fails
+test wrong order       [[int foo (int x) {return 0; int a;}]] parse fails
+test wrong order       [[int foo (int x) {x = 0; int a; return 0;}]] parse fails
+
+test empty return      [[int foo (int x) {return ;}]] parse fails
+test missing braces    [[int foo (int x) return 0;]] parse fails
+test extra semicolon   [[int foo (int x) {return 0;};]] parse fails
+test missing semicolon [[int foo (int x) {return 0}]] parse fails
+
+test missing type      [[foo (int x) {return 0;}]] parse fails
+test missing ID        [[int (int x) {return 0;}]] parse fails
+test missing list      [[int foo {return 0;}]] parse fails
+test missing func body [[int foo (int x)]] parse fails
+test missing return    [[int foo (int x) {}]] parse fails

@@ -3,5 +3,14 @@ module MiniC-ASTSyntax-testcases
 language MiniC
 start symbol Program
 
+test program [[
+struct a {
+    int b;
+}
 
+int c;
 
+int main(){
+    return 0;
+}
+]] parse to Program([_], [_], [_])

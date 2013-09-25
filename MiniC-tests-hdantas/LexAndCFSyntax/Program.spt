@@ -3,22 +3,38 @@ module MiniC-LexAndCFSyntax-testcases
 language MiniC
 start symbol Program
 
+Program   = TypeDec* VarDec* FunctionDec*
+
 //positive test cases
 test simple prog [[
-	struct z {
-		int a;
-		float b;
-		int c[42];
-	};
-	
-	int x;
-	float y;
-	
-	foo (int bar){
-		return;
-	}
-	
-	x = 0;
+    struct z {int a;};
+    int x;
+    foo (int bar){return 0;}
 ]] parse succeeds
 
+test no typeDec [[
+    int x;
+    foo (int bar){return 0;}
+]] parse succeeds
+
+test no VarDec [[
+    struct z {int a;};
+    foo (int bar){return 0;}
+]] parse succeeds
+
+test noFunctionDec [[
+    struct z {int a;};
+    int x;
+]] parse succeeds
+
+test empty prog [[]] parse suceeds
+
 //negative test cases
+
+test wrong order [[int x; struct z{};]] parse fails
+test wrong order [[int x; foo(){return 0;} struct z {};]] parse fails
+test wrong order [[struct z{}; foo(){return 0;} int x;]] parse fails
+test wrong order [[foo(){return 0;} struct z{}; int x;]] parse fails
+test wrong order [[foo(){return 0;} int x; struct z{};]] parse fails
+test wrong order [[foo(){return 0;} int x;]] parse fails
+test wrong order [[foo(){return 0;} struct z{};]] parse fails

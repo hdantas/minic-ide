@@ -2,8 +2,3 @@ module MiniC-ASTSyntax-testcases
 
 language MiniC
 start symbol ExpRest
-
-//positive test cases
-
-
-//negative test cases

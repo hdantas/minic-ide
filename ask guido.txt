@@ -5,4 +5,12 @@ the follwing should succeed right as syntaxically is correcy?
 	test semantically invalid struct [[x.(a + b)]] parse succeeds // syntax correct, semantics incorrect
 	test semantically invalid struct [[p.1]] parse succeeds // syntax correct, semantics incorrect
 
-1[1] should parse right?
+
+the following should have a ";" after return Exp right?
+FunctionDec = Type ID "(" FormalList ")" "{" VarDec* Statement* "return" Exp "}"
+
+the following should have a ";" at the end right?
+TypeDec   = "struct" ID "{" VarDec* "}"
+
+why does program has a Exp at the end?
+Program   = TypeDec* VarDec* FunctionDec* Exp

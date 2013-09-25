@@ -4,6 +4,15 @@ language MiniC
 start symbol FLOAT
 
 //positive test cases
+test zeros [[2.30]] parse succeeds
+test zeros [[2.300]] parse succeeds
+test zeros [[02.3]] parse succeeds
+test zeros [[002.3]] parse succeeds
+test zeros [[-2.30]] parse succeeds
+test zeros [[-2.300]] parse succeeds
+test zeros [[-02.3]] parse succeeds
+test zeros [[-002.3]] parse succeeds
+
 test float decimal [[2.3]] parse succeeds
 test float negative decimal [[-2.3]] parse succeeds
 test double float decimal [[12.3]] parse succeeds
@@ -40,3 +49,4 @@ test mix float string [["a".1]] parse fails
 test mix string float [[1."a"]] parse fails
 test mix char char [[a.a]] parse fails
 
+test wrong exp char [[1c-1]] parse fails

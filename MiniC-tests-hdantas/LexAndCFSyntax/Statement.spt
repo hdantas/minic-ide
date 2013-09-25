@@ -4,85 +4,103 @@ language MiniC
 start symbol Statement
 
 //positive test cases
-test id assignment [[x = a;]] parse succeeds
-test int assignment [[x = 42;]] parse succeeds
-test float assignment [[x = 4.2;]] parse succeeds
-test array access [[x[0] = 2;]] parse succeeds
-test struct access[[x.y = 0;]] parse succeeds
-test if [[
-	if(1) x = 0;
-	else x = 1;
-]] parse succeeds
-test while [[
-	while (1)
-		i = i + 1;
-]] parse succeeds
-test while [[
-	while (1){
-		i = i + 1;
-	}
-]] parse succeeds
-test printf int [[
-	printf ("%i", a);
-]] parse succeeds
-test printf float[[
-	printf ("%f", a);
-]] parse succeeds
-test empty statement[[{}]] parse succeeds
-test block statement[[{x = 1;}]] parse succeeds
-test block statement[[{x = 1; y = 2;}]] parse succeeds
-//negative test cases
+test id assignment          [[x = a;]] parse succeeds
+test int assignment         [[x = 2;]] parse succeeds
+test int assignment         [[x = 42;]] parse succeeds
+test assignment ID          [[x = y;]] parse succeeds
+test float assignment       [[x = 4.2;]] parse succeeds
+test array                  [[x[0] = 2;]] parse succeeds
+test struct access          [[x.y = 0;]] parse succeeds
+test struct access          [[x.y = a + b;]] parse succeeds
 
+test if                     [[if(1) x = 0; else x = 1;]] parse succeeds
+test while                  [[while (1) i = i + 1;]] parse succeeds
+test while                  [[while (1) { i = i + 1;}]] parse succeeds
+test printf int             [[printf ("%i", a);]] parse succeeds
+test printf float           [[printf ("%f", a);]] parse succeeds
+test empty statement        [[{}]] parse succeeds
+test empty statement        [[{{}}]] parse succeeds
+test block statement        [[{x = 1;}]] parse succeeds
+test block statement        [[{x = 1; y = 2;}]] parse succeeds
 
+test assignment array       [[x = y[0];]] parse succeeds
+test assignment array       [[x = y[z];]] parse succeeds
+test assignment array       [[x = y[a + b];]] parse succeeds
+test assignment array       [[x = y[a[b] ];]] parse succeeds
+test assignment array       [[x = y[a[b.c] ];]] parse succeeds
 
-//positive test cases
-test assignment int   [[x = 2]] parse succeeds
-test assignment float [[x = 2.0]] parse succeeds
+test assignment struct      [[x = y.z;]] parse succeeds
+test assignment struct      [[x = w.y[z[0] ];]] parse succeeds
+test assignment struct      [[x.y = 1;]] parse succeeds
+test assignment struct      [[x.y = z;]] parse succeeds
+test assignment struct      [[x.y = a.b;]] parse succeeds
+test assignment struct      [[x.y = a[b];]] parse succeeds
 
-test assignment ID [[x = y]] parse succeeds
+test assignment op ID       [[x = x + y;]] parse succeeds
+test assignment op ID       [[x = a.b + c.d;]] parse succeeds
+test assignment op ID       [[x = x - y;]] parse succeeds
+test assignment op ID       [[x = x * y;]] parse succeeds
+test assignment op ID       [[x = x / y;]] parse succeeds
 
-test assignment array  [[x = y[0] ]] parse succeeds
-test assignment array  [[x = y[z] ]] parse succeeds
-test assignment array  [[x = y[a + b] ]] parse succeeds
-test assignment array  [[x = y[a[b] ] ]] parse succeeds
-test assignment array  [[x = y[a[b.c] ] ]] parse succeeds
+test assignment NOT         [[x = !y;]] parse succeeds
+test assignment NOT         [[x = !(a + b);]] parse succeeds
 
-test assignment struct [[x = y.z]] parse succeeds
-test assignment struct [[x = w.y[z[0] ] ]] parse succeeds
-test assignment struct [[x.y = 1]] parse succeeds
-test assignment struct [[x.y = z]] parse succeeds
-test assignment struct [[x.y = a.b]] parse succeeds
-test assignment struct [[x.y = a[b] ]] parse succeeds
+test assignment parentheses [[x = (y);]] parse succeeds
+test assignment parentheses [[x = a * (b);]] parse succeeds
+test assignment parentheses [[x = (y + z);]] parse succeeds
 
-test assignment op ID [[x = x + y]] parse succeeds
-test assignment op ID [[x = a.b + c.d]] parse succeeds
-test assignment op ID [[x = x - y]] parse succeeds
-test assignment op ID [[x = x * y]] parse succeeds
-test assignment op ID [[x = x / y]] parse succeeds
-
-test assignment NOT [[x = !y ]] parse succeeds
-test assignment NOT [[x = !(a + b) ]] parse succeeds
-
-test assignment parentheses[[x = (y)]] parse succeeds
-test assignment parentheses[[x = a * (b)]] parse succeeds
-test assignment parentheses[[x = (y + z) ]] parse succeeds
-
-test assignment to sizeof [[x = sizeof(y)]] parse succeeds
-test assignment to list [[x = foo(a)]] parse succeeds
-test assignment to expression list [[x = foo(a, b)]] parse succeeds
+test assignment to sizeof   [[x = sizeof(y);]] parse succeeds
+test assignment to list     [[x = foo(a);]] parse succeeds
+test assignment to explist  [[x = foo(a, b);]] parse succeeds
 
 
 //negative test cases
-test more that one left operand [[x + y = 1]] parse fails
-test more that one left operand [[x + y = 1.0]] parse fails
-test more that one left operand [[x + y = z]] parse fails
 
-test assignment NOT [[x = a!b ]] parse fails
+test more that one left operand [[x + y = 1;]] parse fails
+test more that one left operand [[x + y = 1.0;]] parse fails
+test more that one left operand [[x + y = z;]] parse fails
 
-test invalid struct init [[p = a.(1) ]] parse fails
-test invalid struct init [[p = x.(a)]] parse fails
-test invalid struct init [[p = x.(a+b)]] parse fails
-test invalid struct init [[p.1 = x]] parse fails
-test invalid struct init [[p.1 = 1]] parse fails
-test invalid struct init [[p = {1, 2}]] parse fails //albeit is valid in normal C
-test invalid struct init [[p = {.x = 1, .y = 2}]] parse fails //albeit is valid in normal C
+test assignment NOT [[x = a!b;]] parse fails
+
+test invalid struct init [[p = a.(1);]] parse fails
+test invalid struct init [[p = x.(a);]] parse fails
+test invalid struct init [[p = x.(a+b);]] parse fails
+test invalid struct init [[p.1 = x;]] parse fails
+test invalid struct init [[p.1 = 1;]] parse fails
+test invalid struct init [[p = {1};]] parse fails //albeit is valid in normal C
+test invalid struct init [[p = {.x = 1};]] parse fails //albeit is valid in normal C
+test invalid struct init [[p = {1, 2};]] parse fails //albeit is valid in normal C
+test invalid struct init [[p = {.x = 1, .y = 2};]] parse fails //albeit is valid in normal C
+
+
+test if no else             [[if(1) x = 0;]] parse fails
+test else no if             [[else x = 0;]] parse fails
+test if empty condition     [[if() x = 0; else x = 1;]] parse fails
+test else has condition     [[if(x == 1) x = 0; else (x == 0) x = 1;]] parse fails
+
+test while no statement     [[while (x == 1) ]] parse fails
+test while no exp           [[while x = 1; ]] parse fails
+test while empty condition  [[while () i = i + 1;]] parse fails
+test while empty condition  [[while () {}]] parse fails
+
+test printf no int exp      [[printf ("%i");]] parse fails
+test printf no quotes       [[printf (%i, a);]] parse fails
+test printf float           [[printf ("%f");]] parse fails
+test printf no quotes       [[printf (%f, a);]] parse fails
+test invalid printf         [[printf ("", a);]] parse fails
+test invalid printf         [[printf ("%c", a);]] parse fails
+test invalid printf         [[printf ();]] parse fails
+test invalid printf         [[printf ("bar");]] parse fails
+
+test invalid bracket use    [[ [] ]] parse fails
+test invalid bracket use    [[()]] parse fails
+test invalid bracket use    [[}{]] parse fails
+
+test incomplete statements  [[a;]] parse fails
+test incomplete statements  [[a]] parse fails
+test incomplete statements  [[;]] parse fails
+test incomplete statements  [[1]] parse fails
+
+test block statements       [[{;}]] parse fails
+test block statements       [[{x = 1}]] parse fails
+test block statements       [[{x = 1 y = 2;}]] parse fails

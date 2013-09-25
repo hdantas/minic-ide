@@ -4,6 +4,19 @@ language MiniC
 start symbol FormalList
 
 //positive test cases
+test empty list   [[]] parse succeeds
+test int          [[int a]] parse succeeds
+test double array [[double a[] ]] parse succeeds
+test struct       [[stuct a]] parse succeeds
 
+test more than 1 element [[int a, int b]] parse succeeds
 
 //negative test cases
+
+test missing type        [[a, b]] parse fails
+test missing type        [[int a, b]] parse fails
+test missing comma       [[int a int b]] parse fails
+test only comma          [[, ]] parse fails
+test missing parameter   [[int a,]] parse fails
+test missing parameter   [[, int a]] parse fails
+test invalid array usage [[int a[5] ]] parse fails

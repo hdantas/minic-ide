@@ -4,11 +4,29 @@ language MiniC
 start symbol TypeDec
 
 //positive test cases
-test empty struct [[struct x {}]] parse succeeds
-test empty struct [[
-	struct x {
-		int x;
-	}
-]] parse succeeds
+test empty struct   [[struct x {};]] parse succeeds
+test one var struct [[struct x {int y;};]] parse succeeds
+test one var struct [[struct x {struct a y;};]] parse succeeds
+test two var struct [[struct x {float y; int a[42];};]] parse succeeds
 
 //negative test cases
+
+test unbalanced braces [[struct x {;]] parse fails
+test unbalanced braces [[struct x };]] parse fails
+test unbalanced braces [[struct x {}};]] parse fails
+test unbalanced braces [[struct x {{};]] parse fails
+
+test missign semicolon [[struct x {}]] parse fails
+test invalid struct    [[struct x }{;]] parse fails
+test invalid struct    [[struct x {}{};]] parse fails
+test invalid struct    [[struct x {{}};]] parse fails
+test invalid struct    [[struct x {;};]] parse fails
+test invalid struct    [[struct x {int};]] parse fails
+test invalid struct    [[struct x {a};]] parse fails
+test invalid struct    [[struct x {(int a;)};]] parse fails
+test invalid struct    [[struct x;]] parse fails
+test invalid struct    [[struct x ();]] parse fails
+
+test no size array     [[struct x {int a[];};]] parse fails
+test int struct        [[int x {};]] parse fails
+test int struct        [[int x {int a;};]] parse fails

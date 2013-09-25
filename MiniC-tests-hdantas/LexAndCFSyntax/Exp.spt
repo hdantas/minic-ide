@@ -24,11 +24,20 @@ test semantically invalid struct [[x.(a)]] parse succeeds // syntax correct, sem
 test semantically invalid struct [[x.(a + b)]] parse succeeds // syntax correct, semantics incorrect
 test semantically invalid struct [[p.1]] parse succeeds // syntax correct, semantics incorrect
 
-test op ID [[x + y]] parse succeeds
 test op ID [[a.b + c.d]] parse succeeds
+test op ID [[x + y]] parse succeeds
 test op ID [[x - y]] parse succeeds
 test op ID [[x * y]] parse succeeds
 test op ID [[x / y]] parse succeeds
+test op ID [[x == y]] parse succeeds
+test op ID [[x != y]] parse succeeds
+test op ID [[x && y]] parse succeeds
+test op ID [[x || y]] parse succeeds
+test op ID [[x % y]] parse succeeds
+test op ID [[x < y]] parse succeeds
+test op ID [[x <= y]] parse succeeds
+test op ID [[x > y]] parse succeeds
+test op ID [[x >= y]] parse succeeds
 
 test NOT [[!y]] parse succeeds
 test NOT [[!(a + b)]] parse succeeds
@@ -64,11 +73,11 @@ test invalid struct [[x..a]] parse fails
 test invalid struct init [[{1, 2}]] parse fails //albeit is valid in normal C
 test invalid struct init [[{.x = 1, .y = 2}]] parse fails //albeit is valid in normal C
 
-test too many op [[+x]] parse fails
-test too many op [[x+]] parse fails
-test too many op [[x++]] parse fails
-test too many op [[++x]] parse fails
-test too many op [[x ++ y]] parse fails
+test invalid op [[+x]] parse fails
+test invalid op [[x+]] parse fails
+test invalid op [[x++]] parse fails
+test invalid op [[++x]] parse fails
+test invalid op [[x ++ y]] parse fails
 
 test "!" must be at the start of Exp [[x!]] parse fails
 test "!" must be at the start of Exp [[!x!x]] parse fails

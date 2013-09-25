@@ -3,5 +3,48 @@ module MiniC-ASTSyntax-testcases
 language MiniC
 start symbol Exp
 
+test array    [[x[0] ]]     parse to Array("x","0")
+test struct   [[x.y ]]      parse to Struct("x","y")
+test op AND   [[x && y]]    parse to LogicalAnd("x","y")
+test op lt    [[x < y]]     parse to LessThan("x","y")
+test op add   [[x + y]]     parse to Add("x","y")
+test op add   [[4 + 2]]     parse to Add(Integer("4"), Integer("2"))
+test op add   [[-4 + 2]]    parse to Add(NInteger("4"), Integer("2"))
+test op sub   [[x - y]]     parse to Subtract("x","y")
+test op sub   [[4 - 2]]     parse to Subtract(Integer("4"), Integer("2"))
+test op sub   [[-4 - 2]]    parse to Subtract(NInteger("4"), Integer("2"))
+test op mul   [[x * y]]     parse to Multiply("x","y")
+test op mul   [[4 * 2]]     parse to Multipley(Integer("4"), Integer("2"))
+test op mul   [[-4 * 2]]    parse to Multipley(NInteger("4"), Integer("2"))
+test op mul   [[4 * -2]]    parse to Multipley(Integer("4"), NInteger("2"))
+test op div   [[x / y]]     parse to Divide("x","y")
+test op div   [[4 / 2]]     parse to Divide(Integer("4"), Integer("2"))
+test op div   [[-4 / 2]]    parse to Divide(NInteger("4"), Integer("2"))
+test op div   [[4 / -2]]    parse to Divide(Integer("4"), NInteger("2"))
+test not      [[!x]]        parse to Not("x")
+test sizeof   [[sizeof(x)]] parse to SizeOf("x")
+test fun call [[foo(x)]]    parse to FunctionCall("foo", Argumentlist(_))
 
 
+
+
+
+// priorities 
+test left associative addition [[1 + 2 + 3]] parse to [[(1 + 2) + 3]]
+test left associative subtraction [[1 - 2 - 3]] parse to [[(1 - 2) - 3]]
+test left associative multiplication [[1 * 2 * 3]] parse to [[(1 * 2) * 3]]
+test left associative division [[8 / 4 / 2]] parse to [[(8 / 4) / 2]]
+
+
+test addition and multiplication priorities [[1 + 2 * 3]] parse to [[1 + (2 * 3)]]
+test addition and division priorities [[1 + 2 / 3]] parse to [[1 + (2 / 3)]]
+test subtraction and addition priorities [[1 - 2 + 3]] parse to [[(1 - 2) + 3]]
+test addition and subtraction priorities [[1 + 2 - 3]] parse to [[(1 + 2) - 3]]
+test division and multiplication priorities [[1 / 2 * 3]] parse to [[(1 / 2) * 3]]
+test multiplication and division priorities [[1 * 2 / 3]] parse to [[(1 * 2) / 3]]
+
+test parentheses priority addition [[1 + (2 + 3)]] parse to Add(Integer("1"), Add(Integer("2"), Integer("3")))
+test parentheses priority addition [[(1 + 2) + 3)]] parse to Add(Add(Integer("1"), Integer("2")), Integer("3"))
+test parentheses priority subtraction [[1 - (2 - 3)]] parse to Subtract(Integer("1"), Subtract(Integer("2"), Integer("3")))
+test parentheses priority multiplication [[1 * (2 * 3)]] parse to Multipley(Integer("1"), Multipley(Integer("2"), Integer("3")))
+test parentheses priority division [[1 / (2 / 3)]] parse to Divide(Integer("1"), Divide(Integer("2"), Integer("3")))

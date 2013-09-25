@@ -3,3 +3,9 @@ module MiniC-ASTSyntax-testcases
 language MiniC
 start symbol TypeDec
 
+TypeDec   = "struct" ID "{" VarDec* "}"
+test type declaration [[
+struct a {
+	int a;
+}
+]] parse to TypeDec("a", [_])
