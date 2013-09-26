@@ -4,14 +4,14 @@ language MiniC
 start symbol FLOAT
 
 //positive test cases
-test zeros [[2.30]] parse succeeds
-test zeros [[2.300]] parse succeeds
-test zeros [[02.3]] parse succeeds
-test zeros [[002.3]] parse succeeds
-test zeros [[-2.30]] parse succeeds
-test zeros [[-2.300]] parse succeeds
-test zeros [[-02.3]] parse succeeds
-test zeros [[-002.3]] parse succeeds
+test positive trailing zeros [[2.30]] parse succeeds
+test positive trailing zeros [[2.300]] parse succeeds
+test positive leading zeros  [[02.3]] parse succeeds
+test positive leading zeros  [[002.3]] parse succeeds
+test negative trailing zeros [[-2.30]] parse succeeds
+test negative trailing zeros [[-2.300]] parse succeeds
+test negative leading zeros  [[-02.3]] parse succeeds
+test negative leading zeros  [[-002.3]] parse succeeds
 
 test float decimal [[2.3]] parse succeeds
 test float negative decimal [[-2.3]] parse succeeds

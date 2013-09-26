@@ -29,15 +29,25 @@ test op ID [[x + y]] parse succeeds
 test op ID [[x - y]] parse succeeds
 test op ID [[x * y]] parse succeeds
 test op ID [[x / y]] parse succeeds
-test op ID [[x == y]] parse succeeds
-test op ID [[x != y]] parse succeeds
 test op ID [[x && y]] parse succeeds
-test op ID [[x || y]] parse succeeds
-test op ID [[x % y]] parse succeeds
-test op ID [[x < y]] parse succeeds
-test op ID [[x <= y]] parse succeeds
 test op ID [[x > y]] parse succeeds
-test op ID [[x >= y]] parse succeeds
+test op ID [[x < y]] parse succeeds
+// test op ID [[x == y]] parse succeeds
+// test op ID [[x != y]] parse succeeds
+// test op ID [[x || y]] parse succeeds
+// test op ID [[x % y]] parse succeeds
+// test op ID [[x <= y]] parse succeeds
+// test op ID [[x >= y]] parse succeeds
+test op ID [[x && y && z]] parse suceeds
+test op ID [[x > y > z]] parse suceeds
+test op ID [[x < y < z]] parse suceeds
+// test op ID [[x || y || z]] parse suceeds
+// test op ID [[x == y == z]] parse suceeds
+// test op ID [[x != y != z]] parse suceeds
+// test op ID [[x % y % z]] parse suceeds
+// test op ID [[x <= y <= z]] parse suceeds
+// test op ID [[x >= y >= z]] parse suceeds
+
 
 test NOT [[!y]] parse succeeds
 test NOT [[!(a + b)]] parse succeeds
@@ -96,3 +106,16 @@ test sizeof empty parentheses [[sizeof()]] parse fails
 test incomplete exp list [[foo( , )]] parse fails
 test incomplete exp list [[foo(a, )]] parse fails
 test incomplete exp list [[foo( , a)]] parse fails
+
+test op ID [[x == y]] parse fails
+test op ID [[x != y]] parse fails
+test op ID [[x || y]] parse fails
+test op ID [[x % y]] parse fails
+test op ID [[x <= y]] parse fails
+test op ID [[x >= y]] parse fails
+test op ID [[x || y || z]] parse fails
+test op ID [[x == y == z]] parse fails
+test op ID [[x != y != z]] parse fails
+test op ID [[x % y % z]] parse fails
+test op ID [[x <= y <= z]] parse fails
+test op ID [[x >= y >= z]] parse fails

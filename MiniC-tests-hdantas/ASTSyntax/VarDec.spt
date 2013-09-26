@@ -3,5 +3,5 @@ module MiniC-ASTSyntax-testcases
 language MiniC
 start symbol VarDec
 
-test variable declaration [[int x;]] parse to Var("int",Identifier("x"))
-test variable declaration [[int x[5];]] parse to Array("int",Identifier("x"),Integer("5"))
+test variable declaration [[int x;]] parse to VarDec("int", Var("x"))
+test variable declaration [[int x[5];]] parse to ArrayDec("int", Var("x"), Integer("5"))

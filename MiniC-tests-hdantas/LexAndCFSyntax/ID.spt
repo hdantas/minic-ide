@@ -84,3 +84,6 @@ test reserved keywords [[unsigned]] parse fails
 test reserved keywords [[void]] parse fails
 test reserved keywords [[volatile]] parse fails
 test reserved keywords [[while]] parse fails
+
+test reserved literal  [[null]] parse fails
+test reserved literal  [[NULL]] parse fails

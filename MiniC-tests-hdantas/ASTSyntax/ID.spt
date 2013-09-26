@@ -3,4 +3,4 @@ module MiniC-ASTSyntax-testcases
 language MiniC
 start symbol ID
 
-test id [[x]] parse to Identifier("x")
+test id [[x]] parse to Var("x")

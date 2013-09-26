@@ -1,0 +1,53 @@
+module MiniC-Layout-testcases
+
+language MiniC
+start symbol LAYOUT
+
+//positive test cases
+test single line comment [[// comment text]] parse succeeds
+test single line comment [[// comment text
+]] parse succeeds
+test single line comment [[// comment text<EOF>]] parse succeeds
+test single line comment [[// comment text * /]] parse suceeds
+test single line comment [[// comment text //]] parse suceeds
+test single line comment [[// comment text /*]] parse suceeds
+test single line comment [[// comment text /**/]] parse suceeds
+
+test block comment [[/**/]] parse succeeds
+test block comment [[/*  */]] parse succeeds
+test block comment [[/* comment text */]] parse succeeds
+test block comment [[/** text **/]] parse succeeds
+test block comment [[
+/* comment
+text
+*/]] parse succeeds
+
+test nested block comment [[/* */]] parse suceeds
+test nested block comment [[/*/* comment text */*/]] parse suceeds
+test nested block comment [[/* comm/*ent*/text */]] parse suceeds
+test nested block comment [[
+/* /* comment
+text
+*/ more
+
+text */]] parse succeeds
+
+//negative test cases
+
+test incorrect single line comment [[/ comment text]] parse fails
+test incorrect single line comment [[/ / comment text]] parse fails
+test incorrect single line comment [[/ // comment text]] parse fails
+test incorrect single line comment [[comment text<EOF>]] parse fails
+
+test mix type comment [[/* // */]] parse fails
+
+test incorrect block comment [[/* comment text *]] parse fails
+test incorrect block comment [[/* comment text * /]] parse fails
+test incorrect block comment [[/ * comment text */]] parse fails
+test incorrect block comment [[/ * comment text * /]] parse fails
+test incorrect block comment [[/* text <EOF>]] parse fails
+
+test incorrect nested block comment [[/* /*]] parse fails
+test incorrect nested block comment [[/* comment*/text /* */]] parse fails
+test incorrect nested block comment [[/* comment text */*/]] parse fails
+test incorrect nested block comment [[/*/* comment text */]] parse fails
