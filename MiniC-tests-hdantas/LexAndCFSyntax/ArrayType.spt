@@ -9,6 +9,15 @@ test float [[float]] parse succeeds
 
 
 //negative test cases
+
+test 2x int   [[int int]] parse fails
+test 2x float [[float float]] parse fails
+test mix type [[int float]] parse fails
+test mix type [[float int]] parse fails
+test struct   [[struct]] parse fails
+test has ID   [[int a]] parse fails
+test has ID   [[float a]] parse fails
+
 test unsigned int [[unsigned int]] parse fails
 test signed int [[signed int]] parse fails
 test short int[[short int]] parse fails

@@ -14,12 +14,13 @@ test struct access          [[x.y = 0;]] parse succeeds
 test struct access          [[x.y = a + b;]] parse succeeds
 
 test if                     [[if(1) x = 0; else x = 1;]] parse succeeds
+test while                  [[while (1) {}]] parse succeeds
 test while                  [[while (1) i = i + 1;]] parse succeeds
 test while                  [[while (1) { i = i + 1;}]] parse succeeds
 test printf int             [[printf ("%i", a);]] parse succeeds
 test printf float           [[printf ("%f", a);]] parse succeeds
-test empty statement        [[{}]] parse succeeds
-test empty statement        [[{{}}]] parse succeeds
+test empty block statement  [[{}]] parse succeeds
+test nested block statement [[{{}}]] parse succeeds
 test block statement        [[{x = 1;}]] parse succeeds
 test block statement        [[{x = 1; y = 2;}]] parse succeeds
 
@@ -62,9 +63,9 @@ test more that one left operand [[x + y = z;]] parse fails
 
 test assignment NOT [[x = a!b;]] parse fails
 
-test invalid struct init [[p = a.(1);]] parse fails
-test invalid struct init [[p = x.(a);]] parse fails
-test invalid struct init [[p = x.(a+b);]] parse fails
+// test invalid struct init [[p = a.(1);]] parse fails
+// test invalid struct init [[p = x.(a);]] parse fails
+// test invalid struct init [[p = x.(a+b);]] parse fails
 test invalid struct init [[p.1 = x;]] parse fails
 test invalid struct init [[p.1 = 1;]] parse fails
 test invalid struct init [[p = {1};]] parse fails //albeit is valid in normal C

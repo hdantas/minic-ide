@@ -17,6 +17,7 @@ test unbalanced braces [[struct x {}};]] parse fails
 test unbalanced braces [[struct x {{};]] parse fails
 
 test missign semicolon [[struct x {}]] parse fails
+test missign semicolon [[struct x {;};]] parse fails
 test invalid struct    [[struct x }{;]] parse fails
 test invalid struct    [[struct x {}{};]] parse fails
 test invalid struct    [[struct x {{}};]] parse fails

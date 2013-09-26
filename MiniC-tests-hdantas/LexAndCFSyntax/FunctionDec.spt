@@ -17,6 +17,8 @@ test empty return      [[int foo (int x) {return ;}]] parse fails
 test missing braces    [[int foo (int x) return 0;]] parse fails
 test extra semicolon   [[int foo (int x) {return 0;};]] parse fails
 test missing semicolon [[int foo (int x) {return 0}]] parse fails
+test too many returns  [[int foo (int x) {return x; return 1;}]] parse fails
+test too many returns  [[int foo (int x) {return 0; return 1;}]] parse fails
 
 test missing type      [[foo (int x) {return 0;}]] parse fails
 test missing ID        [[int (int x) {return 0;}]] parse fails

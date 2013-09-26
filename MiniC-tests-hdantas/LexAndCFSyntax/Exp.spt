@@ -19,10 +19,11 @@ test struct [[y.z]] parse succeeds
 test struct [[p.x[0] ]] parse succeeds
 test struct [[w.y.z]] parse succeeds
 test struct [[w.y[z[0] ] ]] parse succeeds
-test semantically invalid struct [[a.(1)]] parse succeeds // syntax correct, semantics incorrect
-test semantically invalid struct [[x.(a)]] parse succeeds // syntax correct, semantics incorrect
-test semantically invalid struct [[x.(a + b)]] parse succeeds // syntax correct, semantics incorrect
-test semantically invalid struct [[p.1]] parse succeeds // syntax correct, semantics incorrect
+
+test (semantically invalid) struct [[a.(1)]] parse succeeds // syntax correct, semantics incorrect
+test (semantically invalid) struct [[x.(a)]] parse succeeds // syntax correct, semantics incorrect
+test (semantically invalid) struct [[x.(a + b)]] parse succeeds // syntax correct, semantics incorrect
+test (semantically invalid) struct [[p.1]] parse succeeds // syntax correct, semantics incorrect
 
 test op ID [[a.b + c.d]] parse succeeds
 test op ID [[x + y]] parse succeeds
@@ -38,9 +39,9 @@ test op ID [[x < y]] parse succeeds
 // test op ID [[x % y]] parse succeeds
 // test op ID [[x <= y]] parse succeeds
 // test op ID [[x >= y]] parse succeeds
-test op ID [[x && y && z]] parse suceeds
-test op ID [[x > y > z]] parse suceeds
-test op ID [[x < y < z]] parse suceeds
+test op ID [[x && y && z]] parse succeeds
+test op ID [[x > y > z]] parse succeeds
+test op ID [[x < y < z]] parse succeeds
 // test op ID [[x || y || z]] parse suceeds
 // test op ID [[x == y == z]] parse suceeds
 // test op ID [[x != y != z]] parse suceeds
@@ -107,15 +108,15 @@ test incomplete exp list [[foo( , )]] parse fails
 test incomplete exp list [[foo(a, )]] parse fails
 test incomplete exp list [[foo( , a)]] parse fails
 
-test op ID [[x == y]] parse fails
-test op ID [[x != y]] parse fails
-test op ID [[x || y]] parse fails
-test op ID [[x % y]] parse fails
-test op ID [[x <= y]] parse fails
-test op ID [[x >= y]] parse fails
-test op ID [[x || y || z]] parse fails
-test op ID [[x == y == z]] parse fails
-test op ID [[x != y != z]] parse fails
-test op ID [[x % y % z]] parse fails
-test op ID [[x <= y <= z]] parse fails
-test op ID [[x >= y >= z]] parse fails
+test invalid op ID [[x == y]] parse fails
+test invalid op ID [[x != y]] parse fails
+test invalid op ID [[x || y]] parse fails
+test invalid op ID [[x % y]] parse fails
+test invalid op ID [[x <= y]] parse fails
+test invalid op ID [[x >= y]] parse fails
+test invalid op ID [[x || y || z]] parse fails
+test invalid op ID [[x == y == z]] parse fails
+test invalid op ID [[x != y != z]] parse fails
+test invalid op ID [[x % y % z]] parse fails
+test invalid op ID [[x <= y <= z]] parse fails
+test invalid op ID [[x >= y >= z]] parse fails

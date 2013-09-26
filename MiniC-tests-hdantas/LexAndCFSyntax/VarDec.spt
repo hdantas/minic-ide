@@ -3,6 +3,9 @@ module MiniC-LexAndCFSyntax-testcases
 language MiniC
 start symbol VarDec
 
+// VarDec    = Type ID ";"
+// VarDec    = ArrayType ID "[" INT "]" ";"
+  
 //positive test cases
 test int         [[int a;]] parse succeeds
 test float       [[float a;]] parse succeeds
@@ -11,6 +14,11 @@ test int array   [[int a[1];]] parse succeeds
 test float array [[float a[1];]] parse succeeds
 
 //negative test cases
+test int no space         [[inta;]] parse fails
+test float no space       [[floata;]] parse fails
+test struct no space      [[structa b;]] parse fails
+test int array no space   [[inta[1];]] parse fails
+test float array no space [[floata[1];]] parse fails
 
 test int no semicolon   [[int a]] parse fails
 test float no semicolon [[float a]] parse fails

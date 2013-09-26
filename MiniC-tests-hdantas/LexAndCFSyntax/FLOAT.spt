@@ -49,4 +49,4 @@ test mix float string [["a".1]] parse fails
 test mix string float [[1."a"]] parse fails
 test mix char char [[a.a]] parse fails
 
-test wrong exp char [[1c-1]] parse fails
+test wrong exponent char [[1c-1]] parse fails

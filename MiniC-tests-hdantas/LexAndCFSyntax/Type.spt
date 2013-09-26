@@ -9,8 +9,21 @@ test float  [[float]] parse succeeds
 test struct [[struct x]] parse succeeds
 
 //negative test cases
+test int w/ semicolon    [[int a;]] parse fails
+test float w/ semicolon  [[float a;]] parse fails
+test struct w/ semicolon [[struct x;]] parse fails
 
-test int   [[int [] ]] parse fails
-test int   [[int a]] parse fails
-test float [[float [] ]] parse fails
-test float [[float b]] parse fails
+test int w/ ID   [[int a]] parse fails
+test int array   [[int [] ]] parse fails
+test int array   [[int a[] ]] parse fails
+test int array   [[int a[5] ]] parse fails
+
+test float w/ ID [[float b]] parse fails
+test float array [[float [] ]] parse fails
+test float array [[float a[] ]] parse fails
+test float array [[float a[5] ]] parse fails
+
+test struct no ID [[struct]] parse fails
+test struct array [[struct [] ]] parse fails
+test struct array [[struct b[] ]] parse fails
+test struct array [[struct b[5] ]] parse fails

@@ -3,7 +3,7 @@ Here is the MiniC grammar. The operators are the same as in MiniJava. ID and INT
 Program   = TypeDec* VarDec* FunctionDec* Exp
 
   
-  TypeDec   = "struct" ID "{" VarDec* "}"
+  TypeDec   = "struct" ID "{" VarDec* "}" ";"
 
   
   VarDec    = Type ID ";"
@@ -16,8 +16,7 @@ Program   = TypeDec* VarDec* FunctionDec* Exp
   Type      = "struct" ID
 
   
-  FunctionDec = Type ID "(" FormalList ")" "{" VarDec* Statement* "return" Exp "}"
-  ??? MainDec = "int" "main"(" "int" "argc" "," "char" "*argv[]"  ")" "{" VarDec* Statement* "return" Exp "}"
+  FunctionDec = Type ID "(" FormalList ")" "{" VarDec* Statement* "return" Exp ";" "}"
 
   
   FormalList = Parameter FormalRest*

@@ -3,38 +3,56 @@ module MiniC-LexAndCFSyntax-testcases
 language MiniC
 start symbol Program
 
-Program   = TypeDec* VarDec* FunctionDec*
+// Program   = TypeDec* VarDec* FunctionDec*
 
 //positive test cases
 test simple prog [[
     struct z {int a;};
     int x;
     foo (int bar){return 0;}
+    x
 ]] parse succeeds
 
 test no typeDec [[
     int x;
     foo (int bar){return 0;}
+    x
 ]] parse succeeds
 
 test no VarDec [[
     struct z {int a;};
     foo (int bar){return 0;}
+    0
 ]] parse succeeds
 
 test noFunctionDec [[
     struct z {int a;};
     int x;
+    x
 ]] parse succeeds
 
-test empty prog [[]] parse suceeds
+test empty prog [[4.2]] parse succeeds
 
 //negative test cases
 
-test wrong order [[int x; struct z{};]] parse fails
-test wrong order [[int x; foo(){return 0;} struct z {};]] parse fails
-test wrong order [[struct z{}; foo(){return 0;} int x;]] parse fails
-test wrong order [[foo(){return 0;} struct z{}; int x;]] parse fails
-test wrong order [[foo(){return 0;} int x; struct z{};]] parse fails
-test wrong order [[foo(){return 0;} int x;]] parse fails
-test wrong order [[foo(){return 0;} struct z{};]] parse fails
+test wrong order [[int x; struct z{}; 1]] parse fails
+test wrong order [[int x; foo(){return 0;} struct z {}; 1]] parse fails
+test wrong order [[struct z{}; foo(){return 0;} int x; 1]] parse fails
+test wrong order [[foo(){return 0;} struct z{}; int x; 1]] parse fails
+test wrong order [[foo(){return 0;} int x; struct z{}; 1]] parse fails
+test wrong order [[foo(){return 0;} int x; 1]] parse fails
+test wrong order [[foo(){return 0;} struct z{}; 1]] parse fails
+
+
+test no end Exp [[struct z {int a;}; int x; foo (int bar){return 0;}]] parse fails
+test no end Exp [[int x; foo (int bar){return 0;}]] parse fails
+test no end Exp [[struct z {int a;};  foo (int bar){return 0;}]] parse fails
+test no end Exp [[struct z {int a;}; int x;]] parse fails
+test no end Exp [[]] parse fails
+
+test invalid end Exp [[struct z {int a;}; int x; foo (int bar){return 0;} x;]] parse fails
+test invalid end Exp [[int x; foo (int bar){return 0;} 1;]] parse fails
+test invalid end Exp [[struct z {int a;};  foo (int bar){return 0;} 1;]] parse fails
+test invalid end Exp [[struct z {int a;}; int x; 2;]] parse fails
+test invalid end Exp [[1;]] parse fails
+

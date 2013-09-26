@@ -1,17 +1,17 @@
 module MiniC-Layout-testcases
 
 language MiniC
-start symbol LAYOUT
+start symbol Comment
 
 //positive test cases
 test single line comment [[// comment text]] parse succeeds
 test single line comment [[// comment text
 ]] parse succeeds
 test single line comment [[// comment text<EOF>]] parse succeeds
-test single line comment [[// comment text * /]] parse suceeds
-test single line comment [[// comment text //]] parse suceeds
-test single line comment [[// comment text /*]] parse suceeds
-test single line comment [[// comment text /**/]] parse suceeds
+test single line comment [[// comment text * /]] parse succeeds
+test single line comment [[// comment text //]] parse succeeds
+test single line comment [[// comment text /*]] parse succeeds
+test single line comment [[// comment text /**/]] parse succeeds
 
 test block comment [[/**/]] parse succeeds
 test block comment [[/*  */]] parse succeeds
@@ -22,9 +22,9 @@ test block comment [[
 text
 */]] parse succeeds
 
-test nested block comment [[/* */]] parse suceeds
-test nested block comment [[/*/* comment text */*/]] parse suceeds
-test nested block comment [[/* comm/*ent*/text */]] parse suceeds
+test nested block comment [[/*/* */*/]] parse succeeds
+test nested block comment [[/*/* comment text */*/]] parse succeeds
+test nested block comment [[/* comm/*ent*/text */]] parse succeeds
 test nested block comment [[
 /* /* comment
 text
