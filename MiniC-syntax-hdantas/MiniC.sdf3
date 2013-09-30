@@ -1,0 +1,64 @@
+module MiniC
+
+//context-free start-symbols 
+
+exports
+	sorts ID INT FLOAT LAYOUT
+	
+	lexical syntax
+
+		ID = [a-zA-Z][a-zA-Z0-9\_]*
+		INT = [0-9]+
+		FLOAT = INT+ "." INT*
+		FLOAT = INT* "." INT+
+		FLOAT = INT* "." INT+ [eE] INT+
+		FLOAT = INT+ "." INT* [eE] INT+
+		LAYOUT = [\ \t\n\r]
+	
+		ID = auto {reject}
+		ID = break {reject}
+		ID = case {reject}
+		ID = char {reject}
+		ID = const {reject}
+		ID = continue {reject}
+		ID = default {reject}
+		ID = do {reject}
+		ID = double {reject}
+		ID = else {reject}
+		ID = enum {reject}
+		ID = extern {reject}
+		ID = float {reject}
+		ID = for {reject}
+		ID = goto {reject}
+		ID = if {reject}
+		ID = int {reject}
+		ID = long {reject}
+		ID = register {reject}
+		ID = return {reject}
+		ID = short {reject}
+		ID = signed {reject}
+		ID = sizeof {reject}
+		ID = static {reject}
+		ID = struct {reject}
+		ID = switch {reject}
+		ID = typedef {reject}
+		ID = union {reject}
+		ID = unsigned {reject}
+		ID = void {reject}
+		ID = volatile {reject}
+		ID = while {reject}
+
+		ID = null {reject}
+		ID = NULL {reject}
+
+	lexical restrictions
+		ID -\- [a-zA-Z0-9\_]
+		INT -\- [0-9]
+		FLOAT -\- [0-9]
+	
+	context-free syntax
+		Block = "{" Statement* "}"
+  
+	context-free restrictions
+	
+		LAYOUT? -/-  [\/].[\*]

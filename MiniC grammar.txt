@@ -1,32 +1,25 @@
 Here is the MiniC grammar. The operators are the same as in MiniJava. ID and INT are the same as in MiniJava, same for comments. FLOAT needs to be defined in the common way: 
 
 Program   = TypeDec* VarDec* FunctionDec* Exp
-
   
   TypeDec   = "struct" ID "{" VarDec* "}" ";"
-
   
   VarDec    = Type ID ";"
   VarDec    = ArrayType ID "[" INT "]" ";"
-
   
   ArrayType = "int"
   ArrayType = "float"
   Type      = ArrayType
   Type      = "struct" ID
-
   
   FunctionDec = Type ID "(" FormalList ")" "{" VarDec* Statement* "return" Exp ";" "}"
-
   
   FormalList = Parameter FormalRest*
   FormalList = 
   FormalRest = "," Parameter
-
   
   Parameter = Type ID
   Parameter = ArrayType ID "[" "]"
-
   
   Statement = ID "=" Exp ";"
   Statement = ID "[" Exp "]" "=" Exp ";"
@@ -37,7 +30,6 @@ Program   = TypeDec* VarDec* FunctionDec* Exp
   Statement = "printf" "(" "\"%f\"" "," Exp ")" ";"
   Statement = "{" Statement* "}"
 
-  
   Exp = INT
   Exp = FLOAT
   Exp = ID
@@ -48,25 +40,16 @@ Program   = TypeDec* VarDec* FunctionDec* Exp
   Exp = "(" Exp ")"
   Exp = "sizeof" "(" Exp ")"
   Exp = ID "(" ExpList ")"
-
   
   ExpList = Exp ExpRest*
   ExpList = 
   ExpRest = "," Exp
 
 
-An identifier is a sequence of letters, digits, and under-
-scores, starting with a letter. Uppercase letters are
-distinguished from lowercase.
-A sequence of decimal digits is an integer constant that
-denotes the corresponding integer value.
+An identifier is a sequence of letters, digits, and underscores, starting with a letter. Uppercase letters are distinguished from lowercase.
+A sequence of decimal digits is an integer constant that denotes the corresponding integer value.
 A binary operator is one of
-&&
-<
-+
--
-*
-A comment may appear between any two tokens.There
-are two forms of comments: One starts with /*, ends
-with */, and may be nested; another begins with // and
-goes to the end of the line.
+
+&& < + - *
+
+A comment may appear between any two tokens.There are two forms of comments: One starts with /*, ends with */, and may be nested; another begins with // and goes to the end of the line.
