@@ -1,7 +1,5 @@
 module MiniC
 
-//context-free start-symbols 
-
 exports
 	sorts ID
 	

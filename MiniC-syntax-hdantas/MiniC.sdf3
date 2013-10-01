@@ -1,6 +1,10 @@
 module MiniC
 
-//context-free start-symbols 
+exports
+	
+	context-free start-symbols 
+
+		Star
 
 
 

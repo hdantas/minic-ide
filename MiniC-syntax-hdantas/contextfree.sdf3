@@ -1,7 +1,5 @@
 module MiniC
 
-//context-free start-symbols 
-
 exports 
 
 	sorts Program, TypeDec, VarDec, ArrayType, Type, FunctionDec, FormalList, FormalRest, Parameter, Statement, Exp, ExpList, ExpRest
@@ -39,19 +37,21 @@ exports
 		Statement.PrinfFloat				= < "printf" "(" "\"%f\"" "," <Exp> ")" ";" >
 		Statement.Block						= < "{" <Statement>* "}" >
 
+
+		Exp.Uminus							= < "+" <INT> >
 		Exp.INTExp							= < <INT> >
 		Exp.FLOATExp						= < <FLOAT> >
 		Exp.IDExp							= < <ID> >
 		Exp.ArrayExp						= < <Exp> "[" <Exp> "]" >
-		Exp.StructMemberExp					= < <Exp> "." <Exp> > {left}
+		Exp.StructMemberExp					= < <Exp> "." <Exp> >
 		Exp.And								= < <Exp> && <Exp> > {left}
-		Exp.Lt								= [ <Exp> < <Exp> ] {left}
-		Exp.Gt								= [ <Exp> > <Exp> ] {left}
-		Exp.Add							= < <Exp> + <Exp> > {left}
+		Exp.Lt								= [ <Exp> < <Exp> ] {non-assoc}
+		Exp.Gt								= [ <Exp> > <Exp> ] {non-assoc}
+		Exp.Add								= < <Exp> + <Exp> > {left}
 		Exp.Subtract						= < <Exp> - <Exp> > {left}
 		Exp.Multiply						= < <Exp> * <Exp> > {left}
 		Exp.Divide							= < <Exp> / <Exp> > {left}
-		Exp.Not								= < "!" <Exp> > {right}
+		Exp.Not								= < "!" <Exp> >
 		Exp.Parentheses						= < "(" <Exp> ")" >
 		Exp.Sizeof							= < "sizeof" "(" <Exp> ")" >
 		Exp.FunctionCall					= < <ID> "(" ExpList ")" >
@@ -62,18 +62,16 @@ exports
 
 	
 	context-free priorities
-  		{left: Exp.ArrayExp Exp.FunctionCall Exp.StructMemberExp} >
-  		{left: Exp.Sizeof} >
-  		{left: Exp.Not} >
-  		{left: Exp.Parentheses} >
+	
+  		{Exp.ArrayExp Exp.FunctionCall Exp.StructMemberExp} >
+  		{Exp.Sizeof} >
+  		{Exp.Not} >
+  		{Exp.Parentheses} >
   		{left: Exp.Multiply Exp.Divide} >
   		{left: Exp.Add Exp.Subtract} >
-  		{left: Exp.Lt Exp.Gt} >
+  		{non-assoc: Exp.Lt Exp.Gt} >
   		{left: Exp.And}
 
 	
 	
   
-	context-free restrictions
-	
-		LAYOUT? -/-  [\/].[\*]
