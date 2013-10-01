@@ -1,7 +1,6 @@
 .metadata/
 MiniC-hdantas/
-MiniC-tests-hdantas/.cache
-MiniC-tests-hdantas/.project
+*.cache
 *~
 *.bak
 *.aterm

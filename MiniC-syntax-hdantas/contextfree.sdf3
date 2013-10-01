@@ -1,0 +1,79 @@
+module MiniC
+
+//context-free start-symbols 
+
+exports 
+
+	sorts Program, TypeDec, VarDec, ArrayType, Type, FunctionDec, FormalList, FormalRest, Parameter, Statement, Exp, ExpList, ExpRest
+
+
+	context-free syntax
+
+		Program.Program						= < <TypeDec>* <VarDec>* <FunctionDec>* <Exp> >
+		
+		TypeDec.StructDec					= < "struct" <ID> "{" <VarDec>* "}" ";" >
+
+	 	VarDec.IDDec						= < <Type> <ID> ";" >
+		VarDec.ArrayDec						= < <ArrayType> <ID> "[" <INT> "]" ";" >
+		
+		ArrayType.IntArray					= < "int" >
+		ArrayType.FloatArray				= < "float" >
+		Type.ArrayType						= < <ArrayType> >
+		Type.StructType						= < "struct" <ID> >
+		
+		FunctionDec.FunctionDec				= < <Type> <ID> "(" <FormalList> ")" "{" <VarDec>* <Statement>* "return" <Exp> ";" "}" >
+		
+		FormalList.List						= < <Parameter> <FormalRest>* >
+		FormalList.EmptyList				= <  >
+		FormalRest.ListRest					= < "," <Parameter> >
+		
+		Parameter.IDParameter				= < <Type> <ID> >
+		Parameter.ArrayParameter			= < <ArrayType> <ID> "[" "]" >
+		
+		Statement.IDAssignment				= < <ID> "=" <Exp> ";" >
+		Statement.ArrayAssignment			= < <ID> "[" <Exp> "]" "=" <Exp> ";" >
+		Statement.StructMemberAssignment	= < <ID> "." <ID> "=" <Exp> ";" >
+		Statement.IfElse					= < "if" "(" <Exp> ")" <Statement> "else" <Statement> >
+		Statement.While						= < "while" "(" <Exp> ")" <Statement> >
+		Statement.PrintfInt					= < "printf" "(" "\"%i\"" "," <Exp> ")" ";" >
+		Statement.PrinfFloat				= < "printf" "(" "\"%f\"" "," <Exp> ")" ";" >
+		Statement.Block						= < "{" <Statement>* "}" >
+
+		Exp.INTExp							= < <INT> >
+		Exp.FLOATExp						= < <FLOAT> >
+		Exp.IDExp							= < <ID> >
+		Exp.ArrayExp						= < <Exp> "[" <Exp> "]" >
+		Exp.StructMemberExp					= < <Exp> "." <Exp> > {left}
+		Exp.And								= < <Exp> && <Exp> > {left}
+		Exp.Lt								= [ <Exp> < <Exp> ] {left}
+		Exp.Gt								= [ <Exp> > <Exp> ] {left}
+		Exp.Add							= < <Exp> + <Exp> > {left}
+		Exp.Subtract						= < <Exp> - <Exp> > {left}
+		Exp.Multiply						= < <Exp> * <Exp> > {left}
+		Exp.Divide							= < <Exp> / <Exp> > {left}
+		Exp.Not								= < "!" <Exp> > {right}
+		Exp.Parentheses						= < "(" <Exp> ")" >
+		Exp.Sizeof							= < "sizeof" "(" <Exp> ")" >
+		Exp.FunctionCall					= < <ID> "(" ExpList ")" >
+  
+		ExpList.ListExp						= < <Exp> <ExpRest>* >
+		ExpList.EmptyListExp				= <  >
+		ExpRest.ListRestExp					= < "," <Exp> >
+
+	
+	context-free priorities
+  		{left: Exp.ArrayExp Exp.FunctionCall Exp.StructMemberExp} >
+  		{left: Exp.Sizeof} >
+  		{left: Exp.Not} >
+  		{left: Exp.Parentheses} >
+  		{left: Exp.Multiply Exp.Divide} >
+  		{left: Exp.Add Exp.Subtract} >
+  		{left: Exp.Lt Exp.Gt} >
+  		{left: Exp.And}
+
+	
+	
+  
+	context-free restrictions
+	
+		LAYOUT? -/-  [\/].[\*]

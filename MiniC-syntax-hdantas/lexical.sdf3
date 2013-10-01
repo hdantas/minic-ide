@@ -1,0 +1,28 @@
+module MiniC
+
+//context-free start-symbols 
+
+exports
+	sorts ID INT FLOAT LAYOUT
+	
+	lexical syntax
+
+		ID = [a-zA-Z][a-zA-Z0-9\_]*
+		
+		INT = [0-9]+
+		
+		FLOAT = INT+ "." INT*
+		FLOAT = INT* "." INT+
+		FLOAT = INT* "." INT+ [eE] INT+
+		FLOAT = INT+ "." INT* [eE] INT+
+		
+		LAYOUT = [\ \t\n\r]
+
+
+	lexical restrictions
+		
+		ID -\- [a-zA-Z0-9\_]
+		
+		INT -\- [0-9]
+		
+		FLOAT -\- [0-9]

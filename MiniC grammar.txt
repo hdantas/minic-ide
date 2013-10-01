@@ -51,5 +51,6 @@ A sequence of decimal digits is an integer constant that denotes the correspondi
 A binary operator is one of
 
 && < + - *
+added by me > /
 
 A comment may appear between any two tokens.There are two forms of comments: One starts with /*, ends with */, and may be nested; another begins with // and goes to the end of the line.
