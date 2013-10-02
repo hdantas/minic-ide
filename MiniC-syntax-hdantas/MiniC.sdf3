@@ -1,10 +1,11 @@
 module MiniC
 
 imports
-	MiniC-Lexical MiniC-Keyword MiniC-ContextFree //	MiniC-ContextFree
+	MiniC-Lexical
+	MiniC-ContextFree
 	
 context-free start-symbols
-  Start
+	Start
 
 templates
  Start.Dummy = <> 
