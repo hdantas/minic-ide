@@ -1,11 +1,12 @@
-module MiniC
+module MiniC-ContextFree
 
-exports 
+//exports 
 
-	sorts Program, TypeDec, VarDec, ArrayType, Type, FunctionDec, FormalList, FormalRest, Parameter, Statement, Exp, ExpList, ExpRest
+	//sorts
+		//Program TypeDec VarDec ArrayType Type FunctionDec FormalList FormalRest Parameter Statement Exp ExpList ExpRest
 
 
-	context-free syntax
+	templates //context-free syntax
 
 		Program.Program						= < <TypeDec>* <VarDec>* <FunctionDec>* <Exp> >
 		
