@@ -1,1 +1,10 @@
-/home/nuno/repos/compiler-construction-workspace/MiniC-hdantas/syntax/MiniC.sdf3
+module MiniC
+
+imports
+	MiniC-Lexical MiniC-Keyword MiniC-ContextFree //	MiniC-ContextFree
+	
+context-free start-symbols
+  Start
+
+templates
+ Start.Dummy = <> 
