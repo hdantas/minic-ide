@@ -1,10 +1,1 @@
-module MiniC
-
-exports
-	
-	context-free start-symbols 
-
-		Star
-
-
-
+/home/nuno/repos/compiler-construction-workspace/MiniC-hdantas/syntax/MiniC.sdf3
