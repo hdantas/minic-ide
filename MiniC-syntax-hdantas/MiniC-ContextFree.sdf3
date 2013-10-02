@@ -9,58 +9,58 @@ module MiniC-ContextFree
 
  
 	templates
-		Program.Program						= [ <TypeDec>* <VarDec>* <FunctionDec>* <Exp> ]
+		Program.Program						= < <TypeDec>* <VarDec>* <FunctionDec>* <Exp> >
 		
-		TypeDec.StructDec					= [ "struct" <ID> "{" <VarDec>* "}" ";" ]
+		TypeDec.StructDec					= < "struct" <ID> "{" <VarDec>* "}" ";" >
 
-	 	VarDec.IDDec						= [ <Type> <ID> ";" ]
-		VarDec.ArrayDec						= [ <ArrayType> <ID> "[" <INT> "]" ";" ]
+	 	VarDec.IDDec						= < <Type> <ID> ";" >
+		VarDec.ArrayDec						= < <ArrayType> <ID> "[" <INT> "]" ";" >
 		
-		ArrayType.IntArray					= [ "int" ]
-		ArrayType.FloatArray				= [ "float" ]
-		Type.ArrayType						= [ <ArrayType> ]
-		Type.StructType						= [ "struct" <ID> ]
+		ArrayType.IntArray					= < "int" >
+		ArrayType.FloatArray				= < "float" >
+		Type.ArrayType						= < <ArrayType> >
+		Type.StructType						= < "struct" <ID> >
 		
-		FunctionDec.FunctionDec				= [ <Type> <ID> "(" <FormalList> ")" "{" <VarDec>* <Statemen]>* "return" <Exp> ";" "}" >
+		FunctionDec.FunctionDec				= < <Type> <ID> "(" <FormalList> ")" "{" <VarDec>* <Statement>* "return" <Exp> ";" "}" >
 		
-		FormalList.List						= [ <Parameter> <FormalRest>* ]
-		FormalList.EmptyList				= [  ]
-		FormalRest.ListRest					= [ "," <Parameter> ]
+		FormalList.List						= < <Parameter> <FormalRest>* >
+		FormalList.EmptyList				= <  >
+		FormalRest.ListRest					= < "," <Parameter> >
 		
-		Parameter.IDParameter				= [ <Type> <ID> ]
-		Parameter.ArrayParameter			= [ <ArrayType> <ID> "[" "]" ]
+		Parameter.IDParameter				= < <Type> <ID> >
+		Parameter.ArrayParameter			= < <ArrayType> <ID> "[" "]" >
 		
-		Statement.IDAssignment				= [ <ID> "=" <Exp> ";" ]
-		Statement.ArrayAssignment			= [ <ID> "[" <Exp> "]" "=" <Exp> ";" ]
-		Statement.StructMemberAssignment	= [ <ID> "." <ID> "=" <Exp> ";" ]
-		Statement.IfElse					= [ "if" "(" <Exp> ")" <Statement> "else" <Statement> ]
-		Statement.While						= [ "while" "(" <Exp> ")" <Statement> ]
-		Statement.PrintfInt					= [ "printf" "(" "\"%i\"" "," <Exp> ")" ";" ]
-		Statement.PrinfFloat				= [ "printf" "(" "\"%f\"" "," <Exp> ")" ";" ]
-		Statement.Block						= [ "{" <Statement>* "}" ]
+		Statement.IDAssignment				= < <ID> "=" <Exp> ";" >
+		Statement.ArrayAssignment			= < <ID> "[" <Exp> "]" "=" <Exp> ";" >
+		Statement.StructMemberAssignment	= < <ID> "." <ID> "=" <Exp> ";" >
+		Statement.IfElse					= < "if" "(" <Exp> ")" <Statement> "else" <Statement> >
+		Statement.While						= < "while" "(" <Exp> ")" <Statement> >
+		Statement.PrintfInt					= < "printf" "(" "\"%i\"" "," <Exp> ")" ";" >
+		Statement.PrinfFloat				= < "printf" "(" "\"%f\"" "," <Exp> ")" ";" >
+		Statement.Block						= < "{" <Statement>* "}" >
 
 
-		Exp.Uminus							= [ "-" <INT> ]
-		Exp.INTExp							= [ <INT> ]
-		Exp.FLOATExp						= [ <FLOAT> ]
-		Exp.IDExp							= [ <ID> ]
-		Exp.ArrayExp						= [ <Exp> "[" <Exp> "]" ]
-		Exp.StructMemberExp					= [ <Exp> "." <Exp> ]
-		Exp.And								= [ <Exp> && <Exp> > {left]
+		//Exp.Uminus							= < "-" <INT> >
+		Exp.INTExp							= < <INT> >
+		Exp.FLOATExp						= < <FLOAT> >
+		Exp.IDExp							= < <ID> >
+		Exp.ArrayExp						= < <Exp> "[" <Exp> "]" >
+		Exp.StructMemberExp					= < <Exp> "." <Exp> >
+		Exp.And								= < <Exp> && <Exp> > {left}
 		Exp.Lt								= [ <Exp> < <Exp> ] {non-assoc}
 		Exp.Gt								= [ <Exp> > <Exp> ] {non-assoc}
-		Exp.Add								= [ <Exp> + <Exp> > {left]
-		Exp.Subtract						= [ <Exp> - <Exp> > {left]
-		Exp.Multiply						= [ <Exp> * <Exp> > {left]
-		Exp.Divide							= [ <Exp> / <Exp> > {left]
-		Exp.Not								= [ "!" <Exp> ]
-		Exp.Parentheses						= [ "(" <Exp> ")" ]
-		Exp.Sizeof							= [ "sizeof" "(" <Exp> ")" ]
-		Exp.FunctionCall					= [ <ID> "(" ExpList ")" ]
+		Exp.Add								= < <Exp> + <Exp> > {left}
+		Exp.Subtract						= < <Exp> - <Exp> > {left}
+		Exp.Multiply						= < <Exp> * <Exp> > {left}
+		Exp.Divide							= < <Exp> / <Exp> > {left}
+		Exp.Not								= < "!" <Exp> >
+		Exp.Parentheses						= < "(" <Exp> ")" >
+		Exp.Sizeof							= < "sizeof" "(" <Exp> ")" >
+		Exp.FunctionCall					= < <ID> "(" ExpList ")" >
   
-		ExpList.ListExp						= [ <Exp> <ExpRest>* ]
-		ExpList.EmptyListExp				= [  ]
-		ExpRest.ListRestExp					= [ "," <Exp> ]
+		ExpList.ListExp						= < <Exp> <ExpRest>* >
+		ExpList.EmptyListExp				= <  >
+		ExpRest.ListRestExp					= < "," <Exp> >
 
 	
 	context-free priorities
