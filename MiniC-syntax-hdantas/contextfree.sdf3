@@ -1,5 +1,6 @@
 module MiniC-ContextFree
 
+	imports MiniC-lexical MiniC-keyword
 //exports 
 
 	//sorts

@@ -1,4 +1,4 @@
-module MiniC
+module MiniC-keyword
 
 exports
 	sorts ID
