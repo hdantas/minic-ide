@@ -5,3 +5,34 @@ write test progs and look at AST
 Various students failed all disambiguation tests in the tentative grading. To understand this failure, you have to understand the following test:
 test left-associative addition [[ 21 + 14 + 7 ]] parse to [[ (21 + 14) + 7 ]]
 This test fails, when both expressions have different ASTs. You can figure out the difference when you create an example.mjv file, open it with an editor which has Exp as its start symbol, enter both expressions and inspect their ASTs by selecting Show abstract syntax from the Transform menu.
+
+Answer to: "Constructor xxx not declared error"
+http://blog.gmane.org/gmane.comp.lang.stratego.user/month=20130421
+
+
+Test cases
+
+Lexical Syntax (20 points) 
+    ID      -> 0 errors (6 points)
+    INT     -> 0 errors (1 point)
+    FLOAT   -> 0 errors
+    whitespace (3 points)
+    simple comments (5 points)
+    complex comments, including nested block comments (5 points)
+
+context-free syntax (30 points)
+
+    Program (1 point)
+    MainClass (2 points)
+    ClassDecl (2 points)
+    VarDecl (2 points)
+    Type (2 points)
+    MethodDecl (5 points)
+    Statement (6 points)
+    Exp (10 points)
+
+disambiguation (30 points)
+
+    associativity (10 points)
+    precedence (20 points)
+
