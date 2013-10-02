@@ -3,3 +3,7 @@ organize project better, fix any errors
 look at other projs for correctness
 compare to last year proj and respective score
 write test progs and look at AST
+
+Various students failed all disambiguation tests in the tentative grading. To understand this failure, you have to understand the following test:
+test left-associative addition [[ 21 + 14 + 7 ]] parse to [[ (21 + 14) + 7 ]]
+This test fails, when both expressions have different ASTs. You can figure out the difference when you create an example.mjv file, open it with an editor which has Exp as its start symbol, enter both expressions and inspect their ASTs by selecting Show abstract syntax from the Transform menu.
