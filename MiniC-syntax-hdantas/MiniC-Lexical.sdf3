@@ -1,8 +1,5 @@
 module MiniC-Lexical
 
-	//exports
-		//sorts ID INT FLOAT LAYOUT
-	
 	lexical syntax
 
 		ID = [a-zA-Z][a-zA-Z0-9\_]*

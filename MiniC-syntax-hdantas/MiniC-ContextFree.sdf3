@@ -2,54 +2,45 @@ module MiniC-ContextFree
 
 	imports
 		MiniC-Lexical
-//exports 
-
-	//sorts
-		//Program TypeDec VarDec ArrayType Type FunctionDec FormalList FormalRest Parameter Statement Exp ExpList ExpRest
-
  
 	templates
-		Program.Program						= < <TypeDec*> <VarDec*> <FunctionDec*> <Exp> >
+		Program.File						= < <TypeDec*> <VarDec*> <FunctionDec*> <Exp> >
 		
 		TypeDec.StructDec					= < struct <ID> { <VarDec*> } ; >
 
-	 	VarDec.IDDec						= < <Type> <ID> ; >
+	 	VarDec.VarDec						= < <Type> <ID> ; >
 		VarDec.ArrayDec						= < <ArrayType> <ID> [ <INT> ] ; >
 		
 	
-		FunctionDec.FunctionDec				= < <Type> <ID> ( <FormalList> ) { <VarDec*> <Statement*> return <Exp> ; } >
+		FunctionDec.FunctionDef				= < <Type> <ID> ( <FormalList> ) { <VarDec*> <Statement*> return <Exp> ; } >
 		
-		FormalList.List						= < <Parameter> <FormalRest*> >
-		FormalList.EmptyList				= <  >
-		FormalRest.ListRest					= < , <Parameter> >
+		FormalList.FormalArgList			= < <Parameter> <FormalRest*> >
+		FormalList.FormalEmptyArgList		= <  >
+		FormalRest.FormArgListRep			= < , <Parameter> >
 		
-		Parameter.IDParameter				= < <Type>  <ID> >
-		Parameter.ArrayParameter			= < <ArrayType>  <ID> [ ] >
+		Parameter.Arg						= < <Type>  <ID> >
+		Parameter.ArrayArg					= < <ArrayType>  <ID> [ ] >
 		
-		ArrayType.IntArray					= < int >
-		ArrayType.FloatArray				= < float >
-		Type.ArrayType						= < <ArrayType> >
-		Type.StructType						= < struct <ID>  >
+		ArrayType.Int						= < int >
+		ArrayType.Float						= < float >
+		Type.Array							= < <ArrayType> >
+		Type.Struct							= < struct <ID>  >
 
-		Statement.IDAssignment				= < <ID> = <Exp> ; >
+		Statement.Assignment				= < <ID> = <Exp> ; >
 		Statement.ArrayAssignment			= < <ID> [ <Exp> ] = <Exp> ; >
 		Statement.StructMemberAssignment	= < <ID> . <ID> = <Exp> ; >
 		Statement.IfElse					= < if ( <Exp> ) <Statement> else <Statement> >
 		Statement.While						= < while ( <Exp> ) <Statement> >
 		Statement.PrintfInt					= < printf ( "%i" , <Exp> ) ; >
 		Statement.PrinfFloat				= < printf ( "%f" , <Exp> ) ; >
-		Statement.Block						= < { <Statement*> } >
+		Statement.CodeBlock					= < { <Statement*> } >
 
-
-		//Exp.Uminus						= < - <INT> >
-		Exp.INTExp							= < <INT> >
-		Exp.FLOATExp						= < <FLOAT> >
-		//Exp.IDExp						 	= < <ID> >
+		Exp.IntConst						= < <INT> >
+		Exp.FloatConst						= < <FLOAT> >
 		
-		Lvalue.IDExp					 	= < <ID> >
-		Lvalue.StructMemberExp				= < <Lvalue> . <Lvalue> > {left}
-		Lvalue.ArrayExp						= < <ID> [ <Exp> ] >
-		
+		Lvalue.Var						 	= < <ID> >
+		Lvalue.StructMember					= < <Lvalue> . <Lvalue> > {left}
+		Lvalue.ArrayVar						= < <ID> [ <Exp> ] >
 		Exp 								= < <Lvalue> >
 		
 		Exp.And								= < <Exp> && <Exp> > {left}
@@ -62,21 +53,15 @@ module MiniC-ContextFree
 		Exp.Not								= < ! <Exp> >
 		Exp									= < ( <Exp> ) > {bracket}
 		Exp.Sizeof							= < sizeof ( <Exp> ) >
-		Exp.FunctionCall					= < <ID> ( <ExpList> ) >
+		Exp.Call							= < <ID> ( <ExpList> ) >
   
-		ExpList.ListExp						= < <Exp> <ExpRest*> >
-		ExpList.EmptyListExp				= <  >
-		ExpRest.ListRestExp					= < , <Exp> >
+		ExpList.ArgList						= < <Exp> <ExpRest*> >
+		ExpList.EmptyArgList				= <  >
+		ExpRest.ArgListRep					= < , <Exp> >
 
 	
 	context-free priorities
 
-  		/*{
-  			Lvalue.ArrayExp
-  			//Exp.FunctionCall
-  		} > { 
-  			Lvalue.StructMemberExp
-  		} > */
   		{ left:
   			Exp.Multiply
   			Exp.Divide
