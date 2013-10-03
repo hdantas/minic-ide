@@ -5,7 +5,7 @@ imports
 	MiniC-ContextFree
 	
 context-free start-symbols
-	Exp
+	Comment
 
 //templates
 //	Start.Dummy = <> 

@@ -23,13 +23,13 @@ module MiniC-ContextFree
 		FormalList.EmptyList				= <  >
 		FormalRest.ListRest					= < , <Parameter> >
 		
-		Parameter.IDParameter				= < <Type> <ID> >
-		Parameter.ArrayParameter			= < <ArrayType> <ID> [ ] >
+		Parameter.IDParameter				= < <Type>  <ID> >
+		Parameter.ArrayParameter			= < <ArrayType>  <ID> [ ] >
 		
 		ArrayType.IntArray					= < int >
 		ArrayType.FloatArray				= < float >
 		Type.ArrayType						= < <ArrayType> >
-		Type.StructType						= < struct <ID> >
+		Type.StructType						= < struct <ID>  >
 
 		Statement.IDAssignment				= < <ID> = <Exp> ; >
 		Statement.ArrayAssignment			= < <ID> [ <Exp> ] = <Exp> ; >
@@ -41,13 +41,17 @@ module MiniC-ContextFree
 		Statement.Block						= < { <Statement*> } >
 
 
-		//Exp.Uminus							= < - <INT> >
+		//Exp.Uminus						= < - <INT> >
 		Exp.INTExp							= < <INT> >
 		Exp.FLOATExp						= < <FLOAT> >
-		Exp.IDExp							= < <ID> >
-		Exp.ArrayExp						= < <Exp> [ <Exp> ] >
-		//Exp.StructMemberExp					= < <Exp> . <Exp> >
-		Exp.StructMemberExp					= < <ID> . <Exp> > {right}
+		//Exp.IDExp						 	= < <ID> >
+		
+		Lvalue.IDExp					 	= < <ID> >
+		Lvalue.StructMemberExp				= < <Lvalue> . <Lvalue> > {left}
+		Lvalue.ArrayExp						= < <ID> [ <Exp> ] >
+		
+		Exp 								= < <Lvalue> >
+		
 		Exp.And								= < <Exp> && <Exp> > {left}
 		Exp.Lt								= [ [Exp] < [Exp] ] {non-assoc}
 		Exp.Gt								= [ [Exp] > [Exp] ] {non-assoc}
@@ -67,16 +71,13 @@ module MiniC-ContextFree
 	
 	context-free priorities
 
-  		{
-  			Exp.ArrayExp
+  		/*{
+  			Lvalue.ArrayExp
   			//Exp.FunctionCall
-  		} > { right:
-  			Exp.StructMemberExp
-  		} > {
-  			//Exp.Sizeof
-  		} > {
-  			Exp.Not
-  		} >	{ left:
+  		} > { 
+  			Lvalue.StructMemberExp
+  		} > */
+  		{ left:
   			Exp.Multiply
   			Exp.Divide
   		} >	{ left:
@@ -89,6 +90,8 @@ module MiniC-ContextFree
   			Exp.And
   		}
   		
+  	template options
+  		keyword -/- [a-zA-Z]
   	
   	
   	

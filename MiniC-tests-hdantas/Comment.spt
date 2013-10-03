@@ -32,6 +32,8 @@ text
 
 text */]] parse succeeds
 
+test mix type comment [[/* // */]] parse succeeds
+
 //negative test cases
 
 test incorrect single line comment [[/ comment text]] parse fails
@@ -39,7 +41,7 @@ test incorrect single line comment [[/ / comment text]] parse fails
 test incorrect single line comment [[/ // comment text]] parse fails
 test incorrect single line comment [[comment text<EOF>]] parse fails
 
-test mix type comment [[/* // */]] parse fails
+
 
 test incorrect block comment [[/* comment text *]] parse fails
 test incorrect block comment [[/* comment text * /]] parse fails

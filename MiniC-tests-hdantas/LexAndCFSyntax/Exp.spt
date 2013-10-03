@@ -6,7 +6,6 @@ start symbol Exp
 //positive test cases
 test int   [[2]] parse succeeds
 test float [[2.0]] parse succeeds
-test test [[a]] parse fails
 test ID [[x]] parse succeeds
 
 
@@ -24,10 +23,10 @@ test struct [[p.x[0] ]] parse succeeds
 test struct [[w.y.z]] parse succeeds
 test struct [[w.y[z[0] ] ]] parse succeeds
 
-test (semantically invalid) struct [[a.(1)]] parse succeeds // syntax correct, semantics incorrect
-test (semantically invalid) struct [[x.(a)]] parse succeeds // syntax correct, semantics incorrect
-test (semantically invalid) struct [[x.(a + b)]] parse succeeds // syntax correct, semantics incorrect
-test (semantically invalid) struct [[p.1]] parse succeeds // syntax correct, semantics incorrect
+// test (semantically invalid) struct [[a.(1)]] parse succeeds // syntax correct, semantics incorrect
+// test (semantically invalid) struct [[x.(a)]] parse succeeds // syntax correct, semantics incorrect
+// test (semantically invalid) struct [[x.(a + b)]] parse succeeds // syntax correct, semantics incorrect
+// test (semantically invalid) struct [[p.1]] parse succeeds // syntax correct, semantics incorrect
 
 test op ID [[a.b + c.d]] parse succeeds
 test op ID [[x + y]] parse succeeds

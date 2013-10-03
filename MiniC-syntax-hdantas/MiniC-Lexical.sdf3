@@ -17,11 +17,19 @@ module MiniC-Lexical
 		LAYOUT = Comment
 		
 		Comment = "//" ~[\n\r]* ([\n\r] | EOF)
-		Comment = "/*" CommentPart* "*/"
-		CommentPart = ~[\*]
+		Comment = BlockComment
+ 
+		BlockComment = "/*" CommentPart* "*/"
+		CommentPart = ~[\/\*]
+		
 		CommentPart = Asterisk
+		CommentPart = ForwardSlash
+		CommentPart = BlockComment
+		
 		Asterisk = [\*]
+		ForwardSlash = [\/]			
 
+		
 		EOF = 
 
 
@@ -30,10 +38,11 @@ module MiniC-Lexical
 		ID -/- [a-zA-Z0-9\_]
 		INT -/- [0-9]
 		FLOAT -/- [0-9]
-
 		Asterisk -/- [\/]
+		ForwardSlash -/- [\*]
 		EOF -/- ~[] //EOF is the last thing (ie nothing may follow it)
-
+		
+		
 	context-free restrictions
 
 		LAYOUT? -/- [\ \t\n\r]
