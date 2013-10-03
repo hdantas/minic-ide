@@ -6,8 +6,8 @@ start symbol FormalList
 //positive test cases
 test empty list   [[]] parse succeeds
 test int          [[int a]] parse succeeds
-test double array [[double a[] ]] parse succeeds
-test struct       [[stuct a]] parse succeeds
+test double array [[float a[] ]] parse succeeds
+test struct       [[struct a b]] parse succeeds
 
 test more than 1 element [[int a, int b]] parse succeeds
 

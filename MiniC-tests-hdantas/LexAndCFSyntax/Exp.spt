@@ -6,8 +6,12 @@ start symbol Exp
 //positive test cases
 test int   [[2]] parse succeeds
 test float [[2.0]] parse succeeds
-
+test test [[a]] parse fails
 test ID [[x]] parse succeeds
+
+
+test ID [[x + y]] parse succeeds
+test ID [[x + y + 2]] parse succeeds
 
 test array [[y[0] ]] parse succeeds
 test array [[y[z] ]] parse succeeds
@@ -40,8 +44,8 @@ test op ID [[x < y]] parse succeeds
 // test op ID [[x <= y]] parse succeeds
 // test op ID [[x >= y]] parse succeeds
 test op ID [[x && y && z]] parse succeeds
-test op ID [[x > y > z]] parse succeeds
-test op ID [[x < y < z]] parse succeeds
+// test op ID [[x > y > z]] parse succeeds
+// test op ID [[x < y < z]] parse succeeds
 // test op ID [[x || y || z]] parse suceeds
 // test op ID [[x == y == z]] parse suceeds
 // test op ID [[x != y != z]] parse suceeds
@@ -64,7 +68,7 @@ test sizeof [[sizeof(y)]] parse succeeds
 test sizeof [[sizeof(y.a)]] parse succeeds
 test sizeof [[sizeof(a + b)]] parse succeeds
 
-test ID with expression list [[foo()]] parse succeeds
+test ID with expression list [[foo( )]] parse succeeds
 test ID with expression list [[foo(a)]] parse succeeds
 test ID with expression list [[foo(bar(a))]] parse succeeds
 test ID with expression list [[foo(a + b)]] parse succeeds

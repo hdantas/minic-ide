@@ -6,16 +6,18 @@ module MiniC-Lexical
 	lexical syntax
 
 		ID = [a-zA-Z][a-zA-Z0-9\_]*
-		INT = "-"? [0-9]+
+		INT = ("-"|"+")? [0-9]+
 
-		FLOAT = "-"? [0-9]+ ([eE] ("-"|"+")? [0-9]+)? // 1 or 1E1
-		FLOAT = "-"? [0-9]+ "." [0-9]+ ([eE] ("-"|"+")? [0-9]+)? // 1.1 or 1.1E1
-		FLOAT = "-"? "." [0-9]+ ([eE] ("-"|"+")? [0-9]+)? //.1 or .1E1
-		FLOAT = "-"? [0-9]+ "." ([eE] ("-"|"+")? [0-9]+)? //1. or 1.E1
+		FLOAT = ("-"|"+")? [0-9]+ [eE] ("-"|"+")? [0-9]+ // 1E1
+		FLOAT = ("-"|"+")? [0-9]+ "." [0-9]+ ([eE] ("-"|"+")? [0-9]+)? // 1.1 or 1.1E1
+		FLOAT = ("-"|"+")? "." [0-9]+ ([eE] ("-"|"+")? [0-9]+)? //.1 or .1E1
+		FLOAT = ("-"|"+")? [0-9]+ "." ([eE] ("-"|"+")? [0-9]+)? //1. or 1.E1
 		
 		LAYOUT = [\ \t\n\r]
-		LAYOUT = "//" ~[\n\r]* ([\n\r] | EOF)
-		LAYOUT = "/*" CommentPart* "*/"
+		LAYOUT = Comment
+		
+		Comment = "//" ~[\n\r]* ([\n\r] | EOF)
+		Comment = "/*" CommentPart* "*/"
 		CommentPart = ~[\*]
 		CommentPart = Asterisk
 		Asterisk = [\*]
@@ -35,8 +37,8 @@ module MiniC-Lexical
 	context-free restrictions
 
 		LAYOUT? -/- [\ \t\n\r]
-		LAYOUT? -/- [\/].[\/]
-		LAYOUT? -/- [\/].[\*]
+		Comment? -/- [\/].[\/]
+		Comment? -/- [\/].[\*]
 		
 
 	lexical syntax

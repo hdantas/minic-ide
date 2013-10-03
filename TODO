@@ -17,19 +17,20 @@ Lexical Syntax (20 points)
     INT     -> 0 errors (1 point)
     FLOAT   -> 0 errors
     whitespace (3 points)
-    simple comments (5 points)
-    complex comments, including nested block comments (5 points)
+    simple comments (5 points) -> 0 errors
+    complex comments, including nested block comments (5 points) -> 0 errors (not including nested comments yet)
 
 context-free syntax (30 points)
 
-    Program (1 point)
-    MainClass (2 points)
-    ClassDecl (2 points)
-    VarDecl (2 points)
-    Type (2 points)
-    MethodDecl (5 points)
-    Statement (6 points)
-    Exp (10 points)
+    Program (1 point) -> 0 errors
+    TypeDec (2 points) -> 0 errors
+    FunctionDec -> 0 errors
+    VarDec (2 points) -> 5 errors (floata; parses suceesfully) 
+    FormalList -> 0 errors
+    Parameter (? points) -> 0 errors
+    Type (2 points) -> 0 errors
+    Statement (6 points) -> 2 ambiguity errors (originate from Exp)
+    Exp (10 points) ->3 ambiguity errors
 
 disambiguation (30 points)
 
