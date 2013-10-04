@@ -1,0 +1,20 @@
+
+module pp
+
+imports
+  libstratego-gpp
+  lib/runtime/tmpl/pp
+  include/MiniC-parenthesize
+  trans/MiniC-ContextFree.pp.generated
+  trans/MiniC-Lexical.pp.generated
+  
+  
+rules
+
+  pp-builder:
+  (selected, position, ast, path, project-path) -> (name, content)
+  with
+    name    := <guarantee-extension(|"pp.mic")> path
+  ; ast'    := <parenthesize-MiniC> ast
+  ; box     := V([], <prettyprint-Program> ast')
+  ; content := <box2text-string(|100)> box  
