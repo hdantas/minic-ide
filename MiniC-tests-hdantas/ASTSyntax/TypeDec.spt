@@ -8,4 +8,4 @@ test type declaration [[
 struct a {
 	int a;
 };
-]] parse to TypeDec(StructName("a"), [_])
+]] parse to StructDec("a", [VarDec(Array(Int), "a")])

@@ -3,6 +3,6 @@ module MiniC-ASTSyntax-testcases
 language MiniC
 start symbol INT
 
-test integer constant [[42]] parse to Integer("42")
-test negative integer constant [[-42]] parse to NInteger("42") //NInteger stands for negative integer
+test integer constant [[42]] parse to "42"
+test negative integer constant [[-42]] parse to "-42"
 

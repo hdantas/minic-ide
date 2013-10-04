@@ -3,15 +3,15 @@ module MiniC-ASTSyntax-testcases
 language MiniC
 start symbol FLOAT
 
-test float [[2.3]] parse to Float(Integer("2.3"), Integer("0"))
-test float [[-2.3]] parse to Float(NInteger("2.3"), Integer("0"))
+test float [[2.3]] parse to "2.3"
+test float [[-2.3]] parse to "-2.3"
 
-test float [[2e2]] parse to Float(Integer("2"), Integer("2"))
-test float [[-2e2]] parse to Float(NInteger("2"), Integer("2"))
-test float [[2e-2]] parse to Float(Integer("2"), NInteger("2"))
-test float [[-2e-2]] parse to Float(NInteger("2"), NInteger("2"))
+test float [[2e2]] parse to "2e2"
+test float [[-2e2]] parse to "-2e2"
+test float [[2e-2]] parse to "2e-2"
+test float [[-2e-2]] parse to "-2e-2"
 
-test float [[2E4]] parse to Float(Integer("2"), Integer("4"))
-test float [[-2E4]] parse to Float(NInteger("2"), Integer("4"))
-test float [[2E-4]] parse to Float(Integer("2"), NInteger("4"))
-test float [[-2E-4]] parse to Float(NInteger("2"), NInteger("4"))
+test float [[2E4]] parse to "2E4"
+test float [[-2E4]] parse to "-2E4"
+test float [[2E-4]] parse to "2E-4"
+test float [[-2E-4]] parse to "-2E-4"

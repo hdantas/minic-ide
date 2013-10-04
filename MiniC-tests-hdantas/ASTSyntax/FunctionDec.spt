@@ -11,4 +11,4 @@ int foo(int x) {
 	a = 1.0;
 	return a;
 }
-]] parse to FunctionDec(_, FunctionName("foo"), [_], [_], _)
+]] parse to FunctionDef(Array(Int), "foo", [_], [_], [_], _)

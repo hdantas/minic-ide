@@ -12,11 +12,7 @@ module MiniC-ContextFree
 		VarDec.ArrayDec						= < <ArrayType> <ID> [ <INT> ] ; >
 		
 	
-		FunctionDec.FunctionDef				= < <Type> <ID> ( <FormalList> ) { <VarDec*> <Statement*> return <Exp> ; } >
-		
-		FormalList.FormalArgList			= < <Parameter> <FormalRest*> >
-		FormalList.FormalEmptyArgList		= <  >
-		FormalRest.FormArgListRep			= < , <Parameter> >
+		FunctionDec.FunctionDef				= < <Type> <ID> ( <Parameter*; separator=","> ) { <VarDec*> <Statement*> return <Exp> ; } >
 		
 		Parameter.Arg						= < <Type>  <ID> >
 		Parameter.ArrayArg					= < <ArrayType>  <ID> [ ] >
@@ -53,12 +49,8 @@ module MiniC-ContextFree
 		Exp.Not								= < ! <Exp> >
 		Exp									= < ( <Exp> ) > {bracket}
 		Exp.Sizeof							= < sizeof ( <Exp> ) >
-		Exp.Call							= < <ID> ( <ExpList> ) >
+		Exp.Call							= < <ID> ( <Exp*; separator=","> ) >
   
-		ExpList.ArgList						= < <Exp> <ExpRest*> >
-		ExpList.EmptyArgList				= <  >
-		ExpRest.ArgListRep					= < , <Exp> >
-
 	
 	context-free priorities
 
