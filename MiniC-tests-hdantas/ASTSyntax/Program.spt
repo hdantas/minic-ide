@@ -3,6 +3,8 @@ module MiniC-ASTSyntax-testcases
 language MiniC
 start symbol Program
 
+// Program.File						= < <TypeDec*> <VarDec*> <FunctionDec*> <Exp> >
+
 test Program [[
 struct a {
     int b;
@@ -15,4 +17,4 @@ int main(){
 }
 
 c
-]] parse to Program([_], [_], [_])
+]] parse to File([StructDec(_, [_])], [VarDec(_, _)], [FunctionDef(_, _, [], [], [], _)], _)

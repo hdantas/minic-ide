@@ -6,3 +6,15 @@ imports
 	
 context-free start-symbols
 	Program
+	TypeDec
+	VarDec
+	ArrayType
+	Type
+	FunctionDec
+	Parameter
+	Statement
+	Exp
+	INT
+	ID
+	FLOAT
+	Comment
