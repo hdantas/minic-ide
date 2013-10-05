@@ -1,0 +1,16 @@
+module MiniC-Folding
+
+imports MiniC-Folding.generated
+
+folding
+  
+  // This file can be used for custom folding rules.
+  //
+  // See the imported file for a brief introduction and examples.
+  
+  TypeDec.StructDec       
+  FunctionDec.FunctionDef 
+  Statement.IfElse        
+  Statement.While         
+  Statement.CodeBlock
+  //CommentPart                 

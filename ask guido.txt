@@ -1,16 +1,43 @@
-the follwing should succeed right as syntaxically is correcy? 
+1 -> is there anyway to diferentiate between
 
-	test semantically invalid struct [[a.(1)]] parse succeeds // syntax correct, semantics incorrect
-	test semantically invalid struct [[x.(a)]] parse succeeds // syntax correct, semantics incorrect
-	test semantically invalid struct [[x.(a + b)]] parse succeeds // syntax correct, semantics incorrect
-	test semantically invalid struct [[p.1]] parse succeeds // syntax correct, semantics incorrect
+if (x < 10)
+	a = a + 1;
+else
+	b = b + 1;
+
+and 
+
+if (x < 10) {
+	a = a + 1;
+} else {
+	b = b + 1;
+}
+
+in such a way that if a brace exists the automatic indentation is different
+As I see there are two ways, either I always force braces to exist (as defined by K&R style indentation) or I create a new sort Block which is not a Statement anymore (to avoid ambiguation)
 
 
-the following should have a ";" after return Exp right?
-FunctionDec = Type ID "(" FormalList ")" "{" VarDec* Statement* "return" Exp "}"
+2 -> I am defining functions in such a way that autocomplete imediately returns the following 
+int FuncName (Arguments)
+{
+  Variable Declaration
 
-the following should have a ";" at the end right?
-TypeDec   = "struct" ID "{" VarDec* "}"
+  Body
 
-why does program has a Exp at the end?
-Program   = TypeDec* VarDec* FunctionDec* Exp
+  return Return value;
+}
+
+however if i pretty print already existing code that is missing some of the optional sorts I will have an extra newline there. For example if it is missign the body?
+
+int foo ()
+{
+  int a;
+
+
+  return 0;
+}
+
+Is there a way I can put an optional newline in case the sort is used? An alternative would be to add \\n to the label but if in that case when I select the sort in eclipse and write something on it, the new line is also replaced.
+
+
+3 -> How to fold block comments (nested or not)?

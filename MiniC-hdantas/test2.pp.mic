@@ -1,0 +1,27 @@
+
+
+int a (int foo[])
+{
+  int b;
+  int a;
+  float x;
+  int a[5];
+
+  if (Condition)
+    {
+      d = a + 1;
+      c = b + 1;
+      b = c + 1;
+      a = d + 1;
+    }
+  else
+    {
+      b = b + 1;
+    }
+  
+  printf("%f", a);
+
+  return a;
+}
+
+x

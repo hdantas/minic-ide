@@ -1,5 +1,15 @@
 .metadata/
-MiniC-hdantas/
+MiniC-hdantas/.*
+MiniC-hdantas/bin
+MiniC-hdantas/icons
+MiniC-hdantas/include
+MiniC-hdantas/lib*
+MiniC-hdantas/META-INF
+MiniC-hdantas/*.xml
+MiniC-hdantas/*.aterm
+MiniC-hdantas/*generated*
+MiniC-hdantas/syntax/*.sdf
+MiniC-hdantas/editor/java
 *.cache
 *~
 *.bak
