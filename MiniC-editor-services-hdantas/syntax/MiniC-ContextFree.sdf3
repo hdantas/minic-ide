@@ -4,53 +4,66 @@ module MiniC-ContextFree
     MiniC-Lexical
  
   templates
-    Program.File                      = < <TypeDec*> <VarDec*> <FunctionDec*> <Exp> >
-    //Program.File                      = < <TypeDec*; text="{\tStructDeclaration\n"> <VarDec*; text="\tVariable Declaration\n"> <FunctionDec*; text="\tFuncion Declaration\n"> <Exp; text="\tResult\n}"> >
+    Program.File                      = <<TypeDec*> <VarDec*> <FunctionDec*> <Exp>>
+    //Program.File                    = <<TypeDec*; text="{\tStructDeclaration\n"> <VarDec*; text="\tVariable Declaration\n"> <FunctionDec*; text="\tFuncion Declaration\n"> <Exp; text="\tResult\n}">>
     
-    TypeDec.StructDec                 = < struct <ID; text="StructName"> { <VarDec*; text="StructMembers"> } ; >
+    TypeDec.StructDec                 = <struct <ID; text="StructName"> {
+  <VarDec*; text="StructMembers">
+};>
 
-    VarDec.VarDec                     = < <Type; text="Type"> <ID; text="VarName"> ; >
-    VarDec.ArrayDec                   = < <ArrayType; text="Type"> <ID; text="ArrayName"> [ <INT; text="NumberElements"> ] ; >
+    VarDec.VarDec                     = <<Type; text="Type"> <ID; text="VarName">;>
+    VarDec.ArrayDec                   = <<ArrayType; text="Type"> <ID; text="ArrayName">[<INT; text="NumberElements">];>
     
-  
-    FunctionDec.FunctionDef           = < <Type; text="ReturnType"> <ID; text="FuncName"> ( <Parameter*; separator=", ", text="Arguments"> ) { <VarDec*; text="\\n\\tVariable Declaration\\n"> <Statement*; text="Function Body\\n"> return <Exp; text="Result\\n"> ; } >
+    FunctionDec.FunctionDef           = <<Type; text="ReturnType"> <ID; text="FuncName"> (<Parameter*; separator=", ", text="Arguments">)
+{
+  <VarDec*; text="Variable Declaration">
+  <Statement*; text="Body">
+  return <Exp; text="Return value">;
+}>
     
-    Parameter.Arg                     = < <Type; text="Type"> <ID; text="Name"> >
-    Parameter.ArrayArg                = < <ArrayType; text="Type">  <ID; text="Name"> [ ] >
+    Parameter.Arg                     = <<Type; text="Type"> <ID; text="Name">>
+    Parameter.ArrayArg                = <<ArrayType; text="Type"> <ID; text="Name">[]>
     
-    ArrayType.Int                     = < int >
-    ArrayType.Float                   = < float >
-    Type.Array                        = < <ArrayType; text="Type"> >
-    Type.Struct                       = < struct <ID; text="StructName">  >
+    ArrayType.Int                     = <int>
+    ArrayType.Float                   = <float>
+    Type.Array                        = <<ArrayType; text="Type">>
+    Type.Struct                       = <struct <ID; text="StructName">>
 
-    Statement.Assignment              = < <ID; text="Var"> = <Exp; hide> ; >
-    Statement.ArrayAssignment         = < <ID; text="ArrayName"> [ <Exp; text="Index"> ] = <Exp; hide> ; >
-    Statement.StructMemberAssignment  = < <ID; text="StructName"> . <ID; text="StructMember"> = <Exp; hide> ; >
-    Statement.IfElse                  = < if ( <Exp; text="Condition"> ) <Statement; text=" "> else <Statement; text=" "> >
-    Statement.While                   = < while ( <Exp; text="Condition"> ) <Statement; hide> >
-    Statement.PrintfInt               = < printf ( " %i " , <Exp; text="IntegerVar"> ) ; >
-    Statement.PrinfFloat              = < printf ( " %f " , <Exp; text="FloatVar"> ) ; >
-    Statement.CodeBlock               = < { <Statement*; text="{\t}"> } >
+    Statement.Assignment              = <<ID; text="Var"> = <Exp>;>
+    Statement.ArrayAssignment         = <<ID; text="ArrayName">[<Exp; text="Index">] = <Exp>;>
+    Statement.StructMemberAssignment  = <<ID; text="StructName">.<ID; text="StructMember"> = <Exp>;>
+    Statement.IfElse                  = <if (<Exp; text="Condition">) {
+  <Statement>
+} else
+  <Statement>>
+    Statement.While                   = <while (<Exp; text="Condition">) {
+  <Statement>
+}>
+    Statement.PrintfInt               = <printf( "%i", <Exp; text="IntegerVar">);>
+    Statement.PrinfFloat              = <printf( "%f", <Exp; text="FloatVar">);>
+    Statement.CodeBlock               = <{
+  <Statement>
+}>
 
-    Exp.IntConst                      = < <INT; text="Integer"> >
-    Exp.FloatConst                    = < <FLOAT; text="Float"> >
+    Exp.IntConst                      = <<INT; text="Integer">>
+    Exp.FloatConst                    = <<FLOAT; text="Float">>
     
-    Lvalue.Var                        = < <ID; text="VarName"> >
-    Lvalue.StructMember               = < <Lvalue; text="StructName"> . <Lvalue; text="StructMember"> > {left}
-    Lvalue.ArrayVar                   = < <ID; text="ArrayName"> [ <Exp; text="Index"> ] >
-    Exp                               = < <Lvalue> >
+    Lvalue.Var                        = <<ID; text="VarName">>
+    Lvalue.StructMember               = <<Lvalue; text="StructName">.<Lvalue; text="StructMember">> {left}
+    Lvalue.ArrayVar                   = <<ID; text="ArrayName">[<Exp; text="Index">]>
+    Exp                               = <<Lvalue>>
     
-    Exp.And                           = < <Exp; text="Value"> && <Exp; text="Value"> > {left}
-    Exp.Lt                            = [ [Exp; text="Value"] < [Exp; text="Value"] ] {non-assoc}
-    Exp.Gt                            = [ [Exp; text="Value"] > [Exp; text="Value"] ] {non-assoc}
-    Exp.Add                           = < <Exp; text="Addend"> + <Exp; text="Addend"> > {left}
-    Exp.Subtract                      = < <Exp; text="Minuend" > - <Exp; text="Subtrahend"> > {left}
-    Exp.Multiply                      = < <Exp; text="Multiplicand"> * <Exp; text="Multiplier"> > {left}
-    Exp.Divide                        = < <Exp; text="Dividend"> / <Exp; text="Divisor"> > {left}
-    Exp.Not                           = < ! <Exp; text="Boolean"> >
-    Exp                               = < ( <Exp; text="Expression"> ) > {bracket}
-    Exp.Sizeof                        = < sizeof ( <Exp; text="Datatype"> ) >
-    Exp.Call                          = < <ID; text="FuncName"> ( <Exp*; separator=","> ) >
+    Exp.And                           = <<Exp; text="Value"> && <Exp; text="Value">> {left}
+    Exp.Lt                            = [[Exp; text="Value"] < [Exp; text="Value"]] {non-assoc}
+    Exp.Gt                            = [[Exp; text="Value"] > [Exp; text="Value"]] {non-assoc}
+    Exp.Add                           = <<Exp; text="Addend"> + <Exp; text="Addend">> {left}
+    Exp.Subtract                      = <<Exp; text="Minuend"> - <Exp; text="Subtrahend">> {left}
+    Exp.Multiply                      = <<Exp; text="Multiplicand"> * <Exp; text="Multiplier">> {left}
+    Exp.Divide                        = <<Exp; text="Dividend"> / <Exp; text="Divisor">> {left}
+    Exp.Not                           = <!<Exp; text="Boolean">>
+    Exp                               = <(<Exp; text="Expression">)> {bracket}
+    Exp.Sizeof                        = <sizeof (<Exp; text="Datatype">)>
+    Exp.Call                          = <<ID; text="FuncName">(<Exp*; separator=", ">)>
   
   
   context-free priorities
