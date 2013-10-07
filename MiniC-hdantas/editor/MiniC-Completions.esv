@@ -17,10 +17,15 @@ completions
 
 completions
   // Semantic (identifier) completion:   
-                                         
+  completion keyword                   : "int"
+  completion keyword                   : "float"
+                         
   completion proposer                  : editor-complete
                                          
   completion trigger                   : "."
   
-  completion template Statement : "if (Condition) Statement else Statement " =
-    "if (" <Condition:Exp> ") {\n\t" <Statement:Statement> "\n} else {\n\t" <Statement:Statement> "}\n" (blank) 
+  completion template Statement : "if (Condition) {Statement} else {Statement}" =
+    "if (" <Condition:Exp> ") {\n\t" <Statement:Statement> "\n} else {\n\t" <Statement:Statement> "\n}\n" (blank)
+    
+  completion template Statement : "while (Condition) {Statement}" =
+    "while (" <Condition:Exp> ") {\n\t" <Statement:Statement> "\n}\n" (blank)

@@ -45,23 +45,18 @@ else
   <Statement>
 
 >
-/*    Statement.IfElseWithBraces        = <if (<Exp; text="Condition">) <CodeBlock> else <CodeBlock>
-
->*/
   
     Statement.While                   = <while (<Exp; text="Condition">)
   <Statement>
 
 >
-/*    Statement.WhileWithBraces        = <while (<Exp; text="Condition">) <CodeBlock>
 
->*/
     Statement.PrintfInt               = <printf("%i", <Exp; text="IntegerVar">);>
     Statement.PrinfFloat              = <printf("%f", <Exp; text="FloatVar">);>
     Statement.CodeBlock               = <{
   <Statement*; separator="\n">
 }>
-    //Statement                         = <<CodeBlock>>
+    
     Exp.IntConst                      = <<INT; hide>>
     Exp.FloatConst                    = <<FLOAT; hide>>
     

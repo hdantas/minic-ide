@@ -1,11 +1,6 @@
 1 - Extend generated folding rules with hand-written rules. You should include only structures, where folding is reasonable. (10 points)
 
-** Ask Guido if it is possible to fold blockcomments
-** Check what things eclipse folds by default in C progs
-
-
 2 - Integrate generated pretty-printing rules and completion templates into your MiniJava editor. Improve your syntax definition to support (70 points)
-* ready this http://en.wikipedia.org/wiki/Indent_style
 
     textual labels in these templates,
     hiding optional placeholders,
@@ -13,4 +8,3 @@
     consistent indentation.
 
 3 - Extend your editor with additional, hand-written completion templates (20 points)
-
