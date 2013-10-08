@@ -4,13 +4,11 @@ module MiniC-ContextFree
     MiniC-Lexical
  
   templates
-    Program.File                      = <<TypeDec*; separator="\n">
-
-<VarDec*; separator="\n">
-
-<FunctionDec*; separator="\n">
-
-<Exp>>
+    Program.File                      = <<TypeDec*; hide, separator="\n">
+<VarDec*; hide, separator="\n">
+<FunctionDec*; hide, separator="\n">
+<Exp>
+>
     
     TypeDec.StructDec                 = <struct <ID; text="StructName"> {
   <VarDec*; text="StructMembers", separator="\n">
@@ -21,10 +19,8 @@ module MiniC-ContextFree
     
     FunctionDec.FunctionDef           = <<Type; text="ReturnType"> <ID; text="FuncName"> (<Parameter*; separator=", ", text="Arguments">)
 {
-  <VarDec*; text="Variable Declaration", separator="\n">
-  
-  <Statement*; text="Body", separator="\n">
-  
+  <VarDec*; hide, text="Variable Declaration", separator="\n">
+  <Statement*; hide, text="Body", separator="\n">
   return <Exp; text="Return value">;
 }>
     
@@ -46,7 +42,7 @@ else
 
 >
   
-    Statement.While                   = <while (<Exp; text="Condition">)
+   Statement.While                   = <while (<Exp; text="Condition">)
   <Statement>
 
 >

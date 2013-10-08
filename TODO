@@ -1,10 +1,3 @@
-1 - Extend generated folding rules with hand-written rules. You should include only structures, where folding is reasonable. (10 points)
-
-2 - Integrate generated pretty-printing rules and completion templates into your MiniJava editor. Improve your syntax definition to support (70 points)
-
-    textual labels in these templates,
-    hiding optional placeholders,
-    multi-line templates and
-    consistent indentation.
-
-3 - Extend your editor with additional, hand-written completion templates (20 points)
+compare with reference projects
+check score comments from last year
+do last check on github instructions and Guido's answers
