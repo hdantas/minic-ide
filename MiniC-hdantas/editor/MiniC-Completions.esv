@@ -30,13 +30,13 @@ completions
   completion trigger                   : "."
   
   completion template Statement : "if (Condition) {Statement} else {Statement}" =
-    "if (" <Condition:Exp> ") {\n\t" <Statement:Statement> "\n} else {\n\t" <Statement:Statement> "\n}\n" (blank)
+    "if (" <Condition:Exp> ")\n\t{\n\t" <Statement:Statement> "\n\t}\nelse\n\t{\n\t" <Statement:Statement> "\n\t}\n" (blank)
     
   completion template Statement : "while (Condition) {Statement}" =
-    "while (" <Condition:Exp> ") {\n\t" <Statement:Statement> "\n}\n" (blank)
+    "while (" <Condition:Exp> ")\n\t{\n\t" <Statement:Statement> "\n\t}\n" (blank)
  
   completion template FunctionDec : "int main () { return Return value; }" =
-    "int main ()\n{\n\treturn " <Return value:Exp> ";\n}" (blank)
+    "int main ()\n\t{\n\treturn " <Return value:Exp> ";\n\t}" (blank)
     
   completion template Comment :  "File Header (File Name, Author, Date)" =
-    "/*\n* File: "<FileName:Comment>".c\n* Author: "<Name:Comment>"\n*\n* Date: "<Date:Comment>"\n*/" (blank)
+    "/*\n* File: "<FileName:Comment>".c\n* Author: "<Name:Comment>"\n*\n* Date: "<Date:Comment>"\n*/\n" (blank)    

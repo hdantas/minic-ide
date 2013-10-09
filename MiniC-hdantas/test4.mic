@@ -1,0 +1,15 @@
+
+
+int main ()
+  {
+    int z;
+    
+     
+    z = z + 1;
+  
+    
+    return 0;
+  }
+
+
+x

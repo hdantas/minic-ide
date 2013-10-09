@@ -1,6 +1,6 @@
  int main ()
 {
-  return Return value;
+  return 0;
 }
 
 s

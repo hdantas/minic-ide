@@ -3,23 +3,35 @@ module MiniC-ContextFree
   imports
     MiniC-Lexical
  
+ 
+ /*
+ *
+ *  Indentiation Style: Whitesmiths
+ *  http://en.wikipedia.org/wiki/Indent_style#Whitesmiths_style
+ *  
+ */
+ 
   templates
-    Program.File                      = <<TypeDec*> <VarDec*> <FunctionDec*> <Exp>>
-    //Program.File                    = <<TypeDec*; text="{\tStructDeclaration\n"> <VarDec*; text="\tVariable Declaration\n"> <FunctionDec*; text="\tFuncion Declaration\n"> <Exp; text="\tResult\n}">>
+    Program.File                      = <<TypeDec*; hide, separator="\n">
+<VarDec*; hide, separator="\n">
+<FunctionDec*; hide, separator="\n">
+<Exp>
+>
     
-    TypeDec.StructDec                 = <struct <ID; text="StructName"> {
-  <VarDec*; text="StructMembers">
-};>
+    TypeDec.StructDec                 = <struct <ID; text="StructName">
+  {
+  <VarDec*; text="StructMembers", separator="\n">
+  };>
 
     VarDec.VarDec                     = <<Type; text="Type"> <ID; text="VarName">;>
     VarDec.ArrayDec                   = <<ArrayType; text="Type"> <ID; text="ArrayName">[<INT; text="NumberElements">];>
     
     FunctionDec.FunctionDef           = <<Type; text="ReturnType"> <ID; text="FuncName"> (<Parameter*; separator=", ", text="Arguments">)
-{
-  <VarDec*; text="Variable Declaration">
-  <Statement*; text="Body">
+  {
+  <VarDec*; hide, text="Variable Declaration", separator="\n">
+  <Statement*; hide, text="Body", separator="\n">
   return <Exp; text="Return value">;
-}>
+  }>
     
     Parameter.Arg                     = <<Type; text="Type"> <ID; text="Name">>
     Parameter.ArrayArg                = <<ArrayType; text="Type"> <ID; text="Name">[]>
@@ -32,21 +44,26 @@ module MiniC-ContextFree
     Statement.Assignment              = <<ID; text="Var"> = <Exp>;>
     Statement.ArrayAssignment         = <<ID; text="ArrayName">[<Exp; text="Index">] = <Exp>;>
     Statement.StructMemberAssignment  = <<ID; text="StructName">.<ID; text="StructMember"> = <Exp>;>
-    Statement.IfElse                  = <if (<Exp; text="Condition">) {
+    Statement.IfElse                  = <if (<Exp; text="Condition">)
   <Statement>
-} else
-  <Statement>>
-    Statement.While                   = <while (<Exp; text="Condition">) {
+else
   <Statement>
-}>
-    Statement.PrintfInt               = <printf( "%i", <Exp; text="IntegerVar">);>
-    Statement.PrinfFloat              = <printf( "%f", <Exp; text="FloatVar">);>
-    Statement.CodeBlock               = <{
-  <Statement>
-}>
 
-    Exp.IntConst                      = <<INT; text="Integer">>
-    Exp.FloatConst                    = <<FLOAT; text="Float">>
+>
+  
+   Statement.While                   = <while (<Exp; text="Condition">)
+  <Statement>
+
+>
+
+    Statement.PrintfInt               = <printf("%i", <Exp; text="IntegerVar">);>
+    Statement.PrinfFloat              = <printf("%f", <Exp; text="FloatVar">);>
+    Statement.CodeBlock               = <{
+<Statement*; separator="\n">
+}>
+    
+    Exp.IntConst                      = <<INT; hide>>
+    Exp.FloatConst                    = <<FLOAT; hide>>
     
     Lvalue.Var                        = <<ID; text="VarName">>
     Lvalue.StructMember               = <<Lvalue; text="StructName">.<Lvalue; text="StructMember">> {left}
@@ -83,6 +100,6 @@ module MiniC-ContextFree
       
     template options
       keyword -/- [a-zA-Z]
-    
+      tokenize : "\""
     
     
