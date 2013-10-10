@@ -31,6 +31,7 @@
    Var                         -- _1,
    StructMember                -- _1 KW["."] _2,
    ArrayVar                    -- _1 KW["["] _2 KW["]"],
+   BinExp                      -- _1 _2 _3,
    And                         -- _1 KW["&&"] _2,
    Lt                          -- _1 KW["<"] _2,
    Gt                          -- _1 KW[">"] _2,
@@ -42,6 +43,10 @@
    Sizeof                      -- KW["sizeof"] KW["("] _1 KW[")"],
    Call                        -- _1 KW["("] _2 KW[")"],
    Call.2:iter-star-sep        -- _1 KW[","],
+   Plus                        -- KW["+"],
+   Minus                       -- KW["-"],
+   Mul                         -- KW["*"],
+   Div                         -- KW["/"],
    COMPLETION-Program          -- _1,
    COMPLETION-TypeDec          -- _1,
    COMPLETION-VarDec           -- _1,
@@ -51,5 +56,6 @@
    COMPLETION-Type             -- _1,
    COMPLETION-Statement        -- _1,
    COMPLETION-Lvalue           -- _1,
-   COMPLETION-Exp              -- _1
+   COMPLETION-Exp              -- _1,
+   COMPLETION-Op               -- _1
 ]

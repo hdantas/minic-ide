@@ -1,12 +1,11 @@
-module editor/MiniC-Outliner
+module editor/MiniJava-Outliner
 
 imports
-  include/MiniC
+  include/MiniJava
   lib/runtime/editor/outline-library
   lib/runtime/editor/origins
-  editor/MiniC-Outliner.generated
+  editor/MiniJava-Outliner.generated
 
 rules
   
   outline-expand-to-level = !3
-  

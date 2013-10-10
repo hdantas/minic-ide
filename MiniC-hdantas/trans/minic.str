@@ -16,6 +16,9 @@ imports
   generate
   refactor
   pp
+  editor/outline
+  editor/builders
+  analysis/desugar
 
 rules // Analysis
   

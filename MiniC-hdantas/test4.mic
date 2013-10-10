@@ -2,8 +2,7 @@
 
 int main ()
   {
-    int z;
-    
+  
      
     z = z + 1;
   
@@ -12,4 +11,4 @@ int main ()
   }
 
 
-x
+x + 1
