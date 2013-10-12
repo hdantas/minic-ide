@@ -1,0 +1,15 @@
+DAY 4
+
+Specify rewrite rules to-outline-label which map AST nodes to labels in an outline view. You should include:
+  // classes (class name and, if available, parent class name),
+  // fields (field name and type),
+  // methods (method name, parameter types, return type) and
+  // local variables (variable name and type).
+  Challenge
+
+Define rewrite rules desugar which desugar
+  unary expressions into terms of the form Uop(op, exp),
+  binary expressions into terms of the form Bop(op, exp1, exp2) and
+  octal numbers into decimal numbers.
+
+Integrate desugar into a strategy desugar-all which desugars subtrees in an AST.

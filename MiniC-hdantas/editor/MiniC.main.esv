@@ -1,6 +1,6 @@
 module MiniC.main
 
-imports MiniC-Builders MiniC-Refactorings MiniC-Colorer MiniC-Completions MiniC-Folding MiniC-References MiniC-Syntax
+imports MiniC-Builders MiniC-Refactorings MiniC-Colorer MiniC-Completions MiniC-Folding MiniC-Outliner MiniC-References MiniC-Syntax
 
 language General properties
                   

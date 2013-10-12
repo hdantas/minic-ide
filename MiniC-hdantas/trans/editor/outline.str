@@ -12,23 +12,52 @@ rules
   outline-expand-to-level = !3
 
 rules
-  
+  to-outline-label: File(t, v, f, e) -> $[Program]
+
+//    class declarations,
+  to-outline-label: StructDec(i, m) -> $[struct: [i]]
+
+//    field declarations and
+  to-outline-label: VarDec(t, i) -> $[[<pp> t]: [i]]
+  to-outline-label: ArrayDec(t, i, n) -> $[arrayDec: [i]]
+
+//    method declarations.
+  to-outline-label: FunctionDef(t, i, p, v, s, e) -> label
+  where
+      t'     := <pp> t
+      ;list  := <pp-params> p
+      ;label := $[[t']: [i] ([list])]
+
   // to-outline-label: ... -> ...
+  // to-outline-label: Var(i) -> $[var: [i]] 
   
 rules
       
-  //pp: Bool()       -> ()
-  //pp: ClassType(c) -> ()
-  pp: Int()        -> "pp int"
-  pp: Float()      -> "pp float"
-  pp: Array(t)     -> "pp array"
+  pp: Int()        -> "int"
+  pp: Float()      -> "float"
+  pp: Array(t)     -> <pp> t
+  pp: Struct(t)    -> $[[t] struct]
+
+
+  pp-params: // empty parameter list
+    [] -> " "
+
+  pp-params: // single parameter
+    [Arg(t, n)] -> <pp> t
+  
+  pp-params: // single parameter array  
+    [ArrayArg(t, n)] -> <pp> t
+
+
+  pp-params: // at least two parameters
+    [Arg(t, p), param | params] -> label
+    where
+      e1     := <pp> t // do something on first parameter
+      ;list  := <pp-params> [param | params] // recursive call on remaining parameters
+      ;label := $[[e1], [list]] // generate label
+
 
 rules
 
   //to-outline-label: Assignment(t, v) -> v
   
-  to-outline-label: 
-  Assignment(t, v) -> label
-  where
-    t'    := <pp> t
-  ; label := <concat-strings> [v, ": ", t']

@@ -20,6 +20,7 @@ rules
   desugar: Subtract(e1, e2) -> BinExp(Minus(), e1, e2)
   desugar: Multiply(e1, e2) -> BinExp(Mul(), e1, e2)
   desugar: Divide(e1, e2) -> BinExp(Div(), e1, e2)
+
   // desugar: ... -> ...
   
 strategies
