@@ -1,0 +1,34 @@
+module editor/outline
+
+imports
+  include/MiniC
+  runtime/editor/outline-library
+  runtime/editor/origins
+  editor/MiniC-Outliner.generated
+  
+  
+rules
+  
+  outline-expand-to-level = !3
+
+rules
+  
+  // to-outline-label: ... -> ...
+  
+rules
+      
+  //pp: Bool()       -> ()
+  //pp: ClassType(c) -> ()
+  pp: Int()        -> "pp int"
+  pp: Float()      -> "pp float"
+  pp: Array(t)     -> "pp array"
+
+rules
+
+  //to-outline-label: Assignment(t, v) -> v
+  
+  to-outline-label: 
+  Assignment(t, v) -> label
+  where
+    t'    := <pp> t
+  ; label := <concat-strings> [v, ": ", t']

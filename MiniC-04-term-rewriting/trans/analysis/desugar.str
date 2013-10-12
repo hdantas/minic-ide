@@ -1,0 +1,34 @@
+module analysis/desugar
+
+imports
+
+  include/MiniC
+  
+signature
+
+  sorts
+  
+  // ...
+  
+  constructors
+    
+  // ...
+  
+rules
+  
+  desugar: Add(e1, e2) -> BinExp(Plus(), e1, e2)
+  desugar: Subtract(e1, e2) -> BinExp(Minus(), e1, e2)
+  desugar: Multiply(e1, e2) -> BinExp(Mul(), e1, e2)
+  desugar: Divide(e1, e2) -> BinExp(Div(), e1, e2)
+  // desugar: ... -> ...
+  
+strategies
+  
+  // select one of these
+  
+  // desugar-all = innermost(desugar)
+  // desugar-all = topdown(desugar)
+  // desugar-all = topdown(try(desugar))
+  // desugar-all = bottomup(desugar)
+  // desugar-all = bottomup(try(desugar))
+  // desugar-all = alltd(desugar)
