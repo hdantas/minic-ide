@@ -8,10 +8,7 @@ rules
 
   outline = simple-label-outline(to-outline-label)
   
-  to-outline-label = fail
-  /*
   to-outline-label = ?File(_, _, _, <id>)
   to-outline-label = ?StructDec(<id>, _)
   to-outline-label = ?FunctionDef(<id>, _, _, _, _, _)
   to-outline-label = ?Call(<id>, _)
-  */

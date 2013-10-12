@@ -10,6 +10,6 @@ Specify rewrite rules to-outline-label which map AST nodes to labels in an outli
 Define rewrite rules desugar which desugar
   unary expressions into terms of the form Uop(op, exp),
   binary expressions into terms of the form Bop(op, exp1, exp2) and
-  octal numbers into decimal numbers.
+  Challenge: octal numbers into decimal numbers.
 
 Integrate desugar into a strategy desugar-all which desugars subtrees in an AST.

@@ -12,14 +12,20 @@ signature
   
   constructors
     
-  // ...
+  
   
 rules
-  
-  desugar: Add(e1, e2) -> BinExp(Plus(), e1, e2)
+	/*
+  desugar: IntConst(e1)       -> UnExp(Uplus(), e1)
+  desugar: IntConst(e1)        -> UnExp(Uminus(), e1)
+  desugar: FloatConst(e1)       -> UnExp(Uplus(), e1)
+  desugar: FloatConst(e1)        -> UnExp(Uminus(), e1)  
+  */
+  desugar: Add(e1, e2)      -> BinExp(Plus(), e1, e2)
   desugar: Subtract(e1, e2) -> BinExp(Minus(), e1, e2)
   desugar: Multiply(e1, e2) -> BinExp(Mul(), e1, e2)
-  desugar: Divide(e1, e2) -> BinExp(Div(), e1, e2)
+  desugar: And(e1, e2)      -> BinExp(And(), e1, e2)
+  desugar: Lt(e1, e2)       -> BinExp(Lt(), e1, e2)
 
   // desugar: ... -> ...
   

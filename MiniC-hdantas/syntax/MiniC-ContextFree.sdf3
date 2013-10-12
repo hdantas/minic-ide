@@ -12,6 +12,7 @@ module MiniC-ContextFree
  */
  
   templates
+  
     Program.File                      = <<TypeDec*; hide, separator="\n">
 <VarDec*; hide, separator="\n">
 <FunctionDec*; hide, separator="\n">
@@ -70,23 +71,33 @@ else
     Lvalue.ArrayVar                   = <<ID; text="ArrayName">[<Exp; text="Index">]>
     Exp                               = <<Lvalue>>
     
-    Exp.BinExp                        = <<Op; text="Operator"> <Exp; text="Term"> <Exp; text="Term">>
+    
     Exp.And                           = <<Exp; text="Value"> && <Exp; text="Value">> {left}
     Exp.Lt                            = [[Exp; text="Value"] < [Exp; text="Value"]] {non-assoc}
-    Exp.Gt                            = [[Exp; text="Value"] > [Exp; text="Value"]] {non-assoc}
+    //Exp.Gt                            = [[Exp; text="Value"] > [Exp; text="Value"]] {non-assoc}
     Exp.Add                           = <<Exp; text="Addend"> + <Exp; text="Addend">> {left}
     Exp.Subtract                      = <<Exp; text="Minuend"> - <Exp; text="Subtrahend">> {left}
     Exp.Multiply                      = <<Exp; text="Multiplicand"> * <Exp; text="Multiplier">> {left}
-    Exp.Divide                        = <<Exp; text="Dividend"> / <Exp; text="Divisor">> {left}
-    Exp.Not                           = <!<Exp; text="Boolean">>
+    //Exp.Divide                        = <<Exp; text="Dividend"> / <Exp; text="Divisor">> {left}
+    //Exp.Not                           = <!<Exp; text="Boolean">>
     Exp                               = <(<Exp; text="Expression">)> {bracket}
     Exp.Sizeof                        = <sizeof (<Exp; text="Datatype">)>
     Exp.Call                          = <<ID; text="FuncName">(<Exp*; separator=", ">)>
 
-    Op.Plus                           = <+>
-    Op.Minus                          = <->
-    Op.Mul                            = <*>
-    Op.Div                            = </>
+    Exp.UnExp                         = <<UnOp; text="Operator"> <Exp; text="Term">>
+    Exp.BinExp                        = <<BinOp; text="Operator"> <Exp; text="Term"> <Exp; text="Term">>
+
+    //UnOp.Not                          = <!>
+    UnOp.Uplus                        = <+>
+    UnOp.Uminus                       = <->
+    
+    BinOp.Plus                        = <+>
+    BinOp.Minus                       = <->
+    BinOp.Mul                         = <*>
+    //BinOp.Div                         = </>
+    BinOp.And                         = <&&>
+    BinOp.Lt                          = [<]
+    //BinOp.Gt                          = [>]
     
   
   context-free priorities
