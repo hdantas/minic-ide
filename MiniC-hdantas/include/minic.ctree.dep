@@ -1,37 +1,35 @@
-H:\My Documents\compiler-construction-lab\MiniC-hdantas\include/minic.ctree: \
-	H:/My Documents/compiler-construction-lab/MiniC-hdantas/trans/editor/builders.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/outline-library.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/editor/MiniC-Outliner.generated.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/editor/editor.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/editor/origins.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/utils.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/interface.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/core.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/nbl/utils.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/editor/outline-library.str \
-	H:/My Documents/compiler-construction-lab/MiniC-hdantas/trans/editor/outline.str \
-	H:/My Documents/compiler-construction-lab/MiniC-hdantas/trans/analysis/desugar.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/trans/MiniC-ContextFree.pp.generated.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/trans/MiniC-Lexical.pp.generated.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/trans/MiniC.pp.generated.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/include/MiniC-parenthesize.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/tmpl/pp.str \
-	H:/My Documents/compiler-construction-lab/MiniC-hdantas/trans/pp.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib-refactoring/binding-violations.generated.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib-refactoring/correctness-preservation.generated.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib-refactoring/namebinding-preservation.generated.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib-refactoring/analysis-multifile.generated.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib-refactoring/behavior-preservation.generated.str \
-	H:/My Documents/compiler-construction-lab/MiniC-hdantas/trans/refactor.str \
-	H:/My Documents/compiler-construction-lab/MiniC-hdantas/trans/generate.str \
-	H:/My Documents/compiler-construction-lab/MiniC-hdantas/trans/check.str \
-	H:/My Documents/compiler-construction-lab/MiniC-hdantas/trans/names.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/nbl-library.generated.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/compilation-library.generated.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/analysis-library-internal.generated.str \
+/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/include/minic.ctree: \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/editor/builders.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/editor/editor.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/editor/origins.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/task/utils.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/task/interface.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/task/core.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/nbl/utils.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/editor/outline-library.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/editor/outline.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/analysis/desugar.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/MiniC-ContextFree.pp.generated.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/MiniC-Lexical.pp.generated.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/MiniC.pp.generated.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/include/MiniC-parenthesize.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/tmpl/pp.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/pp.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib-refactoring/binding-violations.generated.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib-refactoring/correctness-preservation.generated.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib-refactoring/namebinding-preservation.generated.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib-refactoring/analysis-multifile.generated.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib-refactoring/behavior-preservation.generated.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/refactor.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/generate.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/check.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/names.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/nbl-library.generated.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/compilation-library.generated.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/analysis-library-internal.generated.str \
 	 \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/analysis-library.generated.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/index-library.generated.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/editor-common.generated.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas/include/MiniC.str \
-	H:\My Documents\compiler-construction-lab\MiniC-hdantas\trans/minic.str
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/analysis-library.generated.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/index-library.generated.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/editor-common.generated.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/include/MiniC.str \
+	/home/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/minic.str

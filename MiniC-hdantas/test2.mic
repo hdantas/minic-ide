@@ -19,8 +19,14 @@ int a (int foo   [] )
   
   %f" , a);
   
+  
+  
  
   return a;
+}
+
+int foo (int a, float b, int a[]) {
+	return 0;
 }
 
 x

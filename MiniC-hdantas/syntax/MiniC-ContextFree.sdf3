@@ -74,20 +74,24 @@ else
     
     Exp.And                           = <<Exp; text="Value"> && <Exp; text="Value">> {left}
     Exp.Lt                            = [[Exp; text="Value"] < [Exp; text="Value"]] {non-assoc}
-    //Exp.Gt                            = [[Exp; text="Value"] > [Exp; text="Value"]] {non-assoc}
+  //Exp.Gt                            = [[Exp; text="Value"] > [Exp; text="Value"]] {non-assoc}
     Exp.Add                           = <<Exp; text="Addend"> + <Exp; text="Addend">> {left}
     Exp.Subtract                      = <<Exp; text="Minuend"> - <Exp; text="Subtrahend">> {left}
     Exp.Multiply                      = <<Exp; text="Multiplicand"> * <Exp; text="Multiplier">> {left}
-    //Exp.Divide                        = <<Exp; text="Dividend"> / <Exp; text="Divisor">> {left}
+  //Exp.Divide                        = <<Exp; text="Dividend"> / <Exp; text="Divisor">> {left}
     Exp.Not                           = <!<Exp; text="Boolean">>
     Exp                               = <(<Exp; text="Expression">)> {bracket}
     Exp.Sizeof                        = <sizeof (<Exp; text="Datatype">)>
     Exp.Call                          = <<ID; text="FuncName">(<Exp*; separator=", ">)>
-
+    Exp.Uminus                        = <-<Exp>>
+    Exp.Uplus                         = <+<Exp>>
   
   context-free priorities
 
-      { left:
+      {
+        Exp.Uminus
+        Exp.Uplus
+      } >  { left:
         Exp.Multiply
         Exp.Divide
       } >  { left:

@@ -1,24 +1,24 @@
 module MiniC-Lexical
 exports
   lexical syntax
-    [a-zA-Z] [a-zA-Z0-9\_]*                                          -> ID           
-    ( "-" | "+" )? [0-9]+                                            -> INT          
-    ( "-" | "+" )? [0-9]+ [eE] ( "-" | "+" )? [0-9]+                 -> FLOAT        
-    ( "-" | "+" )? [0-9]+ "." [0-9]+ ( [eE] ( "-" | "+" )? [0-9]+ )? -> FLOAT        
-    ( "-" | "+" )? "." [0-9]+ ( [eE] ( "-" | "+" )? [0-9]+ )?        -> FLOAT        
-    ( "-" | "+" )? [0-9]+ "." ( [eE] ( "-" | "+" )? [0-9]+ )?        -> FLOAT        
-    [\ \t\n\r]                                                       -> LAYOUT       
-    Comment                                                          -> LAYOUT       
-    "//" ~[\n\r]* [\n\r] | EOF                                       -> Comment      
-    BlockComment                                                     -> Comment      
-    "/*" CommentPart* "*/"                                           -> BlockComment 
-    ~[\/\*]                                                          -> CommentPart  
-    Asterisk                                                         -> CommentPart  
-    ForwardSlash                                                     -> CommentPart  
-    BlockComment                                                     -> CommentPart  
-    [\*]                                                             -> Asterisk     
-    [\/]                                                             -> ForwardSlash 
-                                                                     -> EOF          
+    [a-zA-Z] [a-zA-Z0-9\_]*            -> ID           
+    [0-9]+                             -> INT          
+    [0-9]+ [eE] [0-9]+                 -> FLOAT        
+    [0-9]+ "." [0-9]+ ( [eE] [0-9]+ )? -> FLOAT        
+    "." [0-9]+ ( [eE] [0-9]+ )?        -> FLOAT        
+    [0-9]+ "." ( [eE] [0-9]+ )?        -> FLOAT        
+    [\ \t\n\r]                         -> LAYOUT       
+    Comment                            -> LAYOUT       
+    "//" ~[\n\r]* [\n\r] | EOF         -> Comment      
+    BlockComment                       -> Comment      
+    "/*" CommentPart* "*/"             -> BlockComment 
+    ~[\/\*]                            -> CommentPart  
+    Asterisk                           -> CommentPart  
+    ForwardSlash                       -> CommentPart  
+    BlockComment                       -> CommentPart  
+    [\*]                               -> Asterisk     
+    [\/]                               -> ForwardSlash 
+                                       -> EOF          
 
   lexical restrictions
     ID -/- [a-zA-Z0-9\_]

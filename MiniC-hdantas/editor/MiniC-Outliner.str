@@ -4,9 +4,9 @@ imports
   include/MiniC
   lib/runtime/editor/outline-library
   lib/runtime/editor/origins
-  editor/MiniC-Outliner.generated
+  // editor/MiniC-Outliner.generated
   
 
 rules
-  
+
   outline-expand-to-level = !3

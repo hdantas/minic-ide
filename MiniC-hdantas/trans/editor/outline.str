@@ -4,11 +4,11 @@ imports
   include/MiniC
   runtime/editor/outline-library
   runtime/editor/origins
-  editor/MiniC-Outliner.generated
+  // editor/MiniC-Outliner.generated
   
   
 rules
-  
+  outline = simple-label-outline(to-outline-label)
   outline-expand-to-level = !3
 
 rules
