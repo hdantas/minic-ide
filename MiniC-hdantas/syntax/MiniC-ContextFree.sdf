@@ -21,8 +21,7 @@ exports
     "while" "(" Exp ")" Statement                                                -> Statement   {cons("While")}
     "printf(" "\"" "%i" "\"" "," Exp ");"                                        -> Statement   {cons("PrintfInt")}
     "printf(" "\"" "%f" "\"" "," Exp ");"                                        -> Statement   {cons("PrinfFloat")}
-    "{" Statement* "}"                                                           -> CodeBlock   {cons("Block")}
-    CodeBlock                                                                    -> Statement   
+    "{" Statement* "}"                                                           -> Statement   {cons("CodeBlock")}
     INT                                                                          -> Exp         {cons("IntConst")}
     FLOAT                                                                        -> Exp         {cons("FloatConst")}
     ID                                                                           -> Lvalue      {cons("Var")}

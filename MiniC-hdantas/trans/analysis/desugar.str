@@ -8,19 +8,33 @@ signature
 
   sorts
   
-  // ...
+  
   
   constructors
-    
-  
+      
+	  Plus:    BinOp
+	  Minus:   BinOp
+	  Mul:     BinOp
+	  And:     BinOp
+	  Lt:      BinOp
+	
+	  Uplus:   UnOp
+	  Uminus:  UnOp
+	  Unot:    UnOp
+	    
+	  BinExp: BinOp * Exp * Exp -> Exp
+	  UnExp:  UnOp  * Exp -> Exp    
   
 rules
-	/*
-  desugar: IntConst(e1)       -> UnExp(Uplus(), e1)
-  desugar: IntConst(e1)        -> UnExp(Uminus(), e1)
-  desugar: FloatConst(e1)       -> UnExp(Uplus(), e1)
-  desugar: FloatConst(e1)        -> UnExp(Uminus(), e1)  
-  */
+
+  /*desugar: IntConst(e1)     -> UnExp(Uplus(), e1)
+  desugar: IntConst(e1)     -> UnExp(Uminus(), e1)
+  desugar: FloatConst(e1)   -> UnExp(Uplus(), e1)
+  desugar: FloatConst(e1)   -> UnExp(Uminus(), e1)  
+  desugar: Not(e1)          -> UnExp(Unot(), e1)*/
+  
+  
+  
   desugar: Add(e1, e2)      -> BinExp(Plus(), e1, e2)
   desugar: Subtract(e1, e2) -> BinExp(Minus(), e1, e2)
   desugar: Multiply(e1, e2) -> BinExp(Mul(), e1, e2)
@@ -33,9 +47,9 @@ strategies
   
   // select one of these
   
-  // desugar-all = innermost(desugar)
+  //desugar-all = innermost(debug; desugar)
   // desugar-all = topdown(desugar)
   // desugar-all = topdown(try(desugar))
   // desugar-all = bottomup(desugar)
-  // desugar-all = bottomup(try(desugar))
+  desugar-all = bottomup(debug; try(desugar))
   // desugar-all = alltd(desugar)

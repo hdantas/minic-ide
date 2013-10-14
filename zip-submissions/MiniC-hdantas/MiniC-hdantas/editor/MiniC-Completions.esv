@@ -1,0 +1,42 @@
+module MiniC-Completions
+
+imports
+  MiniC-Completions.generated
+  MiniC-ContextFree.generated
+  MiniC-Lexical.generated
+
+completions
+                                                                   
+  // This file is used to define content completion.               
+  //                                                               
+  // See the imported file for a brief introduction and examples.  
+                                                                   
+
+completions
+    
+
+completions
+  // Semantic (identifier) completion:   
+  completion keyword                   : "int"
+  completion keyword                   : "float"
+  completion keyword                   : "main"
+  completion keyword                   : "if"
+  completion keyword                   : "else"
+  completion keyword                   : "while"
+  completion keyword                   : "return"
+                           
+  completion proposer                  : editor-complete
+                                         
+  completion trigger                   : "."
+  
+  completion template Statement : "if (Condition) {Statement} else {Statement}" =
+    "if (" <Condition:Exp> ")\n\t{\n\t" <Statement:Statement> "\n\t}\nelse\n\t{\n\t" <Statement:Statement> "\n\t}\n" (blank)
+    
+  completion template Statement : "while (Condition) {Statement}" =
+    "while (" <Condition:Exp> ")\n\t{\n\t" <Statement:Statement> "\n\t}\n" (blank)
+ 
+  completion template FunctionDec : "int main () { return Return value; }" =
+    "int main ()\n\t{\n\treturn " <Return value:Exp> ";\n\t}" (blank)
+    
+  completion template Comment :  "File Header (File Name, Author, Date)" =
+    "/*\n* File: "<FileName:Comment>".c\n* Author: "<Name:Comment>"\n*\n* Date: "<Date:Comment>"\n*/\n" (blank)    

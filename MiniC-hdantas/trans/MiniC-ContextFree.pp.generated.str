@@ -4,119 +4,119 @@ strategies
   prettyprint-Program :
     File(a, b, c, d) -> [ H(
                             [SOpt(HS(), "0")]
-                          , [a200]
+                          , [a35]
                           )
                         , H(
                             [SOpt(HS(), "0")]
-                          , [b120]
+                          , [b20]
                           )
                         , H(
                             [SOpt(HS(), "0")]
-                          , [c35]
+                          , [c6]
                           )
                         , H(
                             [SOpt(HS(), "0")]
-                          , [d10]
+                          , [d2]
                           )
                         ]
-    where a200 := <pp-V-list(prettyprint-TypeDec)> a
-    where b120 := <pp-V-list(prettyprint-VarDec)> b
-    where c35 := <pp-V-list(prettyprint-FunctionDec)> c
-    where d10 := <pp-one-Z(prettyprint-Exp)> d
+    where a35 := <pp-V-list(prettyprint-TypeDec)> a
+    where b20 := <pp-V-list(prettyprint-VarDec)> b
+    where c6 := <pp-V-list(prettyprint-FunctionDec)> c
+    where d2 := <pp-one-Z(prettyprint-Exp)> d
 
   prettyprint-TypeDec :
     StructDec(a, b) -> [ H(
                            [SOpt(HS(), "0")]
-                         , [S("struct "), a201]
+                         , [S("struct "), a36]
                          )
-                       , a202
-                       , b121
-                       , a203
+                       , a37
+                       , b21
+                       , a38
                        ]
-    where a201 := <pp-one-Z(prettyprint-ID)> a
-    where a202 := <pp-indent(|"2")> [S("{")]
-    where b121 := <pp-indent(|"2")> [<pp-V-list(prettyprint-VarDec)> b]
-    where a203 := <pp-indent(|"2")> [S("};")]
+    where a36 := <pp-one-Z(prettyprint-ID)> a
+    where a37 := <pp-indent(|"2")> [S("{")]
+    where b21 := <pp-indent(|"2")> [<pp-V-list(prettyprint-VarDec)> b]
+    where a38 := <pp-indent(|"2")> [S("};")]
 
   prettyprint-VarDec :
     VarDec(a, b) -> [ H(
                         [SOpt(HS(), "0")]
-                      , [ a204
+                      , [ a39
                         , S(" ")
-                        , b122
+                        , b22
                         , S(";")
                         ]
                       )
                     ]
-    where a204 := <pp-one-Z(prettyprint-Type)> a
-    where b122 := <pp-one-Z(prettyprint-ID)> b
+    where a39 := <pp-one-Z(prettyprint-Type)> a
+    where b22 := <pp-one-Z(prettyprint-ID)> b
 
   prettyprint-VarDec :
     ArrayDec(a, b, c) -> [ H(
                              [SOpt(HS(), "0")]
-                           , [ a205
+                           , [ a40
                              , S(" ")
-                             , b123
+                             , b23
                              , S("[")
-                             , c36
+                             , c7
                              , S("];")
                              ]
                            )
                          ]
-    where a205 := <pp-one-Z(prettyprint-ArrayType)> a
-    where b123 := <pp-one-Z(prettyprint-ID)> b
-    where c36 := <pp-one-Z(prettyprint-INT)> c
+    where a40 := <pp-one-Z(prettyprint-ArrayType)> a
+    where b23 := <pp-one-Z(prettyprint-ID)> b
+    where c7 := <pp-one-Z(prettyprint-INT)> c
 
   prettyprint-FunctionDec :
     FunctionDef(a, b, c, d, e, f) -> [ H(
                                          [SOpt(HS(), "0")]
-                                       , [ a206
+                                       , [ a41
                                          , S(" ")
-                                         , b124
+                                         , b24
                                          , S(" (")
-                                         , c37
+                                         , c8
                                          , S(")")
                                          ]
                                        )
-                                     , a207
-                                     , d11
-                                     , e7
-                                     , f5
-                                     , a208
+                                     , a42
+                                     , d3
+                                     , e3
+                                     , f1
+                                     , a43
                                      ]
-    where a206 := <pp-one-Z(prettyprint-Type)> a
-    where b124 := <pp-one-Z(prettyprint-ID)> b
-    where c37 := <pp-H-list(prettyprint-Parameter|", ")> c
-    where a207 := <pp-indent(|"2")> [S("{")]
-    where d11 := <pp-indent(|"2")> [<pp-V-list(prettyprint-VarDec)> d]
-    where e7 := <pp-indent(|"2")> [<pp-V-list(prettyprint-Statement)> e]
-    where f5 := <pp-indent(|"2")> [ S("return ")
+    where a41 := <pp-one-Z(prettyprint-Type)> a
+    where b24 := <pp-one-Z(prettyprint-ID)> b
+    where c8 := <pp-H-list(prettyprint-Parameter|", ")> c
+    where a42 := <pp-indent(|"2")> [S("{")]
+    where d3 := <pp-indent(|"2")> [<pp-V-list(prettyprint-VarDec)> d]
+    where e3 := <pp-indent(|"2")> [<pp-V-list(prettyprint-Statement)> e]
+    where f1 := <pp-indent(|"2")> [ S("return ")
                                   , <pp-one-Z(prettyprint-Exp)> f
                                   , S(";")
                                   ]
-    where a208 := <pp-indent(|"2")> [S("}")]
+    where a43 := <pp-indent(|"2")> [S("}")]
 
   prettyprint-Parameter :
     Arg(a, b) -> [ H(
                      [SOpt(HS(), "0")]
-                   , [a209, S(" "), b125]
+                   , [a44, S(" "), b25]
                    )
                  ]
-    where a209 := <pp-one-Z(prettyprint-Type)> a
-    where b125 := <pp-one-Z(prettyprint-ID)> b
+    where a44 := <pp-one-Z(prettyprint-Type)> a
+    where b25 := <pp-one-Z(prettyprint-ID)> b
 
   prettyprint-Parameter :
     ArrayArg(a, b) -> [ H(
                           [SOpt(HS(), "0")]
-                        , [ a210
+                        , [ a45
                           , S(" ")
-                          , b126
+                          , b26
                           , S("[]")
                           ]
                         )
                       ]
-    where a210 := <pp-one-Z(prettyprint-ArrayType)> a
-    where b126 := <pp-one-Z(prettyprint-ID)> b
+    where a45 := <pp-one-Z(prettyprint-ArrayType)> a
+    where b26 := <pp-one-Z(prettyprint-ID)> b
 
   prettyprint-ArrayType :
     Int() -> [ H(
@@ -135,113 +135,113 @@ strategies
   prettyprint-Type :
     Array(a) -> [ H(
                     [SOpt(HS(), "0")]
-                  , [a211]
+                  , [a46]
                   )
                 ]
-    where a211 := <pp-one-Z(prettyprint-ArrayType)> a
+    where a46 := <pp-one-Z(prettyprint-ArrayType)> a
 
   prettyprint-Type :
     Struct(a) -> [ H(
                      [SOpt(HS(), "0")]
-                   , [S("struct "), a212]
+                   , [S("struct "), a47]
                    )
                  ]
-    where a212 := <pp-one-Z(prettyprint-ID)> a
+    where a47 := <pp-one-Z(prettyprint-ID)> a
 
   prettyprint-Statement :
     Assignment(a, b) -> [ H(
                             [SOpt(HS(), "0")]
-                          , [ a213
+                          , [ a48
                             , S(" = ")
-                            , b127
+                            , b27
                             , S(";")
                             ]
                           )
                         ]
-    where a213 := <pp-one-Z(prettyprint-ID)> a
-    where b127 := <pp-one-Z(prettyprint-Exp)> b
+    where a48 := <pp-one-Z(prettyprint-ID)> a
+    where b27 := <pp-one-Z(prettyprint-Exp)> b
 
   prettyprint-Statement :
     ArrayAssignment(a, b, c) -> [ H(
                                     [SOpt(HS(), "0")]
-                                  , [ a214
+                                  , [ a49
                                     , S("[")
-                                    , b128
+                                    , b28
                                     , S("] = ")
-                                    , c38
+                                    , c9
                                     , S(";")
                                     ]
                                   )
                                 ]
-    where a214 := <pp-one-Z(prettyprint-ID)> a
-    where b128 := <pp-one-Z(prettyprint-Exp)> b
-    where c38 := <pp-one-Z(prettyprint-Exp)> c
+    where a49 := <pp-one-Z(prettyprint-ID)> a
+    where b28 := <pp-one-Z(prettyprint-Exp)> b
+    where c9 := <pp-one-Z(prettyprint-Exp)> c
 
   prettyprint-Statement :
     StructMemberAssignment(a, b, c) -> [ H(
                                            [SOpt(HS(), "0")]
-                                         , [ a215
+                                         , [ a50
                                            , S(".")
-                                           , b129
+                                           , b29
                                            , S(" = ")
-                                           , c39
+                                           , c10
                                            , S(";")
                                            ]
                                          )
                                        ]
-    where a215 := <pp-one-Z(prettyprint-ID)> a
-    where b129 := <pp-one-Z(prettyprint-ID)> b
-    where c39 := <pp-one-Z(prettyprint-Exp)> c
+    where a50 := <pp-one-Z(prettyprint-ID)> a
+    where b29 := <pp-one-Z(prettyprint-ID)> b
+    where c10 := <pp-one-Z(prettyprint-Exp)> c
 
   prettyprint-Statement :
     IfElse(a, b, c) -> [ H(
                            [SOpt(HS(), "0")]
-                         , [S("if ("), a216, S(")")]
+                         , [S("if ("), a51, S(")")]
                          )
-                       , b130
+                       , b30
                        , H(
                            [SOpt(HS(), "0")]
                          , [S("else")]
                          )
-                       , c40
+                       , c11
                        , H(
                            []
                          , [S("")]
                          )
                        ]
-    where a216 := <pp-one-Z(prettyprint-Exp)> a
-    where b130 := <pp-indent(|"2")> [<pp-one-Z(prettyprint-Statement)> b]
-    where c40 := <pp-indent(|"2")> [<pp-one-Z(prettyprint-Statement)> c]
+    where a51 := <pp-one-Z(prettyprint-Exp)> a
+    where b30 := <pp-indent(|"2")> [<pp-one-Z(prettyprint-Statement)> b]
+    where c11 := <pp-indent(|"2")> [<pp-one-Z(prettyprint-Statement)> c]
 
   prettyprint-Statement :
     While(a, b) -> [ H(
                        [SOpt(HS(), "0")]
-                     , [S("while ("), a217, S(")")]
+                     , [S("while ("), a52, S(")")]
                      )
-                   , b131
+                   , b31
                    , H(
                        []
                      , [S("")]
                      )
                    ]
-    where a217 := <pp-one-Z(prettyprint-Exp)> a
-    where b131 := <pp-indent(|"2")> [<pp-one-Z(prettyprint-Statement)> b]
+    where a52 := <pp-one-Z(prettyprint-Exp)> a
+    where b31 := <pp-indent(|"2")> [<pp-one-Z(prettyprint-Statement)> b]
 
   prettyprint-Statement :
     PrintfInt(a) -> [ H(
                         [SOpt(HS(), "0")]
-                      , [S("printf(\"%i\", "), a218, S(");")]
+                      , [S("printf(\"%i\", "), a53, S(");")]
                       )
                     ]
-    where a218 := <pp-one-Z(prettyprint-Exp)> a
+    where a53 := <pp-one-Z(prettyprint-Exp)> a
 
   prettyprint-Statement :
     PrinfFloat(a) -> [ H(
                          [SOpt(HS(), "0")]
-                       , [S("printf(\"%f\", "), a219, S(");")]
+                       , [S("printf(\"%f\", "), a54, S(");")]
                        )
                      ]
-    where a219 := <pp-one-Z(prettyprint-Exp)> a
+    where a54 := <pp-one-Z(prettyprint-Exp)> a
 
   prettyprint-Statement :
     CodeBlock(a) -> [ H(
@@ -250,248 +250,150 @@ strategies
                       )
                     , H(
                         [SOpt(HS(), "0")]
-                      , [a220]
+                      , [a55]
                       )
                     , H(
                         [SOpt(HS(), "0")]
                       , [S("}")]
                       )
                     ]
-    where a220 := <pp-V-list(prettyprint-Statement)> a
+    where a55 := <pp-V-list(prettyprint-Statement)> a
 
   prettyprint-Exp :
     IntConst(a) -> [ H(
                        [SOpt(HS(), "0")]
-                     , [a221]
+                     , [a56]
                      )
                    ]
-    where a221 := <pp-one-Z(prettyprint-INT)> a
+    where a56 := <pp-one-Z(prettyprint-INT)> a
 
   prettyprint-Exp :
     FloatConst(a) -> [ H(
                          [SOpt(HS(), "0")]
-                       , [a222]
+                       , [a57]
                        )
                      ]
-    where a222 := <pp-one-Z(prettyprint-FLOAT)> a
+    where a57 := <pp-one-Z(prettyprint-FLOAT)> a
 
   prettyprint-Lvalue :
     Var(a) -> [ H(
                   [SOpt(HS(), "0")]
-                , [a223]
+                , [a58]
                 )
               ]
-    where a223 := <pp-one-Z(prettyprint-ID)> a
+    where a58 := <pp-one-Z(prettyprint-ID)> a
 
   prettyprint-Lvalue :
     StructMember(a, b) -> [ H(
                               [SOpt(HS(), "0")]
-                            , [a224, S("."), b132]
+                            , [a59, S("."), b32]
                             )
                           ]
-    where a224 := <pp-one-Z(prettyprint-Lvalue)> a
-    where b132 := <pp-one-Z(prettyprint-Lvalue)> b
+    where a59 := <pp-one-Z(prettyprint-Lvalue)> a
+    where b32 := <pp-one-Z(prettyprint-Lvalue)> b
 
   prettyprint-Lvalue :
     ArrayVar(a, b) -> [ H(
                           [SOpt(HS(), "0")]
-                        , [ a225
+                        , [ a60
                           , S("[")
-                          , b133
+                          , b33
                           , S("]")
                           ]
                         )
                       ]
-    where a225 := <pp-one-Z(prettyprint-ID)> a
-    where b133 := <pp-one-Z(prettyprint-Exp)> b
+    where a60 := <pp-one-Z(prettyprint-ID)> a
+    where b33 := <pp-one-Z(prettyprint-Exp)> b
 
   prettyprint-Exp :
     a -> [ H(
              [SOpt(HS(), "0")]
-           , [a226]
+           , [a61]
            )
          ]
-    where a226 := <pp-one-Z(prettyprint-Lvalue)> a
+    where a61 := <pp-one-Z(prettyprint-Lvalue)> a
 
   prettyprint-Exp :
     And(a, b) -> [ H(
                      [SOpt(HS(), "0")]
-                   , [a227, S(" && "), b134]
+                   , [a62, S(" && "), b34]
                    )
                  ]
-    where a227 := <pp-one-Z(prettyprint-Exp)> a
-    where b134 := <pp-one-Z(prettyprint-Exp)> b
+    where a62 := <pp-one-Z(prettyprint-Exp)> a
+    where b34 := <pp-one-Z(prettyprint-Exp)> b
 
   prettyprint-Exp :
     Lt(a, b) -> [ H(
                     [SOpt(HS(), "0")]
-                  , [a228, S(" < "), b135]
+                  , [a63, S(" < "), b35]
                   )
                 ]
-    where a228 := <pp-one-Z(prettyprint-Exp)> a
-    where b135 := <pp-one-Z(prettyprint-Exp)> b
-
-  prettyprint-Exp :
-    Gt(a, b) -> [ H(
-                    [SOpt(HS(), "0")]
-                  , [a229, S(" > "), b136]
-                  )
-                ]
-    where a229 := <pp-one-Z(prettyprint-Exp)> a
-    where b136 := <pp-one-Z(prettyprint-Exp)> b
+    where a63 := <pp-one-Z(prettyprint-Exp)> a
+    where b35 := <pp-one-Z(prettyprint-Exp)> b
 
   prettyprint-Exp :
     Add(a, b) -> [ H(
                      [SOpt(HS(), "0")]
-                   , [a230, S(" + "), b137]
+                   , [a64, S(" + "), b36]
                    )
                  ]
-    where a230 := <pp-one-Z(prettyprint-Exp)> a
-    where b137 := <pp-one-Z(prettyprint-Exp)> b
+    where a64 := <pp-one-Z(prettyprint-Exp)> a
+    where b36 := <pp-one-Z(prettyprint-Exp)> b
 
   prettyprint-Exp :
     Subtract(a, b) -> [ H(
                           [SOpt(HS(), "0")]
-                        , [a231, S(" - "), b138]
+                        , [a65, S(" - "), b37]
                         )
                       ]
-    where a231 := <pp-one-Z(prettyprint-Exp)> a
-    where b138 := <pp-one-Z(prettyprint-Exp)> b
+    where a65 := <pp-one-Z(prettyprint-Exp)> a
+    where b37 := <pp-one-Z(prettyprint-Exp)> b
 
   prettyprint-Exp :
     Multiply(a, b) -> [ H(
                           [SOpt(HS(), "0")]
-                        , [a232, S(" * "), b139]
+                        , [a66, S(" * "), b38]
                         )
                       ]
-    where a232 := <pp-one-Z(prettyprint-Exp)> a
-    where b139 := <pp-one-Z(prettyprint-Exp)> b
-
-  prettyprint-Exp :
-    Divide(a, b) -> [ H(
-                        [SOpt(HS(), "0")]
-                      , [a233, S(" / "), b140]
-                      )
-                    ]
-    where a233 := <pp-one-Z(prettyprint-Exp)> a
-    where b140 := <pp-one-Z(prettyprint-Exp)> b
+    where a66 := <pp-one-Z(prettyprint-Exp)> a
+    where b38 := <pp-one-Z(prettyprint-Exp)> b
 
   prettyprint-Exp :
     Not(a) -> [ H(
                   [SOpt(HS(), "0")]
-                , [S("!"), a234]
+                , [S("!"), a67]
                 )
               ]
-    where a234 := <pp-one-Z(prettyprint-Exp)> a
+    where a67 := <pp-one-Z(prettyprint-Exp)> a
 
   prettyprint-Exp :
     Parenthetical(a) -> [ H(
                             [SOpt(HS(), "0")]
-                          , [S("("), a235, S(")")]
+                          , [S("("), a68, S(")")]
                           )
                         ]
-    where a235 := <pp-one-Z(prettyprint-Exp)> a
+    where a68 := <pp-one-Z(prettyprint-Exp)> a
 
   prettyprint-Exp :
     Sizeof(a) -> [ H(
                      [SOpt(HS(), "0")]
-                   , [S("sizeof ("), a236, S(")")]
+                   , [S("sizeof ("), a69, S(")")]
                    )
                  ]
-    where a236 := <pp-one-Z(prettyprint-Exp)> a
+    where a69 := <pp-one-Z(prettyprint-Exp)> a
 
   prettyprint-Exp :
     Call(a, b) -> [ H(
                       [SOpt(HS(), "0")]
-                    , [ a237
+                    , [ a70
                       , S("(")
-                      , b141
+                      , b39
                       , S(")")
                       ]
                     )
                   ]
-    where a237 := <pp-one-Z(prettyprint-ID)> a
-    where b141 := <pp-H-list(prettyprint-Exp|", ")> b
-
-  prettyprint-Exp :
-    UnExp(a, b) -> [ H(
-                       [SOpt(HS(), "0")]
-                     , [a238, S(" "), b142]
-                     )
-                   ]
-    where a238 := <pp-one-Z(prettyprint-UnOp)> a
-    where b142 := <pp-one-Z(prettyprint-Exp)> b
-
-  prettyprint-Exp :
-    BinExp(a, b, c) -> [ H(
-                           [SOpt(HS(), "0")]
-                         , [ a239
-                           , S(" ")
-                           , b143
-                           , S(" ")
-                           , c41
-                           ]
-                         )
-                       ]
-    where a239 := <pp-one-Z(prettyprint-BinOp)> a
-    where b143 := <pp-one-Z(prettyprint-Exp)> b
-    where c41 := <pp-one-Z(prettyprint-Exp)> c
-
-  prettyprint-UnOp :
-    Plus() -> [ H(
-                  [SOpt(HS(), "0")]
-                , [S("+")]
-                )
-              ]
-
-  prettyprint-UnOp :
-    Minus() -> [ H(
-                   [SOpt(HS(), "0")]
-                 , [S("-")]
-                 )
-               ]
-
-  prettyprint-BinOp :
-    Plus() -> [ H(
-                  [SOpt(HS(), "0")]
-                , [S("+")]
-                )
-              ]
-
-  prettyprint-BinOp :
-    Minus() -> [ H(
-                   [SOpt(HS(), "0")]
-                 , [S("-")]
-                 )
-               ]
-
-  prettyprint-BinOp :
-    Mul() -> [ H(
-                 [SOpt(HS(), "0")]
-               , [S("*")]
-               )
-             ]
-
-  prettyprint-BinOp :
-    Div() -> [ H(
-                 [SOpt(HS(), "0")]
-               , [S("/")]
-               )
-             ]
-
-  prettyprint-BinOp :
-    And() -> [ H(
-                 [SOpt(HS(), "0")]
-               , [S("&&")]
-               )
-             ]
-
-  prettyprint-BinOp :
-    Lt() -> [ H(
-                [SOpt(HS(), "0")]
-              , [S("<")]
-              )
-            ]
+    where a70 := <pp-one-Z(prettyprint-ID)> a
+    where b39 := <pp-H-list(prettyprint-Exp|", ")> b
 
   prettyprint-example =
     prettyprint-Program
@@ -522,9 +424,3 @@ strategies
 
   prettyprint-example =
     prettyprint-Exp
-
-  prettyprint-example =
-    prettyprint-UnOp
-
-  prettyprint-example =
-    prettyprint-BinOp

@@ -1,0 +1,24 @@
+( File(
+    []
+  , []
+  , [ FunctionDef(
+        Array(Int())
+      , "main"
+      , [ Arg(Array(Int()), "a")
+        , Arg(Array(Int()), "b")
+        , Arg(Array(Float()), "c")
+        , Arg(Struct("Point"), "p")
+        ]
+      , [ VarDec(Array(Int()), "b")
+        , VarDec(Array(Float()), "c")
+        , ArrayDec(Int(), "a", "5")
+        , VarDec(Struct("point"), "p")
+        ]
+      , [Assignment("z", Add(Var("z"), IntConst("1")))]
+      , IntConst("0")
+      )
+    ]
+  , Add(Var("x"), IntConst("1"))
+  )
+, []
+)

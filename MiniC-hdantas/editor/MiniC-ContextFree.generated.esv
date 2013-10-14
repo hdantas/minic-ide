@@ -50,6 +50,8 @@ completions
     <Minuend:Exp> " - " <Subtrahend:Exp>                               
   completion template Exp : "Multiplicand * Multiplier" =
     <Multiplicand:Exp> " * " <Multiplier:Exp>                     
+  completion template Exp : "!Boolean" =
+    "!" <Boolean:Exp>                                                              
   completion template Exp : "(Expression)" =
     "(" <Expression:Exp> ")"                                                   
   completion template Exp : "sizeof (Datatype)" =

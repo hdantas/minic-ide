@@ -1,0 +1,70 @@
+module MiniC-Lexical
+exports
+  lexical syntax
+    [a-zA-Z] [a-zA-Z0-9\_]*                                          -> ID           
+    ( "-" | "+" )? [0-9]+                                            -> INT          
+    ( "-" | "+" )? [0-9]+ [eE] ( "-" | "+" )? [0-9]+                 -> FLOAT        
+    ( "-" | "+" )? [0-9]+ "." [0-9]+ ( [eE] ( "-" | "+" )? [0-9]+ )? -> FLOAT        
+    ( "-" | "+" )? "." [0-9]+ ( [eE] ( "-" | "+" )? [0-9]+ )?        -> FLOAT        
+    ( "-" | "+" )? [0-9]+ "." ( [eE] ( "-" | "+" )? [0-9]+ )?        -> FLOAT        
+    [\ \t\n\r]                                                       -> LAYOUT       
+    Comment                                                          -> LAYOUT       
+    "//" ~[\n\r]* [\n\r] | EOF                                       -> Comment      
+    BlockComment                                                     -> Comment      
+    "/*" CommentPart* "*/"                                           -> BlockComment 
+    ~[\/\*]                                                          -> CommentPart  
+    Asterisk                                                         -> CommentPart  
+    ForwardSlash                                                     -> CommentPart  
+    BlockComment                                                     -> CommentPart  
+    [\*]                                                             -> Asterisk     
+    [\/]                                                             -> ForwardSlash 
+                                                                     -> EOF          
+
+  lexical restrictions
+    ID -/- [a-zA-Z0-9\_]
+    INT -/- [0-9]
+    FLOAT -/- [0-9]
+    Asterisk -/- [\/]
+    ForwardSlash -/- [\*]
+    EOF -/- ~[]
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\r]
+    Comment? -/- [\/] . [\/]
+    Comment? -/- [\/] . [\*]
+
+  lexical syntax
+    "auto"     -> ID {reject}
+    "break"    -> ID {reject}
+    "case"     -> ID {reject}
+    "char"     -> ID {reject}
+    "const"    -> ID {reject}
+    "continue" -> ID {reject}
+    "default"  -> ID {reject}
+    "do"       -> ID {reject}
+    "double"   -> ID {reject}
+    "else"     -> ID {reject}
+    "enum"     -> ID {reject}
+    "extern"   -> ID {reject}
+    "float"    -> ID {reject}
+    "for"      -> ID {reject}
+    "goto"     -> ID {reject}
+    "if"       -> ID {reject}
+    "int"      -> ID {reject}
+    "long"     -> ID {reject}
+    "register" -> ID {reject}
+    "return"   -> ID {reject}
+    "short"    -> ID {reject}
+    "signed"   -> ID {reject}
+    "sizeof"   -> ID {reject}
+    "static"   -> ID {reject}
+    "struct"   -> ID {reject}
+    "switch"   -> ID {reject}
+    "typedef"  -> ID {reject}
+    "union"    -> ID {reject}
+    "unsigned" -> ID {reject}
+    "void"     -> ID {reject}
+    "volatile" -> ID {reject}
+    "while"    -> ID {reject}
+    "null"     -> ID {reject}
+    "NULL"     -> ID {reject}

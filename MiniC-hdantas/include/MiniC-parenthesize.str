@@ -1,0 +1,130 @@
+module include/MiniC-parenthesize
+
+imports
+  libstratego-lib
+  include/MiniC
+
+
+strategies
+  io-MiniC-parenthesize =
+    io-wrap(parenthesize-MiniC)
+
+  parenthesize-MiniC =
+    innermost(MiniCParenthesize)
+
+
+rules
+
+  MiniCParenthesize :
+    Divide(t_0, t_1) -> Divide(Parenthetical(t_0), t_1)
+    where <(?And(_, _)
+            + ?Gt(_, _)
+            + ?Lt(_, _)
+            + ?Subtract(_, _)
+            + ?Add(_, _)
+            + fail)> t_0
+
+  MiniCParenthesize :
+    Divide(t_0, t_1) -> Divide(t_0, Parenthetical(t_1))
+    where <(?And(_, _)
+            + ?Gt(_, _)
+            + ?Lt(_, _)
+            + ?Subtract(_, _)
+            + ?Add(_, _)
+            + ?Divide(_, _)
+            + ?Multiply(_, _)
+            + fail)> t_1
+
+  MiniCParenthesize :
+    Multiply(t_0, t_1) -> Multiply(Parenthetical(t_0), t_1)
+    where <(?And(_, _)
+            + ?Gt(_, _)
+            + ?Lt(_, _)
+            + ?Subtract(_, _)
+            + ?Add(_, _)
+            + fail)> t_0
+
+  MiniCParenthesize :
+    Multiply(t_0, t_1) -> Multiply(t_0, Parenthetical(t_1))
+    where <(?And(_, _)
+            + ?Gt(_, _)
+            + ?Lt(_, _)
+            + ?Subtract(_, _)
+            + ?Add(_, _)
+            + ?Multiply(_, _)
+            + ?Divide(_, _)
+            + fail)> t_1
+
+  MiniCParenthesize :
+    Subtract(t_0, t_1) -> Subtract(Parenthetical(t_0), t_1)
+    where <(?And(_, _)
+            + ?Gt(_, _)
+            + ?Lt(_, _)
+            + fail)> t_0
+
+  MiniCParenthesize :
+    Subtract(t_0, t_1) -> Subtract(t_0, Parenthetical(t_1))
+    where <(?And(_, _)
+            + ?Gt(_, _)
+            + ?Lt(_, _)
+            + ?Subtract(_, _)
+            + ?Add(_, _)
+            + fail)> t_1
+
+  MiniCParenthesize :
+    Add(t_0, t_1) -> Add(Parenthetical(t_0), t_1)
+    where <(?And(_, _)
+            + ?Gt(_, _)
+            + ?Lt(_, _)
+            + fail)> t_0
+
+  MiniCParenthesize :
+    Add(t_0, t_1) -> Add(t_0, Parenthetical(t_1))
+    where <(?And(_, _)
+            + ?Gt(_, _)
+            + ?Lt(_, _)
+            + ?Add(_, _)
+            + ?Subtract(_, _)
+            + fail)> t_1
+
+  MiniCParenthesize :
+    Gt(t_0, t_1) -> Gt(Parenthetical(t_0), t_1)
+    where <(?And(_, _)
+            + ?Gt(_, _)
+            + ?Lt(_, _)
+            + fail)> t_0
+
+  MiniCParenthesize :
+    Gt(t_0, t_1) -> Gt(t_0, Parenthetical(t_1))
+    where <(?And(_, _)
+            + ?Gt(_, _)
+            + ?Lt(_, _)
+            + fail)> t_1
+
+  MiniCParenthesize :
+    Lt(t_0, t_1) -> Lt(Parenthetical(t_0), t_1)
+    where <(?And(_, _)
+            + ?Lt(_, _)
+            + ?Gt(_, _)
+            + fail)> t_0
+
+  MiniCParenthesize :
+    Lt(t_0, t_1) -> Lt(t_0, Parenthetical(t_1))
+    where <(?And(_, _)
+            + ?Lt(_, _)
+            + ?Gt(_, _)
+            + fail)> t_1
+
+  MiniCParenthesize :
+    And(t_0, t_1) -> And(t_0, Parenthetical(t_1))
+    where <(?And(_, _) + fail)> t_1
+
+  MiniCParenthesize :
+    StructMember(t_0, t_1) -> StructMember(t_0, Parenthetical(t_1))
+    where <(?StructMember(_, _) + fail)> t_1
+
+
+signature
+  constructors
+    Parenthetical : Unknown -> Unknown
+

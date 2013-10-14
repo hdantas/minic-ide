@@ -26,5 +26,8 @@ builders
   builder  : "Reload index"                        = debug-index-reload (meta) (source)                                     
 
   builder  : "Pretty-print"                        = pp-builder (source) (openeditor)    
+  builder : "Desugar AST (selection)"              = editor-desugar (openeditor) (realtime) (meta) (source)
 
-  on save  : editor-save                                                                                                    
+  on save  : editor-save           
+  
+                                                                                           

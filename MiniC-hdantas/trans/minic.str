@@ -16,14 +16,16 @@ imports
   generate
   refactor
   pp
+  analysis/desugar
   editor/outline
   editor/builders
-  analysis/desugar
+  
 
 rules // Analysis
   
 	// Analyzes the current program, returning a tuple with the analyzed AST, errors, warnings, notes and
 	// files that should be re-analyzed.
+	    	
   analyze:
     (ast, path, project-path) -> (ast'', errors, warnings, notes, filesToAnalyze')
     with

@@ -19,7 +19,7 @@ rules
 
 //    field declarations and
   to-outline-label: VarDec(t, i) -> $[[<pp> t]: [i]]
-  to-outline-label: ArrayDec(t, i, n) -> $[arrayDec: [i]]
+  to-outline-label: ArrayDec(t, i, n) -> $[[<pp> t] array: [i]]
 
 //    method declarations.
   to-outline-label: FunctionDef(t, i, p, v, s, e) -> label
@@ -36,7 +36,7 @@ rules
   pp: Int()        -> "int"
   pp: Float()      -> "float"
   pp: Array(t)     -> <pp> t
-  pp: Struct(t)    -> $[[t] struct]
+  pp: Struct(t)    -> t
 
 
   pp-params: // empty parameter list

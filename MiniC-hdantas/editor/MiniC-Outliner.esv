@@ -1,6 +1,8 @@
 module MiniC-Outliner
 
-imports MiniC-Outliner.generated
+imports
+  MiniC-Outliner.generated
+  //editor/outline
 
 outliner
   
