@@ -18,4 +18,5 @@ Define rewrite rules desugar which desugar
   Choose one of the desugar-all strategies
   Challenge: octal numbers into decimal numbers.
 
-// Integrate desugar into a strategy desugar-all which desugars subtrees in an AST.
+Integrate desugar into a strategy desugar-all which desugars subtrees in an AST.
+
