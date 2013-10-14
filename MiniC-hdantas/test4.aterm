@@ -1,0 +1,14 @@
+File(
+  []
+, []
+, [ FunctionDef(
+      Array(Int())
+    , "main"
+    , [Arg(Array(Int()), "a")]
+    , [VarDec(Array(Int()), "b")]
+    , [Assignment("z", Add(Var("z"), IntConst("1")))]
+    , IntConst("0")
+    )
+  ]
+, Add(Var("x"), IntConst("1"))
+)

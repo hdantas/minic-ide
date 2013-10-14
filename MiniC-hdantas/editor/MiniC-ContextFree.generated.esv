@@ -1,0 +1,58 @@
+
+module MiniC-ContextFree.generated
+
+completions
+  completion template TypeDec : "struct StructName { StructMembers };" =
+    "struct " <StructName:ID> "\n\t{\n\t" <StructMembers:VarDec> "\n\t};" (blank)  
+  completion template VarDec : "Type VarName;" =
+    <Type:Type> " " <VarName:ID> ";"                                       
+  completion template VarDec : "Type ArrayName[NumberElements];" =
+    <Type:ArrayType> " " <ArrayName:ID> "[" <NumberElements:INT> "];"  
+  completion template FunctionDec : "ReturnType FuncName (Arguments) { return Return value; }" =
+    <ReturnType:Type> " " <FuncName:ID> " (" <Arguments:Parameter> ")\n\t{\n\treturn " <Return value:Exp> ";\n\t}" (blank)  
+  completion template Parameter : "Type Name" =
+    <Type:Type> " " <Name:ID>                                               
+  completion template Parameter : "Type Name[]" =
+    <Type:ArrayType> " " <Name:ID> "[]"                                   
+  completion template ArrayType : "int" =
+    "int"                                                                         
+  completion template ArrayType : "float" =
+    "float"                                                                     
+  completion template Type : "struct StructName" =
+    "struct " <StructName:ID>                                            
+  completion template Statement : "Var = Exp;" =
+    <Var:ID> " = " <Exp:Exp> ";"                                           
+  completion template Statement : "ArrayName[Index] = Exp;" =
+    <ArrayName:ID> "[" <Index:Exp> "] = " <Exp:Exp> ";"       
+  completion template Statement : "StructName.StructMember = Exp;" =
+    <StructName:ID> "." <StructMember:ID> " = " <Exp:Exp> ";"  
+  completion template Statement : "if (Condition) Statement else Statement " =
+    "if (" <Condition:Exp> ")\n\t" <Statement:Statement> "\nelse\n\t" <Statement:Statement> "\n" (blank)  
+  completion template Statement : "while (Condition) Statement " =
+    "while (" <Condition:Exp> ")\n\t" <Statement:Statement> "\n" (blank)  
+  completion template Statement : "printf(\"%i\", IntegerVar);" =
+    "printf(\"%i\", " <IntegerVar:Exp> ");"               
+  completion template Statement : "printf(\"%f\", FloatVar);" =
+    "printf(\"%f\", " <FloatVar:Exp> ");"                   
+  completion template Statement : "{ }" =
+    "{\n" (cursor) "\n}" (blank)                                                  
+  completion template Lvalue : "StructName.StructMember" =
+    <StructName:Lvalue> "." <StructMember:Lvalue>                
+  completion template Lvalue : "ArrayName[Index]" =
+    <ArrayName:ID> "[" <Index:Exp> "]"                                  
+  completion template Exp : "Value && Value" =
+    <Value:Exp> " && " <Value:Exp>                                           
+  completion template Exp : "Value < Value" =
+    <Value:Exp> " < " <Value:Exp>                                             
+  completion template Exp : "Addend + Addend" =
+    <Addend:Exp> " + " <Addend:Exp>                                         
+  completion template Exp : "Minuend - Subtrahend" =
+    <Minuend:Exp> " - " <Subtrahend:Exp>                               
+  completion template Exp : "Multiplicand * Multiplier" =
+    <Multiplicand:Exp> " * " <Multiplier:Exp>                     
+  completion template Exp : "(Expression)" =
+    "(" <Expression:Exp> ")"                                                   
+  completion template Exp : "sizeof (Datatype)" =
+    "sizeof (" <Datatype:Exp> ")"                                         
+  completion template Exp : "FuncName()" =
+    <FuncName:ID> "(" <:Exp> ")"                                                 

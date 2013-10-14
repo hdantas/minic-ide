@@ -1,0 +1,27 @@
+struct x
+  {
+  int a;
+  };
+int b;
+int foo (int bar)
+  {
+  int a;
+  if (bar < 1)
+    bar = bar + 1;
+  else
+    bar = bar + 5;
+  
+  while (bar < 0)
+    {
+    x = x + 1;
+    }
+  
+  x = x + 2;
+  printf("%i", bar);
+  return 0;
+  }
+int main ()
+  {
+  return 0;
+  }
+x

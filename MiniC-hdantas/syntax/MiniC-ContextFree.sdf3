@@ -84,7 +84,7 @@ else
     Exp.Sizeof                        = <sizeof (<Exp; text="Datatype">)>
     Exp.Call                          = <<ID; text="FuncName">(<Exp*; separator=", ">)>
 
-    Exp.UnExp                         = <<UnOp; text="Operator"> <Exp; text="Term">>
+    /*Exp.UnExp                         = <<UnOp; text="Operator"> <Exp; text="Term">>
     Exp.BinExp                        = <<BinOp; text="Operator"> <Exp; text="Term"> <Exp; text="Term">>
 
     //UnOp.Not                          = <!>
@@ -98,7 +98,7 @@ else
     BinOp.And                         = <&&>
     BinOp.Lt                          = [<]
     //BinOp.Gt                          = [>]
-    
+    */
   
   context-free priorities
 

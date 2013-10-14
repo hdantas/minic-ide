@@ -1,0 +1,1 @@
+Module("analysis/desugar",[Imports([()]),Signature([Sorts([]),Constructors([])]),Rules([SDefT("desugar",[],[],[]),SDefT("desugar",[],[],[]),SDefT("desugar",[],[],[]),SDefT("desugar",[],[],[])]),Strategies([])])
