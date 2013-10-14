@@ -87,19 +87,19 @@ else
     Exp.Uplus                         = <+<Exp>>
   
   context-free priorities
-
+      
       {
         Exp.Uminus
         Exp.Uplus
       } >  { left:
         Exp.Multiply
-        Exp.Divide
+        // Exp.Divide
       } >  { left:
         Exp.Add
         Exp.Subtract
       } > { non-assoc:
         Exp.Lt
-        Exp.Gt
+        // Exp.Gt
       } > { left:
         Exp.And
       }

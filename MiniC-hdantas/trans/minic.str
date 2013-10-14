@@ -38,6 +38,7 @@ rules // Analysis
       );
       filesToAnalyze'         := <index-filepairs-to-files> filesToAnalyze
 
+
   // Main entry point for analyzes, called when a single file is opened in the editor.
   editor-analyze:
     (ast, path, project-path) -> (ast', errors, warnings, notes)

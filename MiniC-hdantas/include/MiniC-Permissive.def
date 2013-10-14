@@ -17,6 +17,15 @@ exports
                                    -> WATEREOF            
     "completion123"                -> COMPLETIONPREFIX    {completion}
     "|#WATERTOKENSTAR|"            -> WATERTOKENSTAR      {completion}
+    "|#TypeDec|"                   -> TypeDec             {completion}
+    "|#VarDec|"                    -> VarDec              {completion}
+    "|#FunctionDec|"               -> FunctionDec         {completion}
+    "|#Parameter|"                 -> Parameter           {completion}
+    "|#ArrayType|"                 -> ArrayType           {completion}
+    "|#Type|"                      -> Type                {completion}
+    "|#Statement|"                 -> Statement           {completion}
+    "|#Lvalue|"                    -> Lvalue              {completion}
+    "|#Exp|"                       -> Exp                 {completion}
     "|#FLOAT|"                     -> FLOAT               {completion}
     "|#Comment|"                   -> Comment             {completion}
     "|#BlockComment|"              -> BlockComment        {completion}
@@ -37,7 +46,13 @@ exports
     WATEREOF -/- ~[]
 
   lexical syntax
-    %% Lexical insertion recovery rules   
+    %% Lexical insertion recovery rules             
+                                        -> "};"     {recover, cons("INSERTION")}
+                                        -> "struct" {recover, cons("INSERTION")}
+                                        -> ");"     {recover, cons("INSERTION")}
+                                        -> "}"      {recover, cons("INSERTION")}
+                                        -> ")"      {recover, cons("INSERTION")}
+                                        -> ","      {recover, cons("INSERTION")}
 
   syntax
     %% Kernel syntax insertion recovery rules   
@@ -47,13 +62,74 @@ exports
   (
 
   context-free syntax
-    
+    TypeDec* VarDec* FunctionDec* Exp                                            -> Program     {cons("File")}
+    "struct" ID "{" VarDec* "};"                                                 -> TypeDec     {cons("StructDec")}
+    Type ID ";"                                                                  -> VarDec      {cons("VarDec")}
+    ArrayType ID "[" INT "];"                                                    -> VarDec      {cons("ArrayDec")}
+    Type ID "(" {Parameter ","}* ")" "{" VarDec* Statement* "return" Exp ";" "}" -> FunctionDec {cons("FunctionDef")}
+    Type ID                                                                      -> Parameter   {cons("Arg")}
+    ArrayType ID "[]"                                                            -> Parameter   {cons("ArrayArg")}
+    "int"                                                                        -> ArrayType   {cons("Int")}
+    "float"                                                                      -> ArrayType   {cons("Float")}
+    ArrayType                                                                    -> Type        {cons("Array")}
+    "struct" ID                                                                  -> Type        {cons("Struct")}
+    ID "=" Exp ";"                                                               -> Statement   {cons("Assignment")}
+    ID "[" Exp "]" "=" Exp ";"                                                   -> Statement   {cons("ArrayAssignment")}
+    ID "." ID "=" Exp ";"                                                        -> Statement   {cons("StructMemberAssignment")}
+    "if" "(" Exp ")" Statement "else" Statement                                  -> Statement   {cons("IfElse")}
+    "while" "(" Exp ")" Statement                                                -> Statement   {cons("While")}
+    "printf(" "\"" "%i" "\"" "," Exp ");"                                        -> Statement   {cons("PrintfInt")}
+    "printf(" "\"" "%f" "\"" "," Exp ");"                                        -> Statement   {cons("PrinfFloat")}
+    "{" Statement* "}"                                                           -> Statement   {cons("CodeBlock")}
+    INT                                                                          -> Exp         {cons("IntConst")}
+    FLOAT                                                                        -> Exp         {cons("FloatConst")}
+    ID                                                                           -> Lvalue      {cons("Var")}
+    Lvalue "." Lvalue                                                            -> Lvalue      {cons("StructMember"), left}
+    ID "[" Exp "]"                                                               -> Lvalue      {cons("ArrayVar")}
+    Lvalue                                                                       -> Exp         
+    Exp "&&" Exp                                                                 -> Exp         {cons("And"), left}
+    Exp "<" Exp                                                                  -> Exp         {cons("Lt"), non-assoc}
+    Exp "+" Exp                                                                  -> Exp         {cons("Add"), left}
+    Exp "-" Exp                                                                  -> Exp         {cons("Subtract"), left}
+    Exp "*" Exp                                                                  -> Exp         {cons("Multiply"), left}
+    "!" Exp                                                                      -> Exp         {cons("Not")}
+    "(" Exp ")"                                                                  -> Exp         {bracket}
+    "sizeof" "(" Exp ")"                                                         -> Exp         {cons("Sizeof")}
+    ID "(" {Exp ","}* ")"                                                        -> Exp         {cons("Call")}
+    "-" Exp                                                                      -> Exp         {cons("Uminus")}
+    "+" Exp                                                                      -> Exp         {cons("Uplus")}
 
   context-free syntax
-    
+    CONTENTCOMPLETE -> Program     {cons("COMPLETION-Program")}
+    CONTENTCOMPLETE -> TypeDec     {cons("COMPLETION-TypeDec")}
+    CONTENTCOMPLETE -> VarDec      {cons("COMPLETION-VarDec")}
+    CONTENTCOMPLETE -> FunctionDec {cons("COMPLETION-FunctionDec")}
+    CONTENTCOMPLETE -> Parameter   {cons("COMPLETION-Parameter")}
+    CONTENTCOMPLETE -> ArrayType   {cons("COMPLETION-ArrayType")}
+    CONTENTCOMPLETE -> Type        {cons("COMPLETION-Type")}
+    CONTENTCOMPLETE -> Statement   {cons("COMPLETION-Statement")}
+    CONTENTCOMPLETE -> Lvalue      {cons("COMPLETION-Lvalue")}
+    CONTENTCOMPLETE -> Exp         {cons("COMPLETION-Exp")}
 
-  lexical syntax
-    
+  lexical restrictions
+    "return" "int" "float" "struct" "if" "else" "while" "sizeof" -/- [a-zA-Z]
+
+  context-free priorities
+    { "-" Exp -> Exp
+      "+" Exp -> Exp } >
+    {left:
+      Exp "*" Exp -> Exp
+    } >
+    {left:
+      Exp "+" Exp -> Exp
+      Exp "-" Exp -> Exp
+    } >
+    {non-assoc:
+      Exp "<" Exp -> Exp
+    } >
+    {left:
+      Exp "&&" Exp -> Exp
+    }
 
   )
 

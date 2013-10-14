@@ -1,0 +1,194 @@
+Module(
+  "analysis/desugar"
+, [ Imports([Import("include/MiniC")])
+  , Signature(
+      [ Sorts([])
+      , Constructors(
+          [ OpDecl("Plus"{272739}, ConstType(SortNoArgs("BinOp")))
+          , OpDecl("Minus"{272740}, ConstType(SortNoArgs("BinOp")))
+          , OpDecl("Mul"{272741}, ConstType(SortNoArgs("BinOp")))
+          , OpDecl("And"{272742}, ConstType(SortNoArgs("BinOp")))
+          , OpDecl("Lt"{272743}, ConstType(SortNoArgs("BinOp")))
+          , OpDecl("UPLUS"{272744}, ConstType(SortNoArgs("UnOp")))
+          , OpDecl("UMINUS"{272745}, ConstType(SortNoArgs("UnOp")))
+          , OpDecl("UNOT"{272746}, ConstType(SortNoArgs("UnOp")))
+          , OpDecl(
+              "BinExp"{272747}
+            , FunType(
+                [ConstType(SortNoArgs("BinOp")), ConstType(SortNoArgs("Exp")), ConstType(SortNoArgs("Exp"))]
+              , ConstType(SortNoArgs("Exp"))
+              )
+            )
+          , OpDecl(
+              "UnExp"{272748}
+            , FunType(
+                [ConstType(SortNoArgs("UnOp")), ConstType(SortNoArgs("Exp"))]
+              , ConstType(SortNoArgs("Exp"))
+              )
+            )
+          ]
+        )
+      ]
+    )
+  , Rules(
+      [ SDefT(
+          "desugar"{272749}
+        , []
+        , []
+        , SRule(
+            Rule(
+              NoAnnoList(Op("Uminus"{272704}, [Var("e"{272751})]))
+            , NoAnnoList(
+                Op(
+                  "UnExp"{272748}
+                , [NoAnnoList(Op("UMINUS"{272745}, [])), Var("e"{272751})]
+                )
+              )
+            , []
+            )
+          )
+        )
+      , SDefT(
+          "desugar"{272749}
+        , []
+        , []
+        , SRule(
+            Rule(
+              NoAnnoList(Op("Uplus"{272703}, [Var("e"{272752})]))
+            , NoAnnoList(
+                Op(
+                  "UnExp"{272748}
+                , [NoAnnoList(Op("UPLUS"{272744}, [])), Var("e"{272752})]
+                )
+              )
+            , []
+            )
+          )
+        )
+      , SDefT(
+          "desugar"{272749}
+        , []
+        , []
+        , SRule(
+            Rule(
+              NoAnnoList(Op("Not"{272707}, [Var("e"{272753})]))
+            , NoAnnoList(
+                Op(
+                  "UnExp"{272748}
+                , [NoAnnoList(Op("UNOT"{272746}, [])), Var("e"{272753})]
+                )
+              )
+            , []
+            )
+          )
+        )
+      , SDefT(
+          "desugar"{272749}
+        , []
+        , []
+        , SRule(
+            Rule(
+              NoAnnoList(Op("Add"{272710}, [Var("e1"{272754}), Var("e2"{272755})]))
+            , NoAnnoList(
+                Op(
+                  "BinExp"{272747}
+                , [NoAnnoList(Op("Plus"{272739}, [])), Var("e1"{272754}), Var("e2"{272755})]
+                )
+              )
+            , []
+            )
+          )
+        )
+      , SDefT(
+          "desugar"{272749}
+        , []
+        , []
+        , SRule(
+            Rule(
+              NoAnnoList(Op("Subtract"{272709}, [Var("e1"{272756}), Var("e2"{272757})]))
+            , NoAnnoList(
+                Op(
+                  "BinExp"{272747}
+                , [NoAnnoList(Op("Minus"{272740}, [])), Var("e1"{272756}), Var("e2"{272757})]
+                )
+              )
+            , []
+            )
+          )
+        )
+      , SDefT(
+          "desugar"{272749}
+        , []
+        , []
+        , SRule(
+            Rule(
+              NoAnnoList(Op("Multiply"{272708}, [Var("e1"{272758}), Var("e2"{272759})]))
+            , NoAnnoList(
+                Op(
+                  "BinExp"{272747}
+                , [NoAnnoList(Op("Mul"{272741}, [])), Var("e1"{272758}), Var("e2"{272759})]
+                )
+              )
+            , []
+            )
+          )
+        )
+      , SDefT(
+          "desugar"{272749}
+        , []
+        , []
+        , SRule(
+            Rule(
+              NoAnnoList(Op("And"{272712}, [Var("e1"{272760}), Var("e2"{272761})]))
+            , NoAnnoList(
+                Op(
+                  "BinExp"{272747}
+                , [NoAnnoList(Op("And"{272742}, [])), Var("e1"{272760}), Var("e2"{272761})]
+                )
+              )
+            , []
+            )
+          )
+        )
+      , SDefT(
+          "desugar"{272749}
+        , []
+        , []
+        , SRule(
+            Rule(
+              NoAnnoList(Op("Lt"{272711}, [Var("e1"{272762}), Var("e2"{272763})]))
+            , NoAnnoList(
+                Op(
+                  "BinExp"{272747}
+                , [NoAnnoList(Op("Lt"{272743}, [])), Var("e1"{272762}), Var("e2"{272763})]
+                )
+              )
+            , []
+            )
+          )
+        )
+      ]
+    )
+  , Strategies(
+      [ SDefT(
+          "desugar-all"{272750}
+        , []
+        , []
+        , CallT(
+            SVar("bottomup"{271688})
+          , [ Seq(
+                CallT(SVar("debug"{271595}), [], [])
+              , CallT(
+                  SVar("try"{271800})
+                , [CallT(SVar("desugar"{272749}), [], [])]
+                , []
+                )
+              )
+            ]
+          , []
+          )
+        )
+      ]
+    )
+  ]
+)

@@ -1,1 +1,1 @@
-UnExp(Uplus(), "1")
+UnExp(UNOT(), IntConst("1"))

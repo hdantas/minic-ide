@@ -58,3 +58,7 @@ completions
     "sizeof (" <Datatype:Exp> ")"                                         
   completion template Exp : "FuncName()" =
     <FuncName:ID> "(" <:Exp> ")"                                                 
+  completion template Exp : "-Exp" =
+    "-" <Exp:Exp>                                                                      
+  completion template Exp : "+Exp" =
+    "+" <Exp:Exp>                                                                      

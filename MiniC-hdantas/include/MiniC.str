@@ -5,14 +5,14 @@ signature
     ArrayVar               : ID * Exp -> Lvalue
     StructMember           : Lvalue * Lvalue -> Lvalue
     Var                    : ID -> Lvalue
+    Uplus                  : Exp -> Exp
+    Uminus                 : Exp -> Exp
     Call                   : ID * List(Exp) -> Exp
     Sizeof                 : Exp -> Exp
     Not                    : Exp -> Exp
-    Divide                 : Exp * Exp -> Exp
     Multiply               : Exp * Exp -> Exp
     Subtract               : Exp * Exp -> Exp
     Add                    : Exp * Exp -> Exp
-    Gt                     : Exp * Exp -> Exp
     Lt                     : Exp * Exp -> Exp
     And                    : Exp * Exp -> Exp
                            : Lvalue -> Exp
