@@ -40,3 +40,4 @@ completions
     
   completion template Comment :  "File Header (File Name, Author, Date)" =
     "/*\n* File: "<FileName:Comment>".c\n* Author: "<Name:Comment>"\n*\n* Date: "<Date:Comment>"\n*/\n" (blank)    
+

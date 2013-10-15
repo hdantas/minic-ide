@@ -1,13 +1,13 @@
 
 
-int a (int foo   [] )
+int a (float a, int a[], float b )
 {
   
   int b;    int a;    float x;    int a [5];
   int a;
 
   if (Condition){
-      d = a + 1;
+      d = - 1;
       c = b + 1;
       b = c + 1;
       a = d + 1;    

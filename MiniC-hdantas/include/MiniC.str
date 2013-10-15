@@ -27,9 +27,10 @@ signature
     ArrayAssignment        : ID * Exp * Exp -> Statement
     Assignment             : ID * Exp -> Statement
     Struct                 : ID -> Type
-    Array                  : ArrayType -> Type
-    Float                  : ArrayType
-    Int                    : ArrayType
+    Float                  : Type
+    Int                    : Type
+    ArrayFloat             : ArrayType
+    ArrayInt               : ArrayType
     ArrayArg               : ArrayType * ID -> Parameter
     Arg                    : Type * ID -> Parameter
     FunctionDef            : Type * ID * List(Parameter) * List(VarDec) * List(Statement) * Exp -> FunctionDec

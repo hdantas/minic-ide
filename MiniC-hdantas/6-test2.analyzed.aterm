@@ -1,0 +1,41 @@
+File(
+  []
+, []
+, [ FunctionDef(
+      Int()
+    , "a"
+    , [Arg(Float(), "a"), ArrayArg(ArrayInt(), "a"), Arg(Float(), "b")]
+    , [ VarDec(Int(), "b")
+      , VarDec(Int(), "a")
+      , VarDec(Float(), "x")
+      , ArrayDec(ArrayInt(), "a", "5")
+      , VarDec(Int(), "a")
+      ]
+    , [ IfElse(
+          Var("Condition")
+        , CodeBlock(
+            [ Assignment("d", UnExp(UMINUS(), IntConst("1")))
+            , Assignment("c", BinExp(Plus(), Var("b"), IntConst("1")))
+            , Assignment("b", BinExp(Plus(), Var("c"), IntConst("1")))
+            , Assignment("a", BinExp(Plus(), Var("d"), IntConst("1")))
+            ]
+          )
+        , CodeBlock(
+            [Assignment("b", BinExp(Plus(), Var("b"), IntConst("1")))]
+          )
+        )
+      , PrinfFloat(Var("a"))
+      ]
+    , Var("a")
+    )
+  , FunctionDef(
+      Int()
+    , "foo"
+    , [Arg(Int(), "a"), Arg(Float(), "b"), ArrayArg(ArrayInt(), "a")]
+    , []
+    , []
+    , IntConst("0")
+    )
+  ]
+, Var("x")
+)

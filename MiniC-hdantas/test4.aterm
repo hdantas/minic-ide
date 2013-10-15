@@ -1,6 +1,0 @@
-File(
-  []
-, []
-, []
-, Add(Var("x"), IntConst("1"))
-)

@@ -37,9 +37,10 @@ module MiniC-ContextFree
     Parameter.Arg                     = <<Type; text="Type"> <ID; text="Name">>
     Parameter.ArrayArg                = <<ArrayType; text="Type"> <ID; text="Name">[]>
     
-    ArrayType.Int                     = <int>
-    ArrayType.Float                   = <float>
-    Type.Array                        = <<ArrayType; text="Type">>
+    ArrayType.ArrayInt                = <int>
+    ArrayType.ArrayFloat              = <float>
+    Type.Int                          = <int>
+    Type.Float                        = <float>
     Type.Struct                       = <struct <ID; text="StructName">>
 
     Statement.Assignment              = <<ID; text="Var"> = <Exp>;>

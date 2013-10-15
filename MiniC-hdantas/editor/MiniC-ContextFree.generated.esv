@@ -18,6 +18,10 @@ completions
     "int"                                                                         
   completion template ArrayType : "float" =
     "float"                                                                     
+  completion template Type : "int" =
+    "int"                                                                              
+  completion template Type : "float" =
+    "float"                                                                          
   completion template Type : "struct StructName" =
     "struct " <StructName:ID>                                            
   completion template Statement : "Var = Exp;" =

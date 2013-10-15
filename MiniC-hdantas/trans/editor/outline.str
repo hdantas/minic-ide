@@ -35,7 +35,16 @@ rules
       
   pp: Int()        -> "int"
   pp: Float()      -> "float"
-  pp: Array(t)     -> <pp> t
+  pp: ArrayInt()     -> label
+  where
+  	brackets := "[]"
+  	;label := $[int [brackets]]
+  		 	
+  pp: ArrayFloat()     -> label
+  where
+  	brackets := "[]"
+  	;label := $[float [brackets]]
+  	 		 	
   pp: Struct(t)    -> t
 
 
@@ -56,6 +65,12 @@ rules
       ;list  := <pp-params> [param | params] // recursive call on remaining parameters
       ;label := $[[e1], [list]] // generate label
 
+  pp-params: // at least two parameters
+    [ArrayArg(t, n), param | params] -> label
+    where
+      e1     := <pp> t // do something on first parameter
+      ;list  := <pp-params> [param | params] // recursive call on remaining parameters
+      ;label := $[[e1], [list]] // generate label
 
 rules
 

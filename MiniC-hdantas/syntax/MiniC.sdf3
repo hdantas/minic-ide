@@ -3,7 +3,7 @@ module MiniC
 imports
 	MiniC-Lexical
 	MiniC-ContextFree
-	
+
 context-free start-symbols
 	Program
 /*	TypeDec

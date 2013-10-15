@@ -69,9 +69,10 @@ exports
     Type ID "(" {Parameter ","}* ")" "{" VarDec* Statement* "return" Exp ";" "}" -> FunctionDec {cons("FunctionDef")}
     Type ID                                                                      -> Parameter   {cons("Arg")}
     ArrayType ID "[]"                                                            -> Parameter   {cons("ArrayArg")}
-    "int"                                                                        -> ArrayType   {cons("Int")}
-    "float"                                                                      -> ArrayType   {cons("Float")}
-    ArrayType                                                                    -> Type        {cons("Array")}
+    "int"                                                                        -> ArrayType   {cons("ArrayInt")}
+    "float"                                                                      -> ArrayType   {cons("ArrayFloat")}
+    "int"                                                                        -> Type        {cons("Int")}
+    "float"                                                                      -> Type        {cons("Float")}
     "struct" ID                                                                  -> Type        {cons("Struct")}
     ID "=" Exp ";"                                                               -> Statement   {cons("Assignment")}
     ID "[" Exp "]" "=" Exp ";"                                                   -> Statement   {cons("ArrayAssignment")}
