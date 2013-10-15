@@ -20,8 +20,4 @@ int foo (int bar)
   printf("%i", bar);
   return 0;
   }
-int main ()
-  {
-  return 0;
-  }
 x

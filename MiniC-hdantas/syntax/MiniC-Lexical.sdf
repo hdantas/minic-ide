@@ -2,7 +2,9 @@ module MiniC-Lexical
 exports
   lexical syntax
     [a-zA-Z] [a-zA-Z0-9\_]*            -> ID           
-    [0-9]+                             -> INT          
+    "0"                                -> INT          
+    [1-9] [0-9]*                       -> INT          
+    [0] [0-7]+                         -> OCTAL        
     [0-9]+ [eE] [0-9]+                 -> FLOAT        
     [0-9]+ "." [0-9]+ ( [eE] [0-9]+ )? -> FLOAT        
     "." [0-9]+ ( [eE] [0-9]+ )?        -> FLOAT        
@@ -23,6 +25,7 @@ exports
   lexical restrictions
     ID -/- [a-zA-Z0-9\_]
     INT -/- [0-9]
+    OCTAL -/- [0-7]
     FLOAT -/- [0-9]
     Asterisk -/- [\/]
     ForwardSlash -/- [\*]

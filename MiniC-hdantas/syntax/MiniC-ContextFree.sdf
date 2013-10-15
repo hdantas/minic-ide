@@ -23,6 +23,7 @@ exports
     "printf(" "\"" "%i" "\"" "," Exp ");"                                        -> Statement   {cons("PrintfInt")}
     "printf(" "\"" "%f" "\"" "," Exp ");"                                        -> Statement   {cons("PrinfFloat")}
     "{" Statement* "}"                                                           -> Statement   {cons("CodeBlock")}
+    OCTAL                                                                        -> Exp         {cons("OctalConst")}
     INT                                                                          -> Exp         {cons("IntConst")}
     FLOAT                                                                        -> Exp         {cons("FloatConst")}
     ID                                                                           -> Lvalue      {cons("Var")}

@@ -64,6 +64,7 @@ else
 <Statement*; separator="\n">
 }>
     
+    Exp.OctalConst                    = <<OCTAL; hide>>
     Exp.IntConst                      = <<INT; hide>>
     Exp.FloatConst                    = <<FLOAT; hide>>
     

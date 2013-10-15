@@ -1,8 +1,11 @@
-
+struct Point {
+  int x;
+  int y;
+};
 
 int a (float a, int a[], float b )
 {
-  
+  struct Point p;
   int b;    int a;    float x;    int a [5];
   int a;
 
@@ -25,8 +28,7 @@ int a (float a, int a[], float b )
   return a;
 }
 
-int foo (int a, float b, int a[]) {
-	return 0;
-}
+
+
 
 x

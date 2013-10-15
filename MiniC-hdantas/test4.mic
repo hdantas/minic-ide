@@ -1,3 +1,30 @@
+struct Point {
+  int x;
+  int y;
+};
+
+int a (float a, int a[], float b )
+{
+  struct Point p;
+  int b;    int a;    float x;    int a [5];
+  int a;
+
+  if (Condition){
+      d = - 1;
+      c = b + 1;
+      b = c + 1;
+      a = d + 1;    
+  } else {b = b + 1;}
+  
+  printf( " %f" , a);
+  
+  return a;
+}
+
+int b() {
+  return 0;
+}
 
 
-x + 1
+
+x

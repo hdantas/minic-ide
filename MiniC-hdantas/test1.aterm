@@ -1,0 +1,27 @@
+File(
+  [StructDec("x", [VarDec(Int(), "a")])]
+, [VarDec(Int(), "b")]
+, [ FunctionDef(
+      Int()
+    , "foo"
+    , [Arg(Int(), "bar")]
+    , [VarDec(Int(), "a")]
+    , [ IfElse(
+          Lt(Var("bar"), IntConst("1"))
+        , Assignment("bar", Add(Var("bar"), IntConst("1")))
+        , Assignment("bar", Add(Var("bar"), IntConst("5")))
+        )
+      , While(
+          Lt(Var("bar"), IntConst("0"))
+        , CodeBlock(
+            [Assignment("x", Add(Var("x"), IntConst("1")))]
+          )
+        )
+      , Assignment("x", Add(Var("x"), IntConst("2")))
+      , PrintfInt(Var("bar"))
+      ]
+    , OctalConst("00")
+    )
+  ]
+, Var("x")
+)

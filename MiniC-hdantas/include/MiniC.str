@@ -18,6 +18,7 @@ signature
                            : Lvalue -> Exp
     FloatConst             : FLOAT -> Exp
     IntConst               : INT -> Exp
+    OctalConst             : OCTAL -> Exp
     CodeBlock              : List(Statement) -> Statement
     PrinfFloat             : Exp -> Statement
     PrintfInt              : Exp -> Statement
@@ -39,6 +40,7 @@ signature
     StructDec              : ID * List(VarDec) -> TypeDec
     File                   : List(TypeDec) * List(VarDec) * List(FunctionDec) * Exp -> Program
                            : String -> FLOAT
+                           : String -> OCTAL
                            : String -> INT
                            : String -> ID
 

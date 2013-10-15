@@ -4,15 +4,20 @@ imports
   include/MiniC
   runtime/editor/outline-library
   runtime/editor/origins
+  runtime/editor/editor
+  
   // editor/MiniC-Outliner.generated
   
   
 rules
-  outline = simple-label-outline(to-outline-label)
+  // outline = simple-label-outline(to-outline-label)
+  outline = custom-label-outline(to-outline-label, to-outline-node)
   outline-expand-to-level = !3
-
+     
 rules
-  to-outline-label: File(t, v, f, e) -> $[Program]
+
+  to-outline-label: File(t, v, f, e) -> <origin-file; base-filename> // file name
+  // to-outline-label: File(t, v, f, e) -> <origin-file> // full path
 
 //    class declarations,
   to-outline-label: StructDec(i, m) -> $[struct: [i]]
@@ -28,6 +33,20 @@ rules
       ;list  := <pp-params> p
       ;label := $[[t']: [i] ([list])]
 
+  // to-outline-node: StructDec(i, m) -> Node(i, [Node("dummy", [])])
+  to-outline-node: File (t, _, f, _) -> outer-node
+  where
+    inner-node := <get-node> f
+    ;outer-node := Node(<get-name> t, <get-2name> t)
+
+
+  
+  get-name: [StructDec(i, _)] -> <to-outline-label> i
+  get-2name: [StructDec(_, children)] -> children
+  
+  // get-name: [StructDec(i, _)] -> i
+  get-node: [param] -> Node(<to-outline-label> param, [])
+  
   // to-outline-label: ... -> ...
   // to-outline-label: Var(i) -> $[var: [i]] 
   

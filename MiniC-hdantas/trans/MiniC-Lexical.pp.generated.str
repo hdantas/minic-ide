@@ -7,6 +7,9 @@ strategies
   prettyprint-INT =
     ![S(<is-string>)]
 
+  prettyprint-OCTAL =
+    ![S(<is-string>)]
+
   prettyprint-FLOAT =
     ![S(<is-string>)]
 
@@ -36,6 +39,9 @@ strategies
 
   prettyprint-example =
     prettyprint-INT
+
+  prettyprint-example =
+    prettyprint-OCTAL
 
   prettyprint-example =
     prettyprint-FLOAT

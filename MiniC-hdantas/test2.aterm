@@ -1,41 +1,33 @@
-File(
-  []
-, []
-, [ FunctionDef(
-      Int()
-    , "a"
-    , [Arg(Float(), "a"), ArrayArg(ArrayInt(), "a"), Arg(Float(), "b")]
-    , [ VarDec(Int(), "b")
-      , VarDec(Int(), "a")
-      , VarDec(Float(), "x")
-      , ArrayDec(ArrayInt(), "a", "5")
-      , VarDec(Int(), "a")
-      ]
-    , [ IfElse(
-          Var("Condition")
-        , CodeBlock(
-            [ Assignment("d", Uminus(IntConst("1")))
-            , Assignment("c", Add(Var("b"), IntConst("1")))
-            , Assignment("b", Add(Var("c"), IntConst("1")))
-            , Assignment("a", Add(Var("d"), IntConst("1")))
-            ]
-          )
-        , CodeBlock(
-            [Assignment("b", Add(Var("b"), IntConst("1")))]
-          )
+amb(
+  [ amb(
+      [ File(
+          [StructDec(
+             "Point"
+           , [VarDec(Int(), "x"), VarDec(Int(), "y")]
+           )]
+        , []
+        , []
+        , Var("x")
         )
-      , PrinfFloat(Var("a"))
+      , File(
+          [StructDec(
+             "Point"
+           , [VarDec(Int(), "x"), VarDec(Int(), "y")]
+           )]
+        , []
+        , []
+        , Var("x")
+        )
       ]
-    , Var("a")
     )
-  , FunctionDef(
-      Int()
-    , "foo"
-    , [Arg(Int(), "a"), Arg(Float(), "b"), ArrayArg(ArrayInt(), "a")]
+  , File(
+      [StructDec(
+         "Point"
+       , [VarDec(Int(), "x"), VarDec(Int(), "y")]
+       )]
     , []
     , []
-    , IntConst("0")
+    , Var("x")
     )
   ]
-, Var("x")
 )

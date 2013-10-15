@@ -2,7 +2,7 @@ File(
   []
 , []
 , [ FunctionDef(
-      Array(Int())
+      Int()
     , "main"
     , []
     , []
@@ -15,9 +15,9 @@ File(
       , Assignment("x", And(IntConst("2"), IntConst("1")))
       , Assignment("x", Uplus(IntConst("1")))
       , Assignment("x", Uminus(IntConst("1")))
-      , Assignment("x", IntConst("1"))
+      , Assignment("x", OctalConst("021"))
       ]
-    , IntConst("1")
+    , IntConst("0")
     )
   ]
 , Var("s")

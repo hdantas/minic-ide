@@ -27,6 +27,7 @@
    PrinfFloat                  -- KW["printf("] KW["\""] KW["%f"] KW["\""] KW[","] _1 KW[");"],
    CodeBlock                   -- V  [V vs=2 [KW["{"] _1] KW["}"]],
    CodeBlock.1:iter-star       -- _1,
+   OctalConst                  -- _1,
    IntConst                    -- _1,
    FloatConst                  -- _1,
    Var                         -- _1,

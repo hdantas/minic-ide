@@ -38,6 +38,8 @@ rules
   desugar: And(e1, e2)      -> BinExp(And(), e1, e2)
   desugar: Lt(e1, e2)       -> BinExp(Lt(), e1, e2)
   
+  desugar: OctalConst(e1)   -> IntConst(<oct-string-to-int; int-to-string > e1)
+   
   // desugar: ... -> ...
   
 strategies

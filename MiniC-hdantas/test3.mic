@@ -7,8 +7,9 @@
 	
 	x = +1;
 	x = -1;
-	x = 1;
-  return 1;
+	x = 021;
+	
+  return 0;
 }
 
 s

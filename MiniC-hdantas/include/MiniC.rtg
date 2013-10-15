@@ -2,50 +2,50 @@
 regular tree grammar
   start Program
   productions
-    ListStarOfExp1         -> ListPlusOfExp1
-    ListStarOfExp1         -> <nil>()
-    ListStarOfExp1         -> <conc>(ListStarOfExp1,ListStarOfExp1)
-    ListPlusOfExp1         -> <conc>(ListStarOfExp1,ListPlusOfExp1)
-    ListPlusOfExp1         -> <conc>(ListPlusOfExp1,ListStarOfExp1)
-    ListPlusOfExp1         -> <conc>(ListPlusOfExp1,ListPlusOfExp1)
-    ListPlusOfExp1         -> <cons>(Exp,ListStarOfExp1)
-    ListStarOfStatement1   -> ListPlusOfStatement1
-    ListStarOfStatement1   -> <nil>()
-    ListStarOfStatement1   -> <conc>(ListStarOfStatement1,ListStarOfStatement1)
-    ListPlusOfStatement1   -> <conc>(ListStarOfStatement1,ListPlusOfStatement1)
-    ListPlusOfStatement1   -> <conc>(ListPlusOfStatement1,ListStarOfStatement1)
-    ListPlusOfStatement1   -> <conc>(ListPlusOfStatement1,ListPlusOfStatement1)
-    ListPlusOfStatement1   -> <cons>(Statement,ListStarOfStatement1)
-    ListStarOfVarDec1      -> ListPlusOfVarDec1
-    ListStarOfVarDec1      -> <nil>()
-    ListStarOfVarDec1      -> <conc>(ListStarOfVarDec1,ListStarOfVarDec1)
-    ListPlusOfVarDec1      -> <conc>(ListStarOfVarDec1,ListPlusOfVarDec1)
-    ListPlusOfVarDec1      -> <conc>(ListPlusOfVarDec1,ListStarOfVarDec1)
-    ListPlusOfVarDec1      -> <conc>(ListPlusOfVarDec1,ListPlusOfVarDec1)
-    ListPlusOfVarDec1      -> <cons>(VarDec,ListStarOfVarDec1)
-    ListStarOfParameter1   -> ListPlusOfParameter1
-    ListStarOfParameter1   -> <nil>()
-    ListStarOfParameter1   -> <conc>(ListStarOfParameter1,ListStarOfParameter1)
-    ListPlusOfParameter1   -> <conc>(ListStarOfParameter1,ListPlusOfParameter1)
-    ListPlusOfParameter1   -> <conc>(ListPlusOfParameter1,ListStarOfParameter1)
-    ListPlusOfParameter1   -> <conc>(ListPlusOfParameter1,ListPlusOfParameter1)
-    ListPlusOfParameter1   -> <cons>(Parameter,ListStarOfParameter1)
-    ListStarOfFunctionDec1 -> ListPlusOfFunctionDec1
-    ListStarOfFunctionDec1 -> <nil>()
-    ListStarOfFunctionDec1 -> <conc>(ListStarOfFunctionDec1,ListStarOfFunctionDec1)
-    ListPlusOfFunctionDec1 -> <conc>(ListStarOfFunctionDec1,ListPlusOfFunctionDec1)
-    ListPlusOfFunctionDec1 -> <conc>(ListPlusOfFunctionDec1,ListStarOfFunctionDec1)
-    ListPlusOfFunctionDec1 -> <conc>(ListPlusOfFunctionDec1,ListPlusOfFunctionDec1)
-    ListPlusOfFunctionDec1 -> <cons>(FunctionDec,ListStarOfFunctionDec1)
-    ListStarOfTypeDec1     -> ListPlusOfTypeDec1
-    ListStarOfTypeDec1     -> <nil>()
-    ListStarOfTypeDec1     -> <conc>(ListStarOfTypeDec1,ListStarOfTypeDec1)
-    ListPlusOfTypeDec1     -> <conc>(ListStarOfTypeDec1,ListPlusOfTypeDec1)
-    ListPlusOfTypeDec1     -> <conc>(ListPlusOfTypeDec1,ListStarOfTypeDec1)
-    ListPlusOfTypeDec1     -> <conc>(ListPlusOfTypeDec1,ListPlusOfTypeDec1)
-    ListPlusOfTypeDec1     -> <cons>(TypeDec,ListStarOfTypeDec1)
-    ListStarOfCommentPart1 -> <string>
-    ListPlusOfCommentPart1 -> <string>
+    ListStarOfExp0         -> ListPlusOfExp0
+    ListStarOfExp0         -> <nil>()
+    ListStarOfExp0         -> <conc>(ListStarOfExp0,ListStarOfExp0)
+    ListPlusOfExp0         -> <conc>(ListStarOfExp0,ListPlusOfExp0)
+    ListPlusOfExp0         -> <conc>(ListPlusOfExp0,ListStarOfExp0)
+    ListPlusOfExp0         -> <conc>(ListPlusOfExp0,ListPlusOfExp0)
+    ListPlusOfExp0         -> <cons>(Exp,ListStarOfExp0)
+    ListStarOfStatement0   -> ListPlusOfStatement0
+    ListStarOfStatement0   -> <nil>()
+    ListStarOfStatement0   -> <conc>(ListStarOfStatement0,ListStarOfStatement0)
+    ListPlusOfStatement0   -> <conc>(ListStarOfStatement0,ListPlusOfStatement0)
+    ListPlusOfStatement0   -> <conc>(ListPlusOfStatement0,ListStarOfStatement0)
+    ListPlusOfStatement0   -> <conc>(ListPlusOfStatement0,ListPlusOfStatement0)
+    ListPlusOfStatement0   -> <cons>(Statement,ListStarOfStatement0)
+    ListStarOfVarDec0      -> ListPlusOfVarDec0
+    ListStarOfVarDec0      -> <nil>()
+    ListStarOfVarDec0      -> <conc>(ListStarOfVarDec0,ListStarOfVarDec0)
+    ListPlusOfVarDec0      -> <conc>(ListStarOfVarDec0,ListPlusOfVarDec0)
+    ListPlusOfVarDec0      -> <conc>(ListPlusOfVarDec0,ListStarOfVarDec0)
+    ListPlusOfVarDec0      -> <conc>(ListPlusOfVarDec0,ListPlusOfVarDec0)
+    ListPlusOfVarDec0      -> <cons>(VarDec,ListStarOfVarDec0)
+    ListStarOfParameter0   -> ListPlusOfParameter0
+    ListStarOfParameter0   -> <nil>()
+    ListStarOfParameter0   -> <conc>(ListStarOfParameter0,ListStarOfParameter0)
+    ListPlusOfParameter0   -> <conc>(ListStarOfParameter0,ListPlusOfParameter0)
+    ListPlusOfParameter0   -> <conc>(ListPlusOfParameter0,ListStarOfParameter0)
+    ListPlusOfParameter0   -> <conc>(ListPlusOfParameter0,ListPlusOfParameter0)
+    ListPlusOfParameter0   -> <cons>(Parameter,ListStarOfParameter0)
+    ListStarOfFunctionDec0 -> ListPlusOfFunctionDec0
+    ListStarOfFunctionDec0 -> <nil>()
+    ListStarOfFunctionDec0 -> <conc>(ListStarOfFunctionDec0,ListStarOfFunctionDec0)
+    ListPlusOfFunctionDec0 -> <conc>(ListStarOfFunctionDec0,ListPlusOfFunctionDec0)
+    ListPlusOfFunctionDec0 -> <conc>(ListPlusOfFunctionDec0,ListStarOfFunctionDec0)
+    ListPlusOfFunctionDec0 -> <conc>(ListPlusOfFunctionDec0,ListPlusOfFunctionDec0)
+    ListPlusOfFunctionDec0 -> <cons>(FunctionDec,ListStarOfFunctionDec0)
+    ListStarOfTypeDec0     -> ListPlusOfTypeDec0
+    ListStarOfTypeDec0     -> <nil>()
+    ListStarOfTypeDec0     -> <conc>(ListStarOfTypeDec0,ListStarOfTypeDec0)
+    ListPlusOfTypeDec0     -> <conc>(ListStarOfTypeDec0,ListPlusOfTypeDec0)
+    ListPlusOfTypeDec0     -> <conc>(ListPlusOfTypeDec0,ListStarOfTypeDec0)
+    ListPlusOfTypeDec0     -> <conc>(ListPlusOfTypeDec0,ListPlusOfTypeDec0)
+    ListPlusOfTypeDec0     -> <cons>(TypeDec,ListStarOfTypeDec0)
+    ListStarOfCommentPart0 -> <string>
+    ListPlusOfCommentPart0 -> <string>
     Exp                    -> COMPLETION-Exp(CONTENTCOMPLETE)
     Lvalue                 -> COMPLETION-Lvalue(CONTENTCOMPLETE)
     Statement              -> COMPLETION-Statement(CONTENTCOMPLETE)
@@ -58,7 +58,7 @@ regular tree grammar
     Program                -> COMPLETION-Program(CONTENTCOMPLETE)
     Exp                    -> Uplus(Exp)
     Exp                    -> Uminus(Exp)
-    Exp                    -> Call(ID,ListStarOfExp1)
+    Exp                    -> Call(ID,ListStarOfExp0)
     Exp                    -> Sizeof(Exp)
     Exp                    -> Not(Exp)
     Exp                    -> Multiply(Exp,Exp)
@@ -72,7 +72,8 @@ regular tree grammar
     Lvalue                 -> Var(ID)
     Exp                    -> FloatConst(FLOAT)
     Exp                    -> IntConst(INT)
-    Statement              -> CodeBlock(ListStarOfStatement1)
+    Exp                    -> OctalConst(OCTAL)
+    Statement              -> CodeBlock(ListStarOfStatement0)
     Statement              -> PrinfFloat(Exp)
     Statement              -> PrintfInt(Exp)
     Statement              -> While(Exp,Statement)
@@ -87,11 +88,11 @@ regular tree grammar
     ArrayType              -> ArrayInt()
     Parameter              -> ArrayArg(ArrayType,ID)
     Parameter              -> Arg(Type,ID)
-    FunctionDec            -> FunctionDef(Type,ID,ListStarOfParameter1,ListStarOfVarDec1,ListStarOfStatement1,Exp)
+    FunctionDec            -> FunctionDef(Type,ID,ListStarOfParameter0,ListStarOfVarDec0,ListStarOfStatement0,Exp)
     VarDec                 -> ArrayDec(ArrayType,ID,INT)
     VarDec                 -> VarDec(Type,ID)
-    TypeDec                -> StructDec(ID,ListStarOfVarDec1)
-    Program                -> File(ListStarOfTypeDec1,ListStarOfVarDec1,ListStarOfFunctionDec1,Exp)
+    TypeDec                -> StructDec(ID,ListStarOfVarDec0)
+    Program                -> File(ListStarOfTypeDec0,ListStarOfVarDec0,ListStarOfFunctionDec0,Exp)
     EOF                    -> <string>
     ForwardSlash           -> <string>
     Asterisk               -> <string>
@@ -99,5 +100,6 @@ regular tree grammar
     BlockComment           -> <string>
     Comment                -> <string>
     FLOAT                  -> <string>
+    OCTAL                  -> <string>
     INT                    -> <string>
     ID                     -> <string>

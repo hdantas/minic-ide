@@ -12,6 +12,7 @@ module MiniC-ContextFree
  */
  
   templates
+  
     Program.File                      = <<TypeDec*; hide, separator="\n">
 <VarDec*; hide, separator="\n">
 <FunctionDec*; hide, separator="\n">
@@ -36,9 +37,10 @@ module MiniC-ContextFree
     Parameter.Arg                     = <<Type; text="Type"> <ID; text="Name">>
     Parameter.ArrayArg                = <<ArrayType; text="Type"> <ID; text="Name">[]>
     
-    ArrayType.Int                     = <int>
-    ArrayType.Float                   = <float>
-    Type.Array                        = <<ArrayType; text="Type">>
+    ArrayType.ArrayInt                = <int>
+    ArrayType.ArrayFloat              = <float>
+    Type.Int                          = <int>
+    Type.Float                        = <float>
     Type.Struct                       = <struct <ID; text="StructName">>
 
     Statement.Assignment              = <<ID; text="Var"> = <Exp>;>
@@ -62,6 +64,7 @@ else
 <Statement*; separator="\n">
 }>
     
+    Exp.OctalConst                    = <<OCTAL; hide>>
     Exp.IntConst                      = <<INT; hide>>
     Exp.FloatConst                    = <<FLOAT; hide>>
     
@@ -70,36 +73,35 @@ else
     Lvalue.ArrayVar                   = <<ID; text="ArrayName">[<Exp; text="Index">]>
     Exp                               = <<Lvalue>>
     
-    Exp.BinExp                        = <<Op; text="Operator"> <Exp; text="Term"> <Exp; text="Term">>
+    
     Exp.And                           = <<Exp; text="Value"> && <Exp; text="Value">> {left}
     Exp.Lt                            = [[Exp; text="Value"] < [Exp; text="Value"]] {non-assoc}
-    Exp.Gt                            = [[Exp; text="Value"] > [Exp; text="Value"]] {non-assoc}
+  //Exp.Gt                            = [[Exp; text="Value"] > [Exp; text="Value"]] {non-assoc}
     Exp.Add                           = <<Exp; text="Addend"> + <Exp; text="Addend">> {left}
     Exp.Subtract                      = <<Exp; text="Minuend"> - <Exp; text="Subtrahend">> {left}
     Exp.Multiply                      = <<Exp; text="Multiplicand"> * <Exp; text="Multiplier">> {left}
-    Exp.Divide                        = <<Exp; text="Dividend"> / <Exp; text="Divisor">> {left}
+  //Exp.Divide                        = <<Exp; text="Dividend"> / <Exp; text="Divisor">> {left}
     Exp.Not                           = <!<Exp; text="Boolean">>
     Exp                               = <(<Exp; text="Expression">)> {bracket}
     Exp.Sizeof                        = <sizeof (<Exp; text="Datatype">)>
     Exp.Call                          = <<ID; text="FuncName">(<Exp*; separator=", ">)>
-
-    Op.Plus                           = <+>
-    Op.Minus                          = <->
-    Op.Mul                            = <*>
-    Op.Div                            = </>
-    
+    Exp.Uminus                        = <-<Exp>>
+    Exp.Uplus                         = <+<Exp>>
   
   context-free priorities
-
-      { left:
+      
+      {
+        Exp.Uminus
+        Exp.Uplus
+      } >  { left:
         Exp.Multiply
-        Exp.Divide
+        // Exp.Divide
       } >  { left:
         Exp.Add
         Exp.Subtract
       } > { non-assoc:
         Exp.Lt
-        Exp.Gt
+        // Exp.Gt
       } > { left:
         Exp.And
       }
