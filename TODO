@@ -7,7 +7,7 @@ Specify rewrite rules to-outline-label which map AST nodes to labels in an outli
   // local variables (variable name and type).
   Challenge
     //1.Provide the file name as the root node label. See lib/runtime/editor/origins/ for a suitable strategy.
-    2.Outline the main method as a subnode of the main class.
+    //2.Outline the main method as a subnode of the main class.
       This requires you to drop the import editor/MiniJava-Outliner.generated.
       Instead, you need to define a strategy outline = custom-label-outline(to-outline-label, to-outline-node)
       Visit lib/runtime/editor/outline-library for inspiration.
@@ -15,8 +15,9 @@ Specify rewrite rules to-outline-label which map AST nodes to labels in an outli
 Define rewrite rules desugar which desugar
   // unary expressions into terms of the form UnOp(op, exp),
   // binary expressions into terms of the form BinOp(op, exp1, exp2) and
-  Choose one of the desugar-all strategies
+  // Choose one of the desugar-all strategies
   // Challenge: octal numbers into decimal numbers.
 
 // Integrate desugar into a strategy desugar-all which desugars subtrees in an AST.
 
+test test2.mic with all available desugar-all strategies and pick the best

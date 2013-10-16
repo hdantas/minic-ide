@@ -16,15 +16,12 @@ rules
      
 rules
 
-  to-outline-label: File(t, v, f, e) -> <origin-file; base-filename> // file name
-  // to-outline-label: File(t, v, f, e) -> <origin-file> // full path
-
 //    class declarations,
   to-outline-label: StructDec(i, m) -> $[struct: [i]]
 
 //    field declarations and
   to-outline-label: VarDec(t, i) -> $[[<pp> t]: [i]]
-  to-outline-label: ArrayDec(t, i, n) -> $[[<pp> t] array: [i]]
+  to-outline-label: ArrayDec(t, i, n) -> $[[<pp> t]: [i]]
 
 //    method declarations.
   to-outline-label: FunctionDef(t, i, p, v, s, e) -> label
@@ -33,20 +30,45 @@ rules
       ;list  := <pp-params> p
       ;label := $[[t']: [i] ([list])]
 
-  // to-outline-node: StructDec(i, m) -> Node(i, [Node("dummy", [])])
-  to-outline-node: File (t, _, f, _) -> outer-node
+  get-children: FunctionDef(t, i, p, v, s, e) -> [p, v, s, e]
+  get-children: StructDec(i, m) -> m
+
+
+  gen-node: // no more nodes to add
+    [] -> ""
+
+  gen-node: // one node to add
+  	[n] -> <simple-label-outline(to-outline-label)> n
+
+  gen-node: // at least two more nodes to add
+    [a, n | ns] -> node
+    where
+      first-node    := <simple-label-outline(to-outline-label)> a
+      ;list         := <gen-node> [n | ns]
+      ;node         := <concat> [first-node, list]
+  
+   
+  gen-outer-node: // outer-node must have at least two nodes
+  	[a, n] -> <simple-label-outline(to-outline-label)> a
+  
+  gen-outer-node: // two or more nodes
+  	[a, n | ns] -> node
+    where
+      first-node    := <simple-label-outline(to-outline-label)> a
+      ;list         := <gen-outer-node> [n | ns]
+      ;node         := <concat> [first-node, list]
+  
+  // to-outline-label: File(t, v, f, e) -> <origin-file; base-filename> // file name
+  // to-outline-label: File(t, v, f, e) -> <origin-file> // full path
+         	
+  to-outline-node: File (t, _, f, _) -> node
   where
-    inner-node := <get-node> f
-    ;outer-node := Node(<get-name> t, <get-2name> t)
-
-
-  
-  get-name: [StructDec(i, _)] -> <to-outline-label> i
-  get-2name: [StructDec(_, children)] -> children
-  
-  // get-name: [StructDec(i, _)] -> i
-  get-node: [param] -> Node(<to-outline-label> param, [])
-  
+  	file-name := <origin-file; base-filename> // file name
+  	;outer-list := <gen-outer-node>  t
+  	;name := <last; to-outline-label> t
+  	;children := <last; get-children> t
+  	;node := Node(file-name, <concat> [outer-list, [Node(name , <concat; gen-node> [children, f])]])
+  	 
   // to-outline-label: ... -> ...
   // to-outline-label: Var(i) -> $[var: [i]] 
   

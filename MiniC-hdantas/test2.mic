@@ -1,11 +1,22 @@
+struct notaPoint {
+  int x;
+  int y;
+ };
+
+
 struct Point {
   int x;
   int y;
-};
+ };
 
+struct line {
+  struct Point a;
+  struct Point b;
+ };
+ 
 int a (float a, int a[], float b )
 {
-  struct Point p;
+  struct Line l;
   int b;    int a;    float x;    int a [5];
   int a;
 
@@ -13,7 +24,7 @@ int a (float a, int a[], float b )
       d = - 1;
       c = b + 1;
       b = c + 1;
-      a = d + 1;    
+      a = b * c + d + 07;    
   } else {b = b + 1;}
   
   printf( " 
@@ -28,6 +39,9 @@ int a (float a, int a[], float b )
   return a;
 }
 
+int b(){
+	return 0;
+}
 
 
 
