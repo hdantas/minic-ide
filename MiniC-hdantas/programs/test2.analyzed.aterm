@@ -1,11 +1,24 @@
 File(
-  []
+  [ StructDec(
+      "notaPoint"
+    , [VarDec(Int(), "x"), VarDec(Int(), "y")]
+    )
+  , StructDec(
+      "Point"
+    , [VarDec(Int(), "x"), VarDec(Int(), "y")]
+    )
+  , StructDec(
+      "line"
+    , [VarDec(Struct("Point"), "a"), VarDec(Struct("Point"), "b")]
+    )
+  ]
 , []
 , [ FunctionDef(
       Int()
     , "a"
     , [Arg(Float(), "a"), ArrayArg(ArrayInt(), "a"), Arg(Float(), "b")]
-    , [ VarDec(Int(), "b")
+    , [ VarDec(Struct("Line"), "l")
+      , VarDec(Int(), "b")
       , VarDec(Int(), "a")
       , VarDec(Float(), "x")
       , ArrayDec(ArrayInt(), "a", "5")
@@ -17,7 +30,18 @@ File(
             [ Assignment("d", UnExp(UMINUS(), IntConst("1")))
             , Assignment("c", BinExp(Plus(), Var("b"), IntConst("1")))
             , Assignment("b", BinExp(Plus(), Var("c"), IntConst("1")))
-            , Assignment("a", BinExp(Plus(), Var("d"), IntConst("1")))
+            , Assignment(
+                "a"
+              , BinExp(
+                  Mul()
+                , IntConst("1")
+                , BinExp(
+                    Plus()
+                  , IntConst("2")
+                  , BinExp(Plus(), IntConst("3"), IntConst("7"))
+                  )
+                )
+              )
             ]
           )
         , CodeBlock(
@@ -28,14 +52,7 @@ File(
       ]
     , Var("a")
     )
-  , FunctionDef(
-      Int()
-    , "foo"
-    , [Arg(Int(), "a"), Arg(Float(), "b"), ArrayArg(ArrayInt(), "a")]
-    , []
-    , []
-    , IntConst("0")
-    )
+  , FunctionDef(Int(), "b", [], [], [], IntConst("0"))
   ]
 , Var("x")
 )

@@ -45,9 +45,9 @@ rules
 strategies
   
   // select one of these
-  // desugar-all = innermost(desugar)
+  desugar-all = innermost(desugar)
   // desugar-all = topdown(desugar)
-  desugar-all = topdown(try(desugar))
+  // desugar-all = topdown(try(desugar))
   // desugar-all = bottomup(desugar)
   // desugar-all = bottomup(try(desugar))
   // desugar-all = alltd(desugar)

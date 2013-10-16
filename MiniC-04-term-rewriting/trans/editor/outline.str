@@ -10,21 +10,18 @@ imports
   
   
 rules
-  outline = simple-label-outline(to-outline-label)
+  // outline = simple-label-outline(to-outline-label)
   outline = custom-label-outline(to-outline-label, to-outline-node)
   outline-expand-to-level = !3
      
 rules
-
-  to-outline-label: File(t, v, f, e) -> <origin-file; base-filename> // file name
-  // to-outline-label: File(t, v, f, e) -> <origin-file> // full path
 
 //    class declarations,
   to-outline-label: StructDec(i, m) -> $[struct: [i]]
 
 //    field declarations and
   to-outline-label: VarDec(t, i) -> $[[<pp> t]: [i]]
-  to-outline-label: ArrayDec(t, i, n) -> $[[<pp> t] array: [i]]
+  to-outline-label: ArrayDec(t, i, n) -> $[[<pp> t]: [i]]
 
 //    method declarations.
   to-outline-label: FunctionDef(t, i, p, v, s, e) -> label
@@ -33,6 +30,30 @@ rules
       ;list  := <pp-params> p
       ;label := $[[t']: [i] ([list])]
 
+
+  get-children: StructDec(i, m) -> m
+  
+  gen-outer-node: // outer-node must have at least two nodes
+  	[a, n] -> <simple-label-outline(to-outline-label)> a
+  
+  gen-outer-node: // two or more nodes
+  	[a, n | ns] -> node
+    where
+      first-node    := <simple-label-outline(to-outline-label)> a
+      ;list         := <gen-outer-node> [n | ns]
+      ;node         := <concat> [first-node, list]
+  
+  // to-outline-label: File(t, v, f, e) -> <origin-file; base-filename> // file name
+  // to-outline-label: File(t, v, f, e) -> <origin-file> // full path
+         	
+  to-outline-node: File (t, _, f, _) -> node
+  where
+  	file-name    := <origin-file; base-filename> // file name
+  	;outer-list  := <gen-outer-node>  t
+  	;name        := <last; to-outline-label> t
+  	;children    := <last; get-children> t
+  	;node        := Node(file-name, <concat> [outer-list, [Node(name , <concat; simple-label-outline(to-outline-label)> [children, f])]])
+  	 
   // to-outline-label: ... -> ...
   // to-outline-label: Var(i) -> $[var: [i]] 
   
