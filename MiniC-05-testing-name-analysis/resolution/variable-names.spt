@@ -1,0 +1,15 @@
+module resolution
+
+language MiniC
+start symbol Program
+
+// variable names
+test backward variable resolution [[
+  int bar(int a){
+    int [[c]];
+    [[c]] = a;
+    return 0;
+  }
+  
+  bar(0)
+]] resolve #2 to #1

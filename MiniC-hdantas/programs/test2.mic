@@ -24,7 +24,7 @@ int a (float a, int a[], float b )
       d = - 1;
       c = b + 1;
       b = c + 1;
-      a = 01 * (02 + (03 + 07));    
+      a = 01 * (02 + (03 + 00));    
   } else {b = b + 1;}
   
   printf( " 

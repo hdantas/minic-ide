@@ -34,7 +34,7 @@ File(
                 "a"
               , Multiply(
                   OctalConst("01")
-                , Add(OctalConst("02"), Add(OctalConst("03"), OctalConst("07")))
+                , Add(OctalConst("02"), Add(OctalConst("03"), OctalConst("00")))
                 )
               )
             ]

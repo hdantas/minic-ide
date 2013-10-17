@@ -1,0 +1,34 @@
+module resolution
+
+language MiniC
+start symbol Program
+
+// parameter names
+test backward parameter resolution [[
+  int bar(int [[a]], float b){
+    return [[a]];
+  }
+  
+  bar(0,0.0)
+]] resolve #2 to #1
+
+
+test backward parameter resolution [[
+  int [[a]];
+  
+  int a(int a){
+    return a;
+  }
+  
+  a([[a]])
+]] resolve #2 to #1
+
+test backward parameter resolution [[
+  int a;
+  
+  int [[a]](int a){
+    return a;
+  }
+  
+  [[a]](a)
+]] resolve #2 to #1

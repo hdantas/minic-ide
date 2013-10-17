@@ -1,0 +1,34 @@
+module errors
+
+language MiniC
+start symbol Program
+
+test correct program [[
+  struct Foo {};
+
+  int main(){
+    struct Foo bar;
+    return 0;
+  }
+  
+  main()
+]] 0 errors 
+
+// errors on cyclic inheritance
+test cyclic struct [[
+  struct Foo{
+    int a;
+    struct [[Foo]] b; 
+  };
+  
+  0
+]] 1 error
+
+
+// warnings on hiding variables
+
+// errors on instantiating or subclassing the main class
+
+/*setup [[
+	
+]]*/

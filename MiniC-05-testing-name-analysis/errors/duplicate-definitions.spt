@@ -1,0 +1,140 @@
+module errors
+
+language MiniC
+start symbol Program
+
+// duplicate definitions
+
+
+test error on duplicate struct [[
+  struct [[Foo]]{};
+  struct [[Foo]]{};
+ 
+  0
+]] 2 errors
+
+test error on duplicate method [[
+  int [[Foo]](){return 0;}
+  int [[Foo]](){return 0;}
+  0
+]] 2 errors
+
+
+test error on duplicate method [[
+  float [[Foo]](){return 0;}
+  int [[Foo]](){return 0;}
+  0
+]] 2 errors
+
+
+test error on duplicate variable[[
+  int main(){
+    int [[a]];
+    int [[a]];
+    return 0;
+  }
+  0
+]] 2 errors
+
+test error on duplicate variable[[
+  int main(){
+    int [[a]];
+    float [[a]];
+    return 0;
+  }
+  0
+]] 2 errors
+
+test error on duplicate variable[[
+  int [[a]];
+  
+  int main(){
+    int [[a]];
+    return 0;
+  }
+  0
+]] 2 errors
+
+test type redefinition[[
+  struct a{
+    int a;
+  };
+  
+  int [[a]];
+  
+  0  
+]] 1 error
+
+
+test type redefinition[[
+  struct a{
+    int a;
+  };
+  
+  int main(){
+    int [[a]];
+    return 0;
+  }
+  
+  0  
+]] 1 error
+
+
+test duplicate definition [[
+  struct a {
+    int a;
+  };
+  
+  int main(){
+    int [[a]];
+    return 0;
+  }
+  
+  0
+]] 1 error
+
+
+test [[
+  int a() {
+    return 0;
+  }
+  
+  int main(){
+    int a;
+    int b;
+    b = [[a]]();
+    return 0;
+  }
+  
+  0
+]] 1 error //a is not a function
+
+
+test [[
+  int b;
+  
+  int [[b]](){
+    return 0; 
+  }
+  
+  0
+]] 1 error
+
+test [[
+	struct b {};
+
+  int main() {
+    struct b b;
+    int [[b]];
+    return 0;
+  }
+  0
+]] 1 error
+
+
+test [[
+  int a;
+  float [[a]](){return 0.0;}
+  0
+]] 1 error
+

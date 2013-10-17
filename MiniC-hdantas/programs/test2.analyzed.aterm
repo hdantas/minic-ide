@@ -38,7 +38,7 @@ File(
                 , BinExp(
                     Plus()
                   , IntConst("2")
-                  , BinExp(Plus(), IntConst("3"), IntConst("7"))
+                  , BinExp(Plus(), IntConst("3"), IntConst("0"))
                   )
                 )
               )

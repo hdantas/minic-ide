@@ -1,0 +1,209 @@
+module resolution
+
+language MiniC
+start symbol Program
+
+// field names
+test backward struct variable resolution [[
+  struct Foo {
+    int [[a]];
+  };
+
+  int main(){
+    struct Foo bar;
+    return bar.[[a]];
+  }
+  
+  main()
+]] resolve #2 to #1
+
+
+test backward struct variable resolution [[
+  struct Foo {
+    int [[a]];
+  };
+  
+  struct Foo bar;
+  
+  bar.[[a]]
+]] resolve #2 to #1
+
+
+test backward struct variable resolution [[
+  struct Foo {
+    int [[a]];
+  };
+
+  int main(){
+    int a;
+    a = bar.[[a]];
+    return 0;
+  }
+  
+  0
+]] resolve #2 to #1
+
+test [[
+	struct Point {
+		int [[a]];
+	};
+	
+	struct Point p;
+	
+	int main() {
+		int a;
+		p.a = 0;
+		return 0;
+	}
+	
+	p.[[a]]
+]] resolve #2 to #1
+
+test [[
+  struct Point {
+    int a;
+  };
+  
+  struct Point [[p]];
+  
+  int main() {
+    int a;
+    p.a = 0;
+    return 0;
+  }
+  
+  [[p]].a
+]] resolve #2 to #1
+
+
+test [[
+  struct Point {
+    int [[a]];
+  };
+  
+  struct Point p;
+  
+  int main() {
+    int a;
+    p.[[a]] = 0;
+    return 0;
+  }
+  
+  p.a
+]] resolve #2 to #1
+
+test [[
+  struct Point {
+    int a;
+  };
+  
+  struct Point [[p]];
+  
+  int main() {
+    int a;
+    [[p]].a = 0;
+    return 0;
+  }
+  
+  p.a
+]] resolve #2 to #1
+
+test [[
+  struct [[Point]] {
+    int a;
+  };
+  
+  struct [[Point]] p;
+  
+  int main() {
+    int a;
+    p.a = 0;
+    return 0;
+  }
+  
+  p.a
+]] resolve #2 to #1
+
+
+test hidden var [[
+	int a;
+	int main(){
+		int [[a]];
+		a = 2;
+		return [[a]];
+	}
+	
+	a
+]] resolve #2 to #1
+
+test hidden var [[
+  int [[a]];
+  
+  int main(){
+    int a;
+    a = 2;
+    return a;
+  }
+  
+  [[a]]
+]] resolve #2 to #1
+
+
+
+test [[
+	struct [[b]]{
+	  int b;
+	};
+	
+	int main(){
+	  struct [[b]] b;
+	  return b;
+	}
+	
+	0
+]] resolve #2 to #1
+
+
+test [[
+  struct b{
+    int b;
+  };
+  
+  int main(){
+    struct b [[b]];
+    [[b]].b = 3;
+    return b;
+  }
+  
+  0
+]] resolve #2 to #1
+
+
+test [[
+  struct b{
+    int [[b]];
+  };
+  
+  int main(){
+    struct b b;
+    b.[[b]] = 3;
+    return b;
+  }
+  
+  0
+]] resolve #2 to #1
+
+
+test [[
+  struct b{
+    int b;
+  };
+  
+  int main(){
+    struct b [[b]];
+    b.b = 3;
+    return [[b]];
+  }
+  
+  0
+]] resolve #2 to #1

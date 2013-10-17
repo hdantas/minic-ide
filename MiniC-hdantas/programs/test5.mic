@@ -1,0 +1,8 @@
+  struct Foo {};
+
+  int main(){
+    struct Foo bar;
+    return 0;
+  }
+  
+  Foo bar

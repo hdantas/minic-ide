@@ -1,0 +1,105 @@
+module errors
+
+language MiniC
+start symbol Program
+
+//missing definitions
+test undefined struct [[
+  int main(){
+    struct [[Foo]] bar;
+    return 0;
+  }
+  
+  main()
+]] 1 error
+
+test undefined struct [[
+  struct Foo {
+    struct [[Bar]] a;
+  };
+  0
+]] 1 error
+
+test undefined struct [[
+  struct Bar{
+    struct [[Foo]] a;
+  };
+  
+  struct Foo {};
+  
+  0
+]] 1 error
+
+test undefined function [[
+  int foo(){
+    return [[bar]](); 
+  }
+  0
+]] 1 error
+
+
+test undefined function [[
+  int foo(){
+    return 0; 
+  }
+  [[bar]]()
+]] 1 error
+
+
+test undefined var [[
+  int foo(){
+    return [[a]]; 
+  }
+  0
+]] 1 error
+
+test undefined var [[
+  int foo(){
+    return 0; 
+  }
+  [[a]]
+]] 1 error
+
+test undefined var [[
+  int foo(){
+    int a;
+    return 0; 
+  }
+  [[a]]
+]] 1 error
+
+
+test undefined var [[
+  int foo(){
+    int a;
+    a = [[b]];
+    return 0; 
+  }
+  0
+]] 1 error
+
+
+test undefined field [[
+  struct foo{};
+  struct foo f;
+  f.[[a]]
+]] 1 error
+
+test using unitialized local var[[
+  int foo(){
+    int a;
+    a = [[a]] + 1;
+    return 0;
+  }
+  0
+]] 1 warning
+
+test using unitialized global var[[
+  int a;
+  int foo(){
+    a = [[a]] + 1;
+    return 0;
+  }
+  0
+]] 1 warning
+
