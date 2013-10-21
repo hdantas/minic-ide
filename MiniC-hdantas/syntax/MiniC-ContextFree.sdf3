@@ -29,7 +29,7 @@ module MiniC-ContextFree
     
     FunctionDec.FunctionDef           = <<Type; text="ReturnType"> <ID; text="FuncName"> (<Parameter*; separator=", ", text="Arguments">)
   {
-  <VarDec*; hide, text="Variable Declaration", separator="\n">
+  // <VarDec*; hide, text="Variable Declaration", separator="\n">
   <Statement*; hide, text="Body", separator="\n">
   return <Exp; text="Return value">;
   }>
@@ -43,6 +43,7 @@ module MiniC-ContextFree
     Type.Float                        = <float>
     Type.Struct                       = <struct <ID; text="StructName">>
 
+    Statement                         = <<VarDec>>
     Statement.Assignment              = <<ID; text="Var"> = <Exp>;>
     Statement.ArrayAssignment         = <<ID; text="ArrayName">[<Exp; text="Index">] = <Exp>;>
     Statement.StructMemberAssignment  = <<ID; text="StructName">.<ID; text="StructMember"> = <Exp>;>
