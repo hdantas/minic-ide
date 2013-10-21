@@ -37,6 +37,13 @@ test undefined function [[
   0
 ]] 1 error
 
+test undefined function [[
+  int foo(){
+    return [[bar]](); 
+  }
+  int bar() {return 0;}
+  0
+]] 1 error
 
 test undefined function [[
   int foo(){
@@ -49,6 +56,15 @@ test undefined function [[
 test undefined var [[
   int foo(){
     return [[a]]; 
+  }
+  0
+]] 1 error
+
+test undefined var [[
+  int foo(){
+    [[a]] = 1;
+    int a;
+    return a; 
   }
   0
 ]] 1 error
@@ -85,6 +101,8 @@ test undefined field [[
   f.[[a]]
 ]] 1 error
 
+
+/*
 test using unitialized local var[[
   int foo(){
     int a;
@@ -102,4 +120,4 @@ test using unitialized global var[[
   }
   0
 ]] 1 warning
-
+*/

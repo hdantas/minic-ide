@@ -3,63 +3,31 @@ module errors
 language MiniC
 start symbol Program
 
-//unused definitions
-test warning on unused class [[
-  struct [[Foo]] {};
-  0
-]] 1 warning
-
-test warning on unused field [[
-  struct Foo {
-    int a;
-    int [[b]];
-  };
-    
-  int bar(){
-    struct foo f;
-    f.a = 2;
-    return f.a;
-  }
-  bar()
-]] 1 warning
-
-
+//unused definitions (local and global variables)
 test warning on unused global var[[
   int [[a]];
   0
-]] 1 warning
+]] 1 warning //not present in gcc
 
+test warning on unused global var[[
+  float [[a]];
+  0
+]] 1 warning //not present in gcc
 
 test warning on unused global var[[
   int [[a]];
+  
   int foo(){
     int a;
     a = 1;
     return a;
   }
   foo()
-]] 1 warning
+]] 1 warning //not present in gcc
 
 test warning on unused local var[[
   int foo(){
     int [[a]];
-    return 0;
-  }
-  foo()
-]] 1 warning
-
-test warning on unused method[[
-  int [[foo]](){
-    return 0;
-  }
-  0
-]] 1 warning
-
-test warning on unused method[[
-  int [[foo]](){
-    return 0;
-  }
-  int [[bar]](){
     return 0;
   }
   foo()

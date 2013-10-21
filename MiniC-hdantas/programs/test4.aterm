@@ -14,8 +14,7 @@ File(
       , VarDec(Float(), "x")
       , ArrayDec(ArrayInt(), "a", "5")
       , VarDec(Int(), "a")
-      ]
-    , [ IfElse(
+      , IfElse(
           Var("Condition")
         , CodeBlock(
             [ Assignment("d", Uminus(IntConst("1")))
@@ -29,10 +28,11 @@ File(
           )
         )
       , PrinfFloat(Var("a"))
+      , VarDec(Int(), "c")
       ]
     , Var("a")
     )
-  , FunctionDef(Int(), "b", [], [], [], IntConst("0"))
+  , FunctionDef(Int(), "b", [], [], IntConst("0"))
   ]
 , Var("x")
 )

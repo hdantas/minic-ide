@@ -29,7 +29,6 @@ module MiniC-ContextFree
     
     FunctionDec.FunctionDef           = <<Type; text="ReturnType"> <ID; text="FuncName"> (<Parameter*; separator=", ", text="Arguments">)
   {
-  // <VarDec*; hide, text="Variable Declaration", separator="\n">
   <Statement*; hide, text="Body", separator="\n">
   return <Exp; text="Return value">;
   }>

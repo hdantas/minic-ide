@@ -16,13 +16,6 @@ regular tree grammar
     ListPlusOfStatement0   -> <conc>(ListPlusOfStatement0,ListStarOfStatement0)
     ListPlusOfStatement0   -> <conc>(ListPlusOfStatement0,ListPlusOfStatement0)
     ListPlusOfStatement0   -> <cons>(Statement,ListStarOfStatement0)
-    ListStarOfVarDec0      -> ListPlusOfVarDec0
-    ListStarOfVarDec0      -> <nil>()
-    ListStarOfVarDec0      -> <conc>(ListStarOfVarDec0,ListStarOfVarDec0)
-    ListPlusOfVarDec0      -> <conc>(ListStarOfVarDec0,ListPlusOfVarDec0)
-    ListPlusOfVarDec0      -> <conc>(ListPlusOfVarDec0,ListStarOfVarDec0)
-    ListPlusOfVarDec0      -> <conc>(ListPlusOfVarDec0,ListPlusOfVarDec0)
-    ListPlusOfVarDec0      -> <cons>(VarDec,ListStarOfVarDec0)
     ListStarOfParameter0   -> ListPlusOfParameter0
     ListStarOfParameter0   -> <nil>()
     ListStarOfParameter0   -> <conc>(ListStarOfParameter0,ListStarOfParameter0)
@@ -30,6 +23,13 @@ regular tree grammar
     ListPlusOfParameter0   -> <conc>(ListPlusOfParameter0,ListStarOfParameter0)
     ListPlusOfParameter0   -> <conc>(ListPlusOfParameter0,ListPlusOfParameter0)
     ListPlusOfParameter0   -> <cons>(Parameter,ListStarOfParameter0)
+    ListStarOfVarDec0      -> ListPlusOfVarDec0
+    ListStarOfVarDec0      -> <nil>()
+    ListStarOfVarDec0      -> <conc>(ListStarOfVarDec0,ListStarOfVarDec0)
+    ListPlusOfVarDec0      -> <conc>(ListStarOfVarDec0,ListPlusOfVarDec0)
+    ListPlusOfVarDec0      -> <conc>(ListPlusOfVarDec0,ListStarOfVarDec0)
+    ListPlusOfVarDec0      -> <conc>(ListPlusOfVarDec0,ListPlusOfVarDec0)
+    ListPlusOfVarDec0      -> <cons>(VarDec,ListStarOfVarDec0)
     ListStarOfFunctionDec0 -> ListPlusOfFunctionDec0
     ListStarOfFunctionDec0 -> <nil>()
     ListStarOfFunctionDec0 -> <conc>(ListStarOfFunctionDec0,ListStarOfFunctionDec0)
@@ -81,6 +81,7 @@ regular tree grammar
     Statement              -> StructMemberAssignment(ID,ID,Exp)
     Statement              -> ArrayAssignment(ID,Exp,Exp)
     Statement              -> Assignment(ID,Exp)
+    Statement              -> VarDec
     Type                   -> Struct(ID)
     Type                   -> Float()
     Type                   -> Int()
@@ -88,7 +89,7 @@ regular tree grammar
     ArrayType              -> ArrayInt()
     Parameter              -> ArrayArg(ArrayType,ID)
     Parameter              -> Arg(Type,ID)
-    FunctionDec            -> FunctionDef(Type,ID,ListStarOfParameter0,ListStarOfVarDec0,ListStarOfStatement0,Exp)
+    FunctionDec            -> FunctionDef(Type,ID,ListStarOfParameter0,ListStarOfStatement0,Exp)
     VarDec                 -> ArrayDec(ArrayType,ID,INT)
     VarDec                 -> VarDec(Type,ID)
     TypeDec                -> StructDec(ID,ListStarOfVarDec0)

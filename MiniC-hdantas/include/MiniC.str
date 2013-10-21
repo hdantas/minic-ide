@@ -27,6 +27,7 @@ signature
     StructMemberAssignment : ID * ID * Exp -> Statement
     ArrayAssignment        : ID * Exp * Exp -> Statement
     Assignment             : ID * Exp -> Statement
+                           : VarDec -> Statement
     Struct                 : ID -> Type
     Float                  : Type
     Int                    : Type
@@ -34,7 +35,7 @@ signature
     ArrayInt               : ArrayType
     ArrayArg               : ArrayType * ID -> Parameter
     Arg                    : Type * ID -> Parameter
-    FunctionDef            : Type * ID * List(Parameter) * List(VarDec) * List(Statement) * Exp -> FunctionDec
+    FunctionDef            : Type * ID * List(Parameter) * List(Statement) * Exp -> FunctionDec
     ArrayDec               : ArrayType * ID * INT -> VarDec
     VarDec                 : Type * ID -> VarDec
     StructDec              : ID * List(VarDec) -> TypeDec

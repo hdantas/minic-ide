@@ -24,7 +24,7 @@ rules
   to-outline-label: ArrayDec(t, i, n) -> $[[<pp> t]: [i]]
 
 //    method declarations.
-  to-outline-label: FunctionDef(t, i, p, v, s, e) -> label
+  to-outline-label: FunctionDef(t, i, p, s, e) -> label
   where
       t'     := <pp> t
       ;list  := <pp-params> p

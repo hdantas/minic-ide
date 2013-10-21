@@ -16,3 +16,7 @@ Develop a test suite for name analysis. The test suite should provide
   errors on hiding fields,
   warnings on hiding variables,
   errors on instantiating or subclassing the main class.
+
+
+
+Check last test case resolution/parameter-names.spt

@@ -9,26 +9,50 @@ test backward parameter resolution [[
     return [[a]];
   }
   
-  bar(0,0.0)
-]] resolve #2 to #1
-
-
-test backward parameter resolution [[
-  int [[a]];
-  
-  int a(int a){
-    return a;
-  }
-  
-  a([[a]])
+  0
 ]] resolve #2 to #1
 
 test backward parameter resolution [[
   int a;
   
-  int [[a]](int a){
+  int a (int [[a]]){
+    return [[a]];
+  }
+  
+  a + 1
+]] resolve #2 to #1
+
+test backward parameter resolution [[
+  int [[a]];
+  
+  int a (int a){
     return a;
   }
   
-  [[a]](a)
+  [[a]] + 1 
 ]] resolve #2 to #1
+
+test [[
+  struct foo { int a;};
+  struct foo f;
+  
+  int main(struct foo [[f]]) {
+    [[f]].a = 0;
+    return 0;
+  }
+  
+  0
+]] resolve #2 to #1
+
+
+test backward parameter resolution [[ 
+  int a (int a) {
+    return b([[a]]);
+  }
+  
+  int b (int [[b]]) {
+    return 0;
+  }
+  
+  a(3)
+]] resolve #2 to #1 // NOT SURE!

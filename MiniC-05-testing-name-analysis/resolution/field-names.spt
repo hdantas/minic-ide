@@ -17,6 +17,21 @@ test backward struct variable resolution [[
   main()
 ]] resolve #2 to #1
 
+test [[
+  struct Point {
+    int [[a]];
+  };
+  
+  struct Point p;
+  
+  int main() {
+    int a;
+    p.[[a]] = 0;
+    return 0;
+  }
+  
+  p.a
+]] resolve #2 to #1
 
 test backward struct variable resolution [[
   struct Foo {
@@ -43,141 +58,6 @@ test backward struct variable resolution [[
   0
 ]] resolve #2 to #1
 
-test [[
-	struct Point {
-		int [[a]];
-	};
-	
-	struct Point p;
-	
-	int main() {
-		int a;
-		p.a = 0;
-		return 0;
-	}
-	
-	p.[[a]]
-]] resolve #2 to #1
-
-test [[
-  struct Point {
-    int a;
-  };
-  
-  struct Point [[p]];
-  
-  int main() {
-    int a;
-    p.a = 0;
-    return 0;
-  }
-  
-  [[p]].a
-]] resolve #2 to #1
-
-
-test [[
-  struct Point {
-    int [[a]];
-  };
-  
-  struct Point p;
-  
-  int main() {
-    int a;
-    p.[[a]] = 0;
-    return 0;
-  }
-  
-  p.a
-]] resolve #2 to #1
-
-test [[
-  struct Point {
-    int a;
-  };
-  
-  struct Point [[p]];
-  
-  int main() {
-    int a;
-    [[p]].a = 0;
-    return 0;
-  }
-  
-  p.a
-]] resolve #2 to #1
-
-test [[
-  struct [[Point]] {
-    int a;
-  };
-  
-  struct [[Point]] p;
-  
-  int main() {
-    int a;
-    p.a = 0;
-    return 0;
-  }
-  
-  p.a
-]] resolve #2 to #1
-
-
-test hidden var [[
-	int a;
-	int main(){
-		int [[a]];
-		a = 2;
-		return [[a]];
-	}
-	
-	a
-]] resolve #2 to #1
-
-test hidden var [[
-  int [[a]];
-  
-  int main(){
-    int a;
-    a = 2;
-    return a;
-  }
-  
-  [[a]]
-]] resolve #2 to #1
-
-
-
-test [[
-	struct [[b]]{
-	  int b;
-	};
-	
-	int main(){
-	  struct [[b]] b;
-	  return b;
-	}
-	
-	0
-]] resolve #2 to #1
-
-
-test [[
-  struct b{
-    int b;
-  };
-  
-  int main(){
-    struct b [[b]];
-    [[b]].b = 3;
-    return b;
-  }
-  
-  0
-]] resolve #2 to #1
-
 
 test [[
   struct b{
@@ -194,16 +74,15 @@ test [[
 ]] resolve #2 to #1
 
 
-test [[
-  struct b{
-    int b;
-  };
-  
-  int main(){
-    struct b [[b]];
-    b.b = 3;
-    return [[b]];
-  }
-  
-  0
+test backward struct variable resolution [[
+  struct Foo { int a;};
+  struct Bar { int [[a]];};
+
+  struct Foo foo;
+  struct Bar bar;
+ 
+  bar.[[a]]
 ]] resolve #2 to #1
+
+
+

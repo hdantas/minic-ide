@@ -5,29 +5,29 @@ completions
   completion template TypeDec : "struct StructName { StructMembers };" =
     "struct " <StructName:ID> "\n\t{\n\t" <StructMembers:VarDec> "\n\t};" (blank)  
   completion template VarDec : "Type VarName;" =
-    <Type:Type> " " <VarName:ID> ";"                                       
+    <Type:Type> " " <VarName:ID> ";"                                         
   completion template VarDec : "Type ArrayName[NumberElements];" =
     <Type:ArrayType> " " <ArrayName:ID> "[" <NumberElements:INT> "];"  
   completion template FunctionDec : "ReturnType FuncName (Arguments) { return Return value; }" =
-    <ReturnType:Type> " " <FuncName:ID> " (" <Arguments:Parameter> ")\n\t{\n\treturn " <Return value:Exp> ";\n\t}" (blank)  
+    <ReturnType:Type> " " <FuncName:ID> " (" <Arguments:Parameter> ")\n\t{\n\n\treturn " <Return value:Exp> ";\n\t}" (blank)  
   completion template Parameter : "Type Name" =
-    <Type:Type> " " <Name:ID>                                               
+    <Type:Type> " " <Name:ID>                                                 
   completion template Parameter : "Type Name[]" =
-    <Type:ArrayType> " " <Name:ID> "[]"                                   
+    <Type:ArrayType> " " <Name:ID> "[]"                                     
   completion template ArrayType : "int" =
-    "int"                                                                         
+    "int"                                                                           
   completion template ArrayType : "float" =
-    "float"                                                                     
+    "float"                                                                       
   completion template Type : "int" =
-    "int"                                                                              
+    "int"                                                                                
   completion template Type : "float" =
-    "float"                                                                          
+    "float"                                                                            
   completion template Type : "struct StructName" =
-    "struct " <StructName:ID>                                            
+    "struct " <StructName:ID>                                              
   completion template Statement : "Var = Exp;" =
-    <Var:ID> " = " <Exp:Exp> ";"                                           
+    <Var:ID> " = " <Exp:Exp> ";"                                             
   completion template Statement : "ArrayName[Index] = Exp;" =
-    <ArrayName:ID> "[" <Index:Exp> "] = " <Exp:Exp> ";"       
+    <ArrayName:ID> "[" <Index:Exp> "] = " <Exp:Exp> ";"         
   completion template Statement : "StructName.StructMember = Exp;" =
     <StructName:ID> "." <StructMember:ID> " = " <Exp:Exp> ";"  
   completion template Statement : "if (Condition) Statement else Statement " =
@@ -35,34 +35,34 @@ completions
   completion template Statement : "while (Condition) Statement " =
     "while (" <Condition:Exp> ")\n\t" <Statement:Statement> "\n" (blank)  
   completion template Statement : "printf(\"%i\", IntegerVar);" =
-    "printf(\"%i\", " <IntegerVar:Exp> ");"               
+    "printf(\"%i\", " <IntegerVar:Exp> ");"                 
   completion template Statement : "printf(\"%f\", FloatVar);" =
-    "printf(\"%f\", " <FloatVar:Exp> ");"                   
+    "printf(\"%f\", " <FloatVar:Exp> ");"                     
   completion template Statement : "{ }" =
-    "{\n" (cursor) "\n}" (blank)                                                  
+    "{\n" (cursor) "\n}" (blank)                                                    
   completion template Lvalue : "StructName.StructMember" =
-    <StructName:Lvalue> "." <StructMember:Lvalue>                
+    <StructName:Lvalue> "." <StructMember:Lvalue>                  
   completion template Lvalue : "ArrayName[Index]" =
-    <ArrayName:ID> "[" <Index:Exp> "]"                                  
+    <ArrayName:ID> "[" <Index:Exp> "]"                                    
   completion template Exp : "Value && Value" =
-    <Value:Exp> " && " <Value:Exp>                                           
+    <Value:Exp> " && " <Value:Exp>                                             
   completion template Exp : "Value < Value" =
-    <Value:Exp> " < " <Value:Exp>                                             
+    <Value:Exp> " < " <Value:Exp>                                               
   completion template Exp : "Addend + Addend" =
-    <Addend:Exp> " + " <Addend:Exp>                                         
+    <Addend:Exp> " + " <Addend:Exp>                                           
   completion template Exp : "Minuend - Subtrahend" =
-    <Minuend:Exp> " - " <Subtrahend:Exp>                               
+    <Minuend:Exp> " - " <Subtrahend:Exp>                                 
   completion template Exp : "Multiplicand * Multiplier" =
-    <Multiplicand:Exp> " * " <Multiplier:Exp>                     
+    <Multiplicand:Exp> " * " <Multiplier:Exp>                       
   completion template Exp : "!Boolean" =
-    "!" <Boolean:Exp>                                                              
+    "!" <Boolean:Exp>                                                                
   completion template Exp : "(Expression)" =
-    "(" <Expression:Exp> ")"                                                   
+    "(" <Expression:Exp> ")"                                                     
   completion template Exp : "sizeof (Datatype)" =
-    "sizeof (" <Datatype:Exp> ")"                                         
+    "sizeof (" <Datatype:Exp> ")"                                           
   completion template Exp : "FuncName()" =
-    <FuncName:ID> "(" <:Exp> ")"                                                 
+    <FuncName:ID> "(" <:Exp> ")"                                                   
   completion template Exp : "-Exp" =
-    "-" <Exp:Exp>                                                                      
+    "-" <Exp:Exp>                                                                        
   completion template Exp : "+Exp" =
-    "+" <Exp:Exp>                                                                      
+    "+" <Exp:Exp>                                                                        

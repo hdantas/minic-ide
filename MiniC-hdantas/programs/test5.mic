@@ -1,8 +1,9 @@
-  struct Foo {};
-
-  int main(){
-    struct Foo bar;
+  int a (int a) {
+    return b(a);
+  }
+  
+  int b (int b) {
     return 0;
   }
   
-  Foo bar
+  a(3)
