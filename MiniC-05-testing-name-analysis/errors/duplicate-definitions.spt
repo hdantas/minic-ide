@@ -7,22 +7,22 @@ start symbol Program
 
 
 test error on duplicate struct [[
-  struct [[Foo]]{int a;};
-  struct [[Foo]]{float b;};
+  struct Foo {int a;};
+  struct Foo {float b;};
  
   0
 ]] 2 errors
 
 test error on duplicate method [[
-  int [[Foo]](){return 0;}
-  int [[Foo]](){return 0;}
+  int Foo(){return 0;}
+  int Foo(){return 0;}
   0
 ]] 2 errors
 
 
 test error on duplicate method [[
-  float [[Foo]](){return 0;}
-  int [[Foo]](){return 0;}
+  float Foo(){return 0;}
+  int Foo(){return 0;}
   0
 ]] 2 errors //maybe to review?
 
@@ -30,8 +30,8 @@ test error on duplicate method [[
 test error on duplicate variable[[
   struct Foo {};
   int main(){
-    struct Foo [[a]];
-    int [[a]];
+    struct Foo a;
+    int a;
     return 0;
   }
   0
@@ -39,16 +39,16 @@ test error on duplicate variable[[
 
 test error on duplicate variable [[
   int main(){
-    int [[a]];
-    int [[a]];
+    int a;
+    int a;
     return 0;
   }
   0
 ]] 2 errors
 
 test error on duplicate variable [[
-  int [[a]];
-  int [[a]];
+  int a;
+  int a;
   int main(){
     return 0;
   }
@@ -57,8 +57,8 @@ test error on duplicate variable [[
 
 test error on duplicate variable[[
   int main(){
-    int [[a]];
-    float [[a]];
+    int a;
+    float a;
     return 0;
   }
   0
@@ -71,20 +71,20 @@ test [[
   }
   
   int main(){
-    int [[a]];
+    int a;
     int b;
-    b = [[a]]();
+    b = a();
     return 0;
   }
   
   0
-]] 2 error //a is not a function
+]] 2 errors //a is not a function
 
 
 test [[
-  int [[b]];
+  int b;
   
-  int [[b]](){
+  int b(){
     return 0; 
   }
   
