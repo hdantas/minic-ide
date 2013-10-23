@@ -15,6 +15,7 @@ test correct program [[
 ]] 0 errors 
 
 // errors on cyclic inheritance
+// does not directly apply to C
 test recursive struct [[
   struct Foo{
     int a;
@@ -24,21 +25,22 @@ test recursive struct [[
   0
 ]] 1 error
 
-// errros on hiding fields
+// errrors on hiding fields
 //does not apply to C
 
 // warnings on hiding variables
-test [[
-	int a;
-	float main() {
-		int [[a]];
-		return 0.0;
-	}
-	0
+// does not directly apply to C
+test local variable hiding global [[
+  int a;
+  float main() {
+    int [[a]];
+    return 0.0;
+  }
+  0
 ]] 1 warning
 
-test [[
-	struct Foo {};
+test local variable hiding global [[
+  struct Foo {};
   int a;
   float main() {
     struct Foo [[a]];
@@ -49,7 +51,3 @@ test [[
 
 // errors on instantiating or subclassing the main class
 //not applicable to C
-
-/*setup [[
-	
-]]*/

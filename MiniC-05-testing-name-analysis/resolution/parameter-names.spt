@@ -4,15 +4,15 @@ language MiniC
 start symbol Program
 
 // parameter names
-test backward parameter resolution [[
-  int bar(int [[a]], float b){
+test parameter resolution [[
+  int bar (int [[a]], float b){
     return [[a]];
   }
   
   0
 ]] resolve #2 to #1
 
-test backward parameter resolution [[
+test parameter resolution [[
   int a;
   
   int a (int [[a]]){
@@ -22,17 +22,7 @@ test backward parameter resolution [[
   a + 1
 ]] resolve #2 to #1
 
-test backward parameter resolution [[
-  int [[a]];
-  
-  int a (int a){
-    return a;
-  }
-  
-  [[a]] + 1 
-]] resolve #2 to #1
-
-test [[
+test struct parameter resolution[[
   struct foo { int a;};
   struct foo f;
   
@@ -44,15 +34,3 @@ test [[
   0
 ]] resolve #2 to #1
 
-
-test backward parameter resolution [[ 
-  int a (int a) {
-    return b([[a]]);
-  }
-  
-  int b (int [[b]]) {
-    return 0;
-  }
-  
-  a(3)
-]] resolve #2 to #1 // NOT SURE!

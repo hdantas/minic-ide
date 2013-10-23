@@ -4,8 +4,8 @@ language MiniC
 start symbol Program
 
 // variable names
-test backward variable resolution [[
-  int bar(int a){
+test local variable resolution[[
+  int bar(int a) {
     int [[c]];
     [[c]] = a;
     return 0;
@@ -14,7 +14,7 @@ test backward variable resolution [[
   0
 ]] resolve #2 to #1
 
-test backward variable resolution [[
+test local variable resolution[[
   int bar(float a){
     float [[c]];
     [[c]] = a;
@@ -24,7 +24,17 @@ test backward variable resolution [[
   0
 ]] resolve #2 to #1
 
-test backward variable resolution [[
+test local variable resolution [[
+  int bar(float a){
+    int [[c]][5];
+    [[c]] = a;
+    return 0;
+  }
+  
+  0
+]] resolve #2 to #1
+
+test local struct instance resolution [[
   struct Foo {int a;};
   
   int bar(int a){
@@ -37,7 +47,7 @@ test backward variable resolution [[
 ]] resolve #2 to #1
 
 
-test [[
+test global struct instance resolution [
   struct Point {
     int a;
   };
@@ -54,7 +64,7 @@ test [[
 ]] resolve #2 to #1
 
 
-test [[
+test global struct instance resolution [[
   struct Point {
     int a;
   };
@@ -71,7 +81,7 @@ test [[
 ]] resolve #2 to #1
 
 
-test hidden var [[
+test hidding variable resolution [[
   int a;
   
   int main() {
@@ -83,7 +93,7 @@ test hidden var [[
   0
 ]] resolve #2 to #1
 
-test backward variable resolution [[
+test global variable resolution [[
   int [[a]];
   
   int bar(){
@@ -94,7 +104,7 @@ test backward variable resolution [[
   0
 ]] resolve #2 to #1
 
-test hidden var [[
+test global variable resolution [[
   int [[a]];
   
   int main(){
@@ -106,7 +116,7 @@ test hidden var [[
 ]] resolve #2 to #1
 
 
-test [[
+test local struct instance resolution[[
   struct b{
     int b;
   };
@@ -121,7 +131,7 @@ test [[
 ]] resolve #2 to #1
 
 
-test [[
+test local struct instance resolution[[
   struct b{
     int b;
   };
@@ -136,7 +146,7 @@ test [[
 ]] resolve #2 to #1
 
 
-test variable resolution [[
+test local variable resolution [[
   struct a{
     int a;
   };
@@ -151,7 +161,7 @@ test variable resolution [[
 ]] resolve #2 to #1
 
 
-test variable resolution [[
+test local variable resolution [[
   struct a{
     int a;
   };
@@ -164,4 +174,14 @@ test variable resolution [[
   }
   
   0
+]] resolve #2 to #1
+
+test global variable resolution [[
+  int [[a]];
+  
+  int a (int a){
+    return a;
+  }
+  
+  [[a]] + 1 
 ]] resolve #2 to #1

@@ -3,16 +3,16 @@ module errors
 language MiniC
 start symbol Program
 
-//unused definitions (local and global variables)
+//unused definitions (local and global variables, parameters and functions)
 test warning on unused global var[[
   int [[a]];
   0
-]] 1 warning //not present in gcc
+]] 1 warning
 
 test warning on unused global var[[
-  float [[a]];
+  float [[a]][42];
   0
-]] 1 warning //not present in gcc
+]] 1 warning
 
 test warning on unused global var[[
   int [[a]];
@@ -23,12 +23,86 @@ test warning on unused global var[[
     return a;
   }
   foo()
-]] 1 warning //not present in gcc
+]] 1 warning
 
 test warning on unused local var[[
   int foo(){
     int [[a]];
     return 0;
   }
+  foo()
+]] 1 warning
+
+test warning on unused parameter[[
+  int foo(int [[a]]){
+    return 0;
+  }
+  0
+]] 1 warning
+
+test warning on unused parameter[[
+  int foo(float a, int [[b]]){
+    return a;
+  }
+  0
+]] 1 warning
+
+test warning on unused global struct instance[[
+  struct Foo {};
+  struct Foo [[f]];
+  0	
+]] 1 warning
+
+test warning on unused local struct instance[[
+  struct Foo {int a;};
+  struct Foo [[f]];
+  int main(){
+  	struct Foo [[f]];
+  	return 0;
+  }
+  f.a
+]] 1 warning
+
+test warning on unused struct variable[[
+  struct Foo {
+    int [[a]];
+    int b;
+  };
+
+  struct Foo foo(){
+    struct Foo f;
+    f.b = 2;
+    return f;
+  }
+  
+  0
+]] 1 warning
+
+test warning on unused struct var[[
+  struct Foo {
+    int a;
+    int [[b]];
+  };
+
+  int foo(){
+    struct Foo f;
+    f.a = 2;
+    return 0;
+  }
+  0
+]] 1 warning
+
+
+
+test warning on unused method[[
+  int [[foo]](){
+    return 0;
+  }
+  0
+]] 1 warning
+
+test warning on unused method[[
+  int foo(){ return 0;}
+  int [[bar]](){ return 0;}
   foo()
 ]] 1 warning

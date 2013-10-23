@@ -1,6 +1,0 @@
-module MiniC
-imports MiniC-Lexical MiniC-ContextFree
-
-exports
-  context-free start-symbols
-    Program

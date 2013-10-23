@@ -4,7 +4,7 @@ language MiniC
 start symbol Program
 
 // struct names
-test backward struct name resolution [[
+test local struct resolution [[
   struct [[Foo]] {};
 
   int main(){
@@ -15,7 +15,7 @@ test backward struct name resolution [[
   0
 ]] resolve #2 to #1
 
-test backward struct name resolution [[
+test global struct resolution [[
   struct [[Foo]] {};
 
   struct [[Foo]] bar;
@@ -25,7 +25,7 @@ test backward struct name resolution [[
 
 
 
-test [[
+test global struct resolution [[
   struct [[Point]] {
     int a;
   };
@@ -42,7 +42,7 @@ test [[
 ]] resolve #2 to #1
 
 
-test [[
+test struct resolution inside function [[
   struct [[b]]{
     int b;
   };
@@ -56,12 +56,24 @@ test [[
 ]] resolve #2 to #1
 
 
-test backward struct variable resolution [[
+test struct as parameter resolution [[
   struct [[Foo]] {int a;};
 
   int main (struct [[Foo]] foo) {
     return 0;
   }
  
+  0
+]] resolve #2 to #1
+
+test struct as local variable resolution [[
+  struct [[Foo]] {};
+  int Foo(){ return 0;}
+  
+  int main(){
+    struct [[Foo]] bar;
+    return 0;
+  }
+  
   0
 ]] resolve #2 to #1

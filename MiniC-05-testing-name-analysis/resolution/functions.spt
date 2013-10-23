@@ -1,0 +1,37 @@
+module resolution
+
+language MiniC
+start symbol Program
+
+//functions
+test function resolution [[
+  int [[main]](){return 0;}
+  
+  [[main]]()
+]] resolve #2 to #1
+
+
+test function overloading resolution [[
+  int main(int a){return 0;}
+  int [[main]](){return 0;}
+  
+  [[main]]()
+]] resolve #2 to #1
+
+test function overloading resolution [[
+  float main(int a){return 0.0;}
+  int [[main]](){return 0;}
+  
+  [[main]]()
+]] resolve #2 to #1
+
+
+test function overloading resolution [[
+  int i;
+  float f;
+  int [[main]](int a, float b){return 0;}
+  int main (float a, int b){return 0;}
+  
+  
+  [[main]](i, f)
+]] resolve #2 to #1

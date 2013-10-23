@@ -5,29 +5,55 @@ start symbol Program
 
 // error on duplicate definitions
 
+test error on duplicate fields [[
+  struct Foo {
+    int a;
+    int a;
+  };
+ 
+  0
+]] 2 errors
 
-test error on duplicate struct [[
+test error on duplicate fields [[
+  struct Foo {
+    int a;
+    float a;
+  };
+ 
+  0
+]] 2 errors
+
+test error on duplicate fields [[
+  struct Foo {
+    int a;
+    int a[5];
+  };
+ 
+  0
+]] 2 errors
+
+test error on duplicate struct name [[
   struct Foo {int a;};
   struct Foo {float b;};
  
   0
 ]] 2 errors
 
-test error on duplicate method [[
+test error on duplicate function with same signature [[
   int Foo(){return 0;}
   int Foo(){return 0;}
   0
 ]] 2 errors
 
 
-test error on duplicate method [[
+test error on duplicate function with same signature [[
   float Foo(){return 0;}
   int Foo(){return 0;}
   0
-]] 2 errors //maybe to review?
+]] 2 errors
 
 
-test error on duplicate variable[[
+test error on duplicate local variable[[
   struct Foo {};
   int main(){
     struct Foo a;
@@ -37,7 +63,7 @@ test error on duplicate variable[[
   0
 ]] 2 errors
 
-test error on duplicate variable [[
+test error on duplicate local variable [[
   int main(){
     int a;
     int a;
@@ -46,7 +72,7 @@ test error on duplicate variable [[
   0
 ]] 2 errors
 
-test error on duplicate variable [[
+test error on duplicate global variable [[
   int a;
   int a;
   int main(){
@@ -55,7 +81,7 @@ test error on duplicate variable [[
   0
 ]] 2 errors
 
-test error on duplicate variable[[
+test error on duplicate local variable[[
   int main(){
     int a;
     float a;
@@ -65,7 +91,7 @@ test error on duplicate variable[[
 ]] 2 errors
 
 
-test [[
+test error on name conflict for function and variable [[
   int a() {
     return 0;
   }
@@ -81,7 +107,7 @@ test [[
 ]] 2 errors //a is not a function
 
 
-test [[
+test error on name conflict for function and variable[[
   int b;
   
   int b(){
@@ -90,3 +116,29 @@ test [[
   
   0
 ]] 2 errors
+
+test error on duplicate parameter [[
+  int main(int a, int a) {
+    return 0;
+  }
+
+  0
+  ]] 2 errors
+
+test error on duplicate parameter [[
+  int main(float a, int a) {
+    return 0;
+  }
+
+  0
+  ]] 2 errors
+
+  test error on name conflict for parameter and local variable [[
+  int main(float a) {
+    int a;
+    return 0;
+  }
+  0
+  ]] 2 errors
+  
+  

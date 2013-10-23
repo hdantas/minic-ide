@@ -4,7 +4,7 @@ language MiniC
 start symbol Program
 
 // field names
-test backward struct variable resolution [[
+test local instance field resolution [[
   struct Foo {
     int [[a]];
   };
@@ -17,7 +17,7 @@ test backward struct variable resolution [[
   main()
 ]] resolve #2 to #1
 
-test [[
+test global instance field resolution [[
   struct Point {
     int [[a]];
   };
@@ -33,7 +33,7 @@ test [[
   p.a
 ]] resolve #2 to #1
 
-test backward struct variable resolution [[
+test global instance field resolution [[
   struct Foo {
     int [[a]];
   };
@@ -44,7 +44,7 @@ test backward struct variable resolution [[
 ]] resolve #2 to #1
 
 
-test backward struct variable resolution [[
+test local instance field resolution [[
   struct Foo {
     int [[a]];
   };
@@ -59,7 +59,7 @@ test backward struct variable resolution [[
 ]] resolve #2 to #1
 
 
-test [[
+test local instance field resolution[[
   struct b{
     int [[b]];
   };
@@ -74,7 +74,7 @@ test [[
 ]] resolve #2 to #1
 
 
-test backward struct variable resolution [[
+test global instance field resolution [[
   struct Foo { int a;};
   struct Bar { int [[a]];};
 
