@@ -12,7 +12,9 @@ imports
 	lib/runtime/nabl/-
 	lib/runtime/task/-
 	lib/runtime/index/-
-	names/names
+	names/functions
+	names/structs
+	names/variables
 	names/errors
 	check
 	generate

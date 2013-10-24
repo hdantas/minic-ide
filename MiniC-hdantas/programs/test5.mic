@@ -1,9 +1,8 @@
-  int a (int a) {
-    return b(a);
-  }
+  struct Foo {};
   
-  int b (int b) {
-    return 0;
-  }
+  int yyy;
   
-  a(3)
+     
+   
+  
+  0

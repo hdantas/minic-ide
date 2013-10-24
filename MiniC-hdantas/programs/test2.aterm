@@ -13,18 +13,17 @@ File(
     )
   ]
 , []
-, [ FunctionDef(
+, [ FunctionDef(Int(), "main", [], [], IntConst("0"))
+  , FunctionDef(
       Int()
     , "a"
-    , [Arg(Float(), "a"), ArrayArg(ArrayInt(), "a"), Arg(Float(), "b")]
-    , [ VarDec(Struct("Line"), "l")
-      , VarDec(Int(), "b")
-      , VarDec(Int(), "a")
-      , VarDec(Float(), "x")
-      , ArrayDec(ArrayInt(), "a", "5")
-      , VarDec(Int(), "a")
+    , [ Arg(Float(), "a")
+      , Arg(Int(), "b")
+      , Arg(Float(), "c")
+      , Arg(Int(), "d")
       ]
-    , [ IfElse(
+    , [ VarDec(Struct("line"), "l")
+      , IfElse(
           Var("Condition")
         , CodeBlock(
             [ Assignment("d", Uminus(IntConst("1")))
@@ -47,7 +46,7 @@ File(
       ]
     , Var("a")
     )
-  , FunctionDef(Int(), "b", [], [], [], IntConst("0"))
+  , FunctionDef(Int(), "b", [], [], IntConst("0"))
   ]
 , Var("x")
 )

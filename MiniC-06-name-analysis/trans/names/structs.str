@@ -1,0 +1,81 @@
+module names/structs
+
+imports
+  lib/runtime/nabl/-
+  lib/runtime/task/-
+  lib/runtime/properties/-
+  lib/runtime/types/-
+  lib/runtime/editor/-
+  include/MiniC
+
+
+signature
+  constructors
+    NablNsStruct : Namespace
+
+
+rules
+
+  nabl-get-name :
+    StructDec(s, _) -> s
+
+  nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
+    ?StructDec(s, _)
+    ; origin-track-forced(
+        StructDec(
+          nabl-def(
+            ?c-uri1__
+          , ?s-uri1__
+          | lang__
+          , partition__
+          , uniques__
+          , uri__
+          , uri__
+          , NablNsStruct()
+          , Unique()
+          , Current()
+          , []
+          )
+        , id
+        )
+        ; match(child-uris__|c-uri1__)
+        ; match(sibl-uris__|s-uri1__)
+        ; match(implicits__|[])
+      |
+      )
+
+  nabl-get-name :
+    Struct(s) -> s
+
+  nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
+    ?Struct(s)
+    ; origin-track-forced(
+        Struct(
+          nabl-use(
+          | lang__
+          , partition__
+          , uniques__
+          , uris__
+          , [ UseCandidate(
+                NablNsStruct()
+              , []
+              , Current()
+              , True()
+              , []
+              )
+            ]
+          )
+        )
+      |
+      )
+
+  nabl-scoping-site =
+    ?File(_, _, _, _)
+    ; origin-track-forced(
+        nabl-scope(|[NablNsStruct()])
+      |
+      )
+
+  nabl-get-scope =
+    ?File(_, _, _, _)
+    ; ![NablNsStruct()]

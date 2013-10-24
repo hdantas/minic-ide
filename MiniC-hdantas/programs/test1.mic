@@ -1,19 +1,34 @@
-struct x {int a;};int b;int foo (int bar){int a; if (bar < 1) bar = bar + 1;else bar = bar + 5; while (bar < 0) {x = x + 1;} x = x + 2; printf("%i", bar); return 0;}
+struct Foo {
+  int a;
+  int b;
+};
 
+struct Bar {
+  int a;
+};
 
+int x;
 
-//
-  /*
-	 *
-	 *
-	 *    hello
-	 *    world
-	*/
- x
- 
- 
- // hello 
- // 
+struct Foo f;
+struct Bar b;
 
- 
+int foo (int bar)
+{
   
+  int a;
+  a = f.b;
+  if (bar < 1)
+    bar = bar + 1;
+  else
+    bar = bar + 5;
+  
+  while (bar < 0) {
+    x = x + 1;
+  }
+  
+  x = x + 2;
+  printf("%i", bar);
+  return 0;
+}
+
+x

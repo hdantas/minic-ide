@@ -1,0 +1,19 @@
+module names/variables
+
+imports
+  include/MiniC
+  
+namespaces
+  Variable
+  
+binding rules
+
+  VarDec(_, v)   : defines Variable v
+  ArrayDec(_, v, _) : defines Variable v
+  
+  Arg(_, a)      : defines Variable a
+  ArrayArg(_, a) : defines Variable a
+  
+  
+  //Class(c, _, _, _): defines Class c
+  //ClassType(c): refers to Class c

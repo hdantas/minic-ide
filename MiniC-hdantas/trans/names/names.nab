@@ -1,0 +1,52 @@
+module names/names
+
+imports
+  include/MiniC
+  
+namespaces
+  Struct
+  Variable
+  Function
+  
+binding rules // Files
+
+  File(_, _, _, _): scopes Struct, Variable, Function
+
+binding rules // Struct
+  StructDec(s, _):
+    defines Struct s of type s
+    scopes Variable
+
+  Struct(s): refers to Struct s
+  
+binding rules // Variable
+
+  //StructMember(s, f):
+    //refers to Variable f of type s
+    
+  VarDec(t, v)   :
+    defines Variable v of type t
+        
+  ArrayDec(t, v, _) :
+    defines Variable v of type t
+      
+  Arg(t, a)      : defines Variable a of type t
+  ArrayArg(t, a) : defines Variable a of type t
+  
+  CodeBlock(_): scopes Variable
+  
+  Var(v): refers to Variable v
+  
+binding rules // Function  
+  
+  FunctionDef(t, f, _, _, _):
+    defines Function f of type t
+    scopes Variable
+    
+  Call(c, _): refers to Function c
+  
+  
+  
+  CodeBlock(_): scopes Variable
+  StructDec(_, _): scopes Variable
+  FunctionDef(_, _, _, _, _): scopes Variable

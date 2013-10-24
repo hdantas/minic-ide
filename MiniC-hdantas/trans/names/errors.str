@@ -1,0 +1,23 @@
+module names/errors
+
+imports
+
+  include/MiniC
+  runtime/nabl/-
+  runtime/task/-
+  runtime/types/-
+
+
+strategies
+  
+  // nabl-check-disable-duplicate(|uri, ns) = id
+  // nabl-check-disable-hiding(|uri, ns) = id
+  // nabl-check-disable-unresolved = id
+
+rules
+  nabl-constraint(|ctx):
+    Struct(c) -> <fail>
+    where
+      <has-annotation(?Use(task))> c
+    ; msg  := "Your meaningful error message should be here"
+    ; <task-create-error-on-failure(|ctx, task, msg)> c

@@ -1,0 +1,13 @@
+module names/functions
+
+imports
+  include/MiniC
+  
+namespaces
+  Function
+  
+binding rules
+
+  FunctionDef(_, f, _, _, _): defines Function f
+  //Class(c, _, _, _): defines Class c
+  //ClassType(c): refers to Class c

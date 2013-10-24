@@ -3,39 +3,37 @@ struct notaPoint {
   int y;
  };
 
-
 struct Point {
   int x;
   int y;
- };
+};
 
 struct line {
   struct Point a;
   struct Point b;
- };
- 
-int a (float a, int a[], float b )
-{
-  struct Line l;
-  int b;    int a;    float x;    int a [5];
-  int a;
+};
 
-  if (Condition){
+int a;
+int main;
+int x;
+
+int main(){
+  int main;
+  return 0;
+} 
+ 
+int a (float a, int b, float c, int d )
+{
+  struct line l;
+
+  if (d < 3){
       d = - 1;
       c = b + 1;
       b = c + 1;
       a = 01 * (02 + (03 + 00));    
   } else {b = b + 1;}
   
-  printf( " 
-  
-  
-  
-  %f" , a);
-  
-  
-  
- 
+  printf("%f" , a); 
   return a;
 }
 
@@ -45,4 +43,4 @@ int b(){
 
 
 
-x
+a

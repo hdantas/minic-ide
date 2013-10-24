@@ -3,20 +3,21 @@ struct Point {
   int y;
 };
 
-int a (float a, int a[], float b )
+int x;
+int a (float a, int b[], float c )
 {
   struct Point p;
-  int b;    int a;    float x;    int a [5];
-  int a;
+  int d;    int e;    float x;    int f [5];
+  int g;
 
-  if (Condition){
+  if (a < 3){
       d = - 1;
       c = b + 1;
       b = c + 1;
       a = d + 1;    
   } else {b = b + 1;}
   
-  printf( " %f" , a);  int c;
+  printf( " %f" , a);
   return a;
 }
 
