@@ -1,11 +1,11 @@
 module MiniC.main
 
-imports MiniC-Builders MiniC-Refactorings MiniC-Colorer MiniC-Completions MiniC-Folding MiniC-References MiniC-Syntax
+imports MiniC-Menus MiniC-Refactorings MiniC-Colorer MiniC-Completions MiniC-Folding MiniC-References MiniC-Syntax
 
 language General properties
                   
   name          : MiniC
-  id            : MiniChdantas
+  id            : MiniC
   extends       : Root
                   
   description   : "Spoofax/IMP-generated editor for the MiniC language"
@@ -14,3 +14,8 @@ language General properties
   extensions    : mic
   table         : include/MiniC.tbl
   start symbols : Program
+  
+  provider      : include/minic.ctree                                                                
+  provider      : include/minic-java.jar                                                             
+  observer      : editor-analyze (multifile)                                                 
+                                                                                                   
