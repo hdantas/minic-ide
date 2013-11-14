@@ -78,7 +78,7 @@ test warning on unused struct variable[[
   0
 ]] 1 warning
 
-test warning on unused struct var[[
+test warning on unused struct field[[
   struct Foo {
     int a;
     int [[b]];

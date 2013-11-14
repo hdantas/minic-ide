@@ -15,7 +15,8 @@ imports
 	lib/runtime/task/-
 	lib/runtime/index/-
 	names/names
-	names/errors
+	names/myconstraints
+	names/types
 	check
 	generate
 	trans/pp

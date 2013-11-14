@@ -3,7 +3,11 @@ module MiniC-ContextFree.generated
 
 completions
   completion template TypeDec : "struct StructName { StructMembers };" =
-    "struct " <StructName:ID> "\n\t{\n\t" <StructMembers:VarDec> "\n\t};" (blank)  
+    "struct " <StructName:ID> "\n\t{\n\t" <StructMembers:FieldDec> "\n\t};" (blank)  
+  completion template FieldDec : "Type VarName;" =
+    <Type:Type> " " <VarName:ID> ";"                                     
+  completion template FieldDec : "Type ArrayName[NumberElements];" =
+    <Type:ArrayType> " " <ArrayName:ID> "[" <NumberElements:INT> "];"  
   completion template VarDec : "Type VarName;" =
     <Type:Type> " " <VarName:ID> ";"                                       
   completion template VarDec : "Type ArrayName[NumberElements];" =
@@ -25,11 +29,7 @@ completions
   completion template Type : "struct StructName" =
     "struct " <StructName:ID>                                            
   completion template Statement : "Var = Exp;" =
-    <Var:ID> " = " <Exp:Exp> ";"                                           
-  completion template Statement : "ArrayName[Index] = Exp;" =
-    <ArrayName:ID> "[" <Index:Exp> "] = " <Exp:Exp> ";"       
-  completion template Statement : "StructName.StructMember = Exp;" =
-    <StructName:ID> "." <StructMember:ID> " = " <Exp:Exp> ";"  
+    <Var:Lvalue> " = " <Exp:Exp> ";"                                       
   completion template Statement : "if (Condition) Statement else Statement " =
     "if (" <Condition:Exp> ")\n\t" <Statement:Statement> "\nelse\n\t" <Statement:Statement> "\n" (blank)  
   completion template Statement : "while (Condition) Statement " =
@@ -43,7 +43,7 @@ completions
   completion template Lvalue : "StructName.StructMember" =
     <StructName:Lvalue> "." <StructMember:Lvalue>                
   completion template Lvalue : "ArrayName[Index]" =
-    <ArrayName:ID> "[" <Index:Exp> "]"                                  
+    <ArrayName:Lvalue> "[" <Index:Exp> "]"                              
   completion template Exp : "Value && Value" =
     <Value:Exp> " && " <Value:Exp>                                           
   completion template Exp : "Value < Value" =

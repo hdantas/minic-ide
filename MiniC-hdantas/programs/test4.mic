@@ -4,7 +4,7 @@ struct Point {
 };
 
 int x;
-int a (float a, int b[], float c )
+int main (float a, int b[], float c )
 {
   struct Point p;
   int d;    int e;    float x;    int f [5];

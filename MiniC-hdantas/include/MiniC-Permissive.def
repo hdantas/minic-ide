@@ -18,6 +18,7 @@ exports
     "completion123"                -> COMPLETIONPREFIX    {completion}
     "|#WATERTOKENSTAR|"            -> WATERTOKENSTAR      {completion}
     "|#TypeDec|"                   -> TypeDec             {completion}
+    "|#FieldDec|"                  -> FieldDec            {completion}
     "|#VarDec|"                    -> VarDec              {completion}
     "|#FunctionDec|"               -> FunctionDec         {completion}
     "|#Parameter|"                 -> Parameter           {completion}
@@ -64,7 +65,9 @@ exports
 
   context-free syntax
     TypeDec* VarDec* FunctionDec* Exp                                    -> Program     {cons("File")}
-    "struct" ID "{" VarDec* "};"                                         -> TypeDec     {cons("StructDec")}
+    "struct" ID "{" FieldDec* "};"                                       -> TypeDec     {cons("StructDec")}
+    Type ID ";"                                                          -> FieldDec    {cons("FieldDec")}
+    ArrayType ID "[" INT "];"                                            -> FieldDec    {cons("FieldArrayDec")}
     Type ID ";"                                                          -> VarDec      {cons("VarDec")}
     ArrayType ID "[" INT "];"                                            -> VarDec      {cons("ArrayDec")}
     Type ID "(" {Parameter ","}* ")" "{" Statement* "return" Exp ";" "}" -> FunctionDec {cons("FunctionDef")}
@@ -76,9 +79,7 @@ exports
     "float"                                                              -> Type        {cons("Float")}
     "struct" ID                                                          -> Type        {cons("Struct")}
     VarDec                                                               -> Statement   
-    ID "=" Exp ";"                                                       -> Statement   {cons("Assignment")}
-    ID "[" Exp "]" "=" Exp ";"                                           -> Statement   {cons("ArrayAssignment")}
-    ID "." ID "=" Exp ";"                                                -> Statement   {cons("StructMemberAssignment")}
+    Lvalue "=" Exp ";"                                                   -> Statement   {cons("Assignment")}
     "if" "(" Exp ")" Statement "else" Statement                          -> Statement   {cons("IfElse")}
     "while" "(" Exp ")" Statement                                        -> Statement   {cons("While")}
     "printf(" "\"" "%i" "\"" "," Exp ");"                                -> Statement   {cons("PrintfInt")}
@@ -89,7 +90,7 @@ exports
     FLOAT                                                                -> Exp         {cons("FloatConst")}
     ID                                                                   -> Lvalue      {cons("Var")}
     Lvalue "." Lvalue                                                    -> Lvalue      {cons("StructMember"), left}
-    ID "[" Exp "]"                                                       -> Lvalue      {cons("ArrayVar")}
+    Lvalue "[" Exp "]"                                                   -> Lvalue      {cons("ArrayVar")}
     Lvalue                                                               -> Exp         
     Exp "&&" Exp                                                         -> Exp         {cons("And"), left}
     Exp "<" Exp                                                          -> Exp         {cons("Lt"), non-assoc}
@@ -106,6 +107,7 @@ exports
   context-free syntax
     CONTENTCOMPLETE -> Program     {cons("COMPLETION-Program")}
     CONTENTCOMPLETE -> TypeDec     {cons("COMPLETION-TypeDec")}
+    CONTENTCOMPLETE -> FieldDec    {cons("COMPLETION-FieldDec")}
     CONTENTCOMPLETE -> VarDec      {cons("COMPLETION-VarDec")}
     CONTENTCOMPLETE -> FunctionDec {cons("COMPLETION-FunctionDec")}
     CONTENTCOMPLETE -> Parameter   {cons("COMPLETION-Parameter")}

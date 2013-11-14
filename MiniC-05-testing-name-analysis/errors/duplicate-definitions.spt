@@ -104,7 +104,7 @@ test error on name conflict for function and variable [[
   }
   
   0
-]] 2 errors //a is not a function
+]] 1 error //a is not a function
 
 
 test error on name conflict for function and variable[[

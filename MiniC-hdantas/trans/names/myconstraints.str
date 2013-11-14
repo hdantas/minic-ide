@@ -1,0 +1,147 @@
+module names/myconstraints
+
+imports
+
+  include/MiniC
+  runtime/nabl/-
+  runtime/task/-
+  runtime/types/-
+  names/names
+ 
+
+strategies
+
+  nabl-check-disable-duplicate(|uri, ns) = id
+  nabl-check-disable-hiding(|uri, ns) = id
+  nabl-check-disable-unresolved = id
+
+
+rules // unresolved
+  nabl-constraint(|ctx): //unresolved struct
+    Struct(c) -> <fail>
+    where
+      <has-annotation(?Use(task))> c
+    ; msg  := $[Unresolved Struct [c].] 
+    ; <task-create-error-on-failure(|ctx, task, msg)> c
+
+
+  nabl-constraint(|ctx): //unresolved field
+    StructMember(s, f) -> <fail>
+    where
+      <has-annotation(?Use(task))> f
+    ; msg  := $[Unresolved Field [f] in Struct [s].] 
+    ; <task-create-error-on-failure(|ctx, task, msg)> f
+
+
+  nabl-constraint(|ctx): //unresolved var
+    Var(v) -> <fail>
+    where
+      <has-annotation(?Use(task))> v
+    ; msg  := $[Unresolved Variable [v]] 
+    ; <task-create-error-on-failure(|ctx, task, msg)> v
+
+  nabl-constraint(|ctx): //unresolved field
+    Field(f) -> <fail>
+    where
+      <has-annotation(?Use(task))> f
+    ; msg  := $[Unresolved Field [f]] 
+    ; <task-create-error-on-failure(|ctx, task, msg)> f
+      
+  nabl-constraint(|ctx): //unresolved function call
+    Call(c, _) -> <fail>
+    where
+      <has-annotation(?Use(task))> c
+    ; msg  := $[Unresolved Function call To [c]] 
+    ; <task-create-error-on-failure(|ctx, task, msg)> c
+
+rules //duplicates
+
+  nabl-constraint(|ctx): //duplicate struct
+    StructDec(c, _) -> <fail>
+    where
+      task := <nabl-lookup-local(|ctx)> c
+    ; msg  := $[Duplicate Structure [c]] 
+    ; <task-create-error-on-multiple(|ctx, task, msg)> c
+      
+  nabl-constraint(|ctx): //duplicate field
+    FieldDec(_, f) -> <fail>
+    where
+      task := <nabl-lookup-local(|ctx)> f
+    ; msg  := $[Duplicate Field [f]] 
+    ; <task-create-error-on-multiple(|ctx, task, msg)> f
+
+ nabl-constraint(|ctx): //duplicate field
+    FieldArrayDec(_, f, _) -> <fail>
+    where
+      task := <nabl-lookup-local(|ctx)> f
+    ; msg  := $[Duplicate Array Field [f]] 
+    ; <task-create-error-on-multiple(|ctx, task, msg)> f
+      
+  nabl-constraint(|ctx): //duplicate variable
+    VarDec(_, v) -> <fail>
+    where
+      task := <nabl-lookup-lexical(|ctx)> v
+    ; msg  := $[Duplicate Variable [v]] 
+    ; <task-create-error-on-multiple(|ctx, task, msg)> v      
+     
+  nabl-constraint(|ctx): //duplicate variable
+    ArrayDec(_, v, _) -> <fail>
+    where
+      task := <nabl-lookup-lexical(|ctx)> v
+    ; msg  := $[Duplicate Array Variable [v]] 
+    ; <task-create-error-on-multiple(|ctx, task, msg)> v      
+
+  nabl-constraint(|ctx): //duplicate variable
+    Arg(_, v) -> <fail>
+    where
+      task := <nabl-lookup-lexical(|ctx)> v
+    ; msg  := $[Duplicate Variable [v]] 
+    ; <task-create-error-on-multiple(|ctx, task, msg)> v      
+     
+  nabl-constraint(|ctx): //duplicate variable
+    ArrayArg(_, v) -> <fail>
+    where
+      task := <nabl-lookup-lexical(|ctx)> v
+    ; msg  := $[Duplicate Array Variable [v]] 
+    ; <task-create-error-on-multiple(|ctx, task, msg)> v 
+      
+  nabl-constraint(|ctx): //duplicate function
+    FunctionDef(_, f, p, _, _) -> <fail>
+    where
+      task := <nabl-lookup-lexical(|ctx)> f
+    ; msg  := $[Duplicate Function [f]] 
+    ; <task-create-error-on-multiple(|ctx, task, msg)> f
+
+
+rules //hiding
+	
+	  nabl-constraint(|ctx): //variable hiding other variable
+    VarDec(_, v) -> <fail>
+    where
+      task := <nabl-lookup-lexical-parent(|ctx)> v
+    ; msg  := $[Variable [v] is hiding previous definition] 
+    ; <task-create-warning-on-success(|ctx, task, msg)> v 
+
+    nabl-constraint(|ctx): //variable hiding other variable
+    ArrayDec(_, v, _) -> <fail>
+    where
+      task := <nabl-lookup-lexical-parent(|ctx)> v
+    ; msg  := $[Variable [v] is hiding previous definition] 
+    ; <task-create-warning-on-success(|ctx, task, msg)> v
+      
+            
+    nabl-constraint(|ctx): //argument hiding other variable
+    Arg(_, v) -> <fail>
+    where
+      task := <nabl-lookup-lexical-parent(|ctx)> v
+    ; msg  := $[Argument [v] is hiding previous definition]
+    ; <task-create-warning-on-success(|ctx, task, msg)> v  
+      
+    nabl-constraint(|ctx): //argument hiding other variable
+    ArrayArg(_, v) -> <fail>
+    where
+      task := <nabl-lookup-lexical-parent(|ctx)> v
+    ; msg  := $[Argument array [v] is hiding previous definition]
+    ; <task-create-warning-on-success(|ctx, task, msg)> v
+      
+      

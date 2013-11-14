@@ -5,6 +5,7 @@ start symbol Program
 
 // variable names
 test local variable resolution[[
+  int k;
   int bar(int a) {
     int [[c]];
     [[c]] = a;
@@ -47,7 +48,7 @@ test local struct instance resolution [[
 ]] resolve #2 to #1
 
 
-test global struct instance resolution [
+test global struct instance resolution [[
   struct Point {
     int a;
   };
@@ -82,7 +83,7 @@ test global struct instance resolution [[
 
 
 test hidding variable resolution [[
-  int a;
+  //int a;
   
   int main() {
     int [[a]];
@@ -179,8 +180,8 @@ test local variable resolution [[
 test global variable resolution [[
   int [[a]];
   
-  int a (int a){
-    return a;
+  int main (int b){
+    return b;
   }
   
   [[a]] + 1 

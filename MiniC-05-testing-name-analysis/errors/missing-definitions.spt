@@ -98,7 +98,7 @@ test undefined local variable [[
 test undefined global struct instance [[
   struct foo {int a;};
   [[f]].a
-]] 1 error
+]] 2 errors
 
 test undefined field [[
   struct foo {};

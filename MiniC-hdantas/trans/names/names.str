@@ -7,13 +7,14 @@ imports
   lib/runtime/types/-
   lib/runtime/editor/-
   include/MiniC
+  names/types
 
 
 signature
   constructors
     NablNsStruct   : Namespace
+    NablNsField    : Namespace
     NablNsVariable : Namespace
-    NablNsFunction : Namespace
 
 
 rules
@@ -22,24 +23,27 @@ rules
     ?File(_, _, _, _)
     ; origin-track-forced(
         nabl-scope(
-        | [NablNsStruct(), NablNsVariable(), NablNsFunction()]
+        | [NablNsStruct(), NablNsVariable()]
         )
       |
       )
 
   nabl-get-scope =
     ?File(_, _, _, _)
-    ; ![NablNsStruct(), NablNsVariable(), NablNsFunction()]
+    ; ![NablNsStruct(), NablNsVariable()]
 
 
 rules
 
   nabl-get-scope =
     ?StructDec(s, _)
-    ; ![NablNsVariable()]
+    ; ![NablNsField()]
 
   nabl-get-name :
     StructDec(s, _) -> s
+
+  nabl-name-apply(s) =
+    StructDec(s, id)
 
   nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
     ?StructDec(s, _)
@@ -56,7 +60,7 @@ rules
           , NablNsStruct()
           , Unique()
           , Current()
-          , [NablNsVariable()]
+          , [NablNsField()]
           )
         , id
         )
@@ -72,7 +76,12 @@ rules
         StructDec(
           nabl-store-props(
           | partition__
-          , [Prop(Type(), s, [])]
+          , [ Prop(
+                Type()
+              , Type(s)
+              , []
+              )
+            ]
           )
         , id
         )
@@ -81,6 +90,9 @@ rules
 
   nabl-get-name :
     Struct(s) -> s
+
+  nabl-name-apply(s) =
+    Struct(s)
 
   nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
     ?Struct(s)
@@ -104,11 +116,145 @@ rules
       |
       )
 
+  nabl-get-name :
+    FieldDec(t, v) -> v
+
+  nabl-name-apply(s) =
+    FieldDec(id, s)
+
+  nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
+    ?FieldDec(t, v)
+    ; origin-track-forced(
+        FieldDec(
+          id
+        , nabl-def(
+            ?c-uri1__
+          , ?s-uri1__
+          | lang__
+          , partition__
+          , uniques__
+          , uri__
+          , uri__
+          , NablNsField()
+          , Unique()
+          , Current()
+          , []
+          )
+        )
+        ; match(child-uris__|c-uri1__)
+        ; match(sibl-uris__|s-uri1__)
+        ; match(implicits__|[])
+      |
+      )
+
+  nabl-prop-site(|lang__, partition__, uris__, states__, implicits__) =
+    ?FieldDec(t, v)
+    ; origin-track-forced(
+        FieldDec(
+          id
+        , nabl-store-props(
+          | partition__
+          , [Prop(Type(), t, [])]
+          )
+        )
+      |
+      )
+
+  nabl-get-name :
+    FieldArrayDec(t, v, _) -> v
+
+  nabl-name-apply(s) =
+    FieldArrayDec(id, s, id)
+
+  nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
+    ?FieldArrayDec(t, v, _)
+    ; origin-track-forced(
+        FieldArrayDec(
+          id
+        , nabl-def(
+            ?c-uri1__
+          , ?s-uri1__
+          | lang__
+          , partition__
+          , uniques__
+          , uri__
+          , uri__
+          , NablNsField()
+          , Unique()
+          , Current()
+          , []
+          )
+        , id
+        )
+        ; match(child-uris__|c-uri1__)
+        ; match(sibl-uris__|s-uri1__)
+        ; match(implicits__|[])
+      |
+      )
+
+  nabl-prop-site(|lang__, partition__, uris__, states__, implicits__) =
+    ?FieldArrayDec(t, v, _)
+    ; origin-track-forced(
+        FieldArrayDec(
+          id
+        , nabl-store-props(
+          | partition__
+          , [Prop(Type(), t, [])]
+          )
+        , id
+        )
+      |
+      )
+
+  nabl-get-name :
+    StructMember(v, f) -> f
+
+  nabl-name-apply(s) =
+    StructMember(id, s)
+
+  nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
+    ?StructMember(v, f)
+    ; origin-track-forced(
+        where(r5-1-1-1__ := <get-property-task(|Type())> v)
+        ; where(r5-1-1-1-1__ := <new-task(|partition__)> Rewrite("match5-1-1-1-1", (r5-1-1-1__, [])))
+        ; StructMember(
+            id
+          , nabl-use(
+            | lang__
+            , partition__
+            , uniques__
+            , uris__
+            , [ UseCandidate(
+                  NablNsField()
+                , []
+                , Context(
+                    NablNsStruct()
+                  , r5-1-1-1-1__
+                  , []
+                  , Current()
+                  )
+                , True()
+                , [r5-1-1-1-1__]
+                )
+              ]
+            )
+          )
+      |
+      )
+
+  task-rewrite :
+    ( "match5-1-1-1-1"
+    , (Type(s), [])
+    ) -> s
+
 
 rules
 
   nabl-get-name :
     VarDec(t, v) -> v
+
+  nabl-name-apply(s) =
+    VarDec(id, s)
 
   nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
     ?VarDec(t, v)
@@ -150,6 +296,9 @@ rules
 
   nabl-get-name :
     ArrayDec(t, v, _) -> v
+
+  nabl-name-apply(s) =
+    ArrayDec(id, s, id)
 
   nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
     ?ArrayDec(t, v, _)
@@ -194,6 +343,9 @@ rules
   nabl-get-name :
     Arg(t, a) -> a
 
+  nabl-name-apply(s) =
+    Arg(id, s)
+
   nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
     ?Arg(t, a)
     ; origin-track-forced(
@@ -235,6 +387,9 @@ rules
   nabl-get-name :
     ArrayArg(t, a) -> a
 
+  nabl-name-apply(s) =
+    ArrayArg(id, s)
+
   nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
     ?ArrayArg(t, a)
     ; origin-track-forced(
@@ -273,18 +428,11 @@ rules
       |
       )
 
-  nabl-scoping-site =
-    ?CodeBlock(_)
-    ; origin-track-forced(
-        nabl-scope(|[NablNsVariable()])
-      |
-      )
-
-  nabl-get-scope =
-    ?CodeBlock(_) ; ![NablNsVariable()]
-
   nabl-get-name :
     Var(v) -> v
+
+  nabl-name-apply(s) =
+    Var(s)
 
   nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
     ?Var(v)
@@ -308,6 +456,44 @@ rules
       |
       )
 
+  nabl-get-name :
+    Field(f) -> f
+
+  nabl-name-apply(s) =
+    Field(s)
+
+  nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
+    ?Field(f)
+    ; origin-track-forced(
+        Field(
+          nabl-use(
+          | lang__
+          , partition__
+          , uniques__
+          , uris__
+          , [ UseCandidate(
+                NablNsField()
+              , []
+              , Current()
+              , True()
+              , []
+              )
+            ]
+          )
+        )
+      |
+      )
+
+  nabl-scoping-site =
+    ?CodeBlock(_)
+    ; origin-track-forced(
+        nabl-scope(|[NablNsVariable()])
+      |
+      )
+
+  nabl-get-scope =
+    ?CodeBlock(_) ; ![NablNsVariable()]
+
 
 rules
 
@@ -317,6 +503,9 @@ rules
 
   nabl-get-name :
     FunctionDef(t, f, _, _, _) -> f
+
+  nabl-name-apply(s) =
+    FunctionDef(id, s, id, id, id)
 
   nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
     ?FunctionDef(t, f, _, _, _)
@@ -331,7 +520,7 @@ rules
           , uniques__
           , uri__
           , uri__
-          , NablNsFunction()
+          , NablNsVariable()
           , Unique()
           , Current()
           , [NablNsVariable()]
@@ -365,6 +554,9 @@ rules
   nabl-get-name :
     Call(c, _) -> c
 
+  nabl-name-apply(s) =
+    Call(s, id)
+
   nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
     ?Call(c, _)
     ; origin-track-forced(
@@ -375,7 +567,7 @@ rules
           , uniques__
           , uris__
           , [ UseCandidate(
-                NablNsFunction()
+                NablNsVariable()
               , []
               , Current()
               , True()
@@ -387,35 +579,3 @@ rules
         )
       |
       )
-
-  nabl-scoping-site =
-    ?CodeBlock(_)
-    ; origin-track-forced(
-        nabl-scope(|[NablNsVariable()])
-      |
-      )
-
-  nabl-get-scope =
-    ?CodeBlock(_) ; ![NablNsVariable()]
-
-  nabl-scoping-site =
-    ?StructDec(_, _)
-    ; origin-track-forced(
-        nabl-scope(|[NablNsVariable()])
-      |
-      )
-
-  nabl-get-scope =
-    ?StructDec(_, _)
-    ; ![NablNsVariable()]
-
-  nabl-scoping-site =
-    ?FunctionDef(_, _, _, _, _)
-    ; origin-track-forced(
-        nabl-scope(|[NablNsVariable()])
-      |
-      )
-
-  nabl-get-scope =
-    ?FunctionDef(_, _, _, _, _)
-    ; ![NablNsVariable()]

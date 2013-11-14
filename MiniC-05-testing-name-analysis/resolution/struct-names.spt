@@ -38,7 +38,7 @@ test global struct resolution [[
     return 0;
   }
   
-  p.a
+  0
 ]] resolve #2 to #1
 
 

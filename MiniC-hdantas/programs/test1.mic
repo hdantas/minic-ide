@@ -1,34 +1,13 @@
-struct Foo {
-  int a;
-  int b;
-};
 
 struct Bar {
   int a;
 };
 
-int x;
+int b;
 
-struct Foo f;
-struct Bar b;
-
-int foo (int bar)
-{
-  
-  int a;
-  a = f.b;
-  if (bar < 1)
-    bar = bar + 1;
-  else
-    bar = bar + 5;
-  
-  while (bar < 0) {
-    x = x + 1;
-  }
-  
-  x = x + 2;
-  printf("%i", bar);
+int main() {
+  int b;
   return 0;
 }
 
-x
+0
