@@ -1,0 +1,12 @@
+Develop a test suite for type analysis. The test suite should provide
+
+1. Test cases for the types of expressions.
+2. Test cases for the resolution of method names.
+3. Test cases for
+	errors on duplicate method definitions,
+	errors on missing method definitions,
+	errors on overloaded methods,
+	notes on overriding methods,
+	type errors in expressions,
+	type errors in statements, and
+	type errors in method definitions.

@@ -114,8 +114,8 @@ rules //duplicates
 
 
 rules //hiding
-	
-	  nabl-constraint(|ctx): //variable hiding other variable
+  
+    nabl-constraint(|ctx): //variable hiding other variable
     VarDec(_, v) -> <fail>
     where
       task := <nabl-lookup-lexical-parent(|ctx)> v
@@ -126,7 +126,7 @@ rules //hiding
     ArrayDec(_, v, _) -> <fail>
     where
       task := <nabl-lookup-lexical-parent(|ctx)> v
-    ; msg  := $[Variable [v] is hiding previous definition] 
+    ; msg  := $[Variable array [v] is hiding previous definition] 
     ; <task-create-warning-on-success(|ctx, task, msg)> v
       
             

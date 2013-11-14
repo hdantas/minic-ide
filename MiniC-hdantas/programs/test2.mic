@@ -13,15 +13,17 @@ struct line {
   struct Point b;
 };
 
-int x;
+int x[5];
 
 int main(){
-  int x;
+  
+  int x[5];
   return 0;
 } 
  
 int test (float a, float a, float c, int d )
 {
+  
   struct line l;
   d = 1;
   if (d < 3){

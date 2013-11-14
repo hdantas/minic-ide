@@ -3,10 +3,11 @@ struct Bar {
   int a;
 };
 
-int b;
+int s;
 
 int main() {
-  int b;
+  int s;
+  int a;
   return 0;
 }
 
