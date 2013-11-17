@@ -1,1 +1,5 @@
 how should I handle ifs and elses in the test cases? Since there is no bool is C?
+
+should i consider forward resolution? ("normal" C does not allow it)
+
+should i allow polymorphism?
