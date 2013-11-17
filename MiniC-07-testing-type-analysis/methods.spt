@@ -1,4 +1,4 @@
-module method-resolution
+module methods
 
 language MiniC
 start symbol Program
@@ -55,3 +55,71 @@ test method name resolution [[
   0
 ]] resolve #1 to #2
 
+test method name resolution [[
+  float main(){ return [[foo]](1.0, 0); }
+  float foo(int a, float b) { return a; }
+  float [[foo]](float a, int b) { return a; }
+  0
+]] resolve #1 to #2
+
+// %% Method errors %%
+// You should also come up with test cases for error checking on method names.
+// This should include test cases for errors on duplicate definitions,
+// missing definitions, and method overloading as well as for notes
+// on method overriding. Similar to previous test cases,
+// you can pair up positive (0 errors) and negative test cases.
+
+// Assuming method overloading is acceptable
+test correct program[[
+  int foo(){return 0;}
+  int foo(int a){return a;}
+  int foo(int a, int b){return a + b;}
+  foo(1, 2)
+]] 0 errors
+
+test undefined function [[
+  int foo(){
+    return [[bar]](); 
+  }
+  0
+]] 1 error
+
+test undefined function [[
+    int bar(int a) {return 0;}
+    int foo(){
+    return [[bar]](); 
+  }
+  0
+]] 1 error
+
+test undefined function [[
+  int foo(int a, int b){
+    return 0; 
+  }
+  [[foo]](0)
+]] 1 error
+
+test undefined function [[
+  int foo(float a, int b){ return 0;}
+  int foo(int a, float b){ return 0;}
+  [[foo]](0.1, 0.1)
+]] 1 error
+
+test error on duplicate function with same signature [[
+  int foo(){return 0;}
+  int foo(){return 0;}
+  0
+]] 2 errors
+
+
+test error on duplicate function with same signature [[
+  float foo(){return 0;}
+  int foo(){return 0;}
+  0
+]] 2 errors
+
+test error on duplicate function with same signature [[
+  float foo(int a, int b){return 0;}
+  int foo(int c, int d){return 0;}
+  0
+]] 2 errors
