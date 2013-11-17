@@ -1,0 +1,1 @@
+how should I handle ifs and elses in the test cases? Since there is no bool is C?

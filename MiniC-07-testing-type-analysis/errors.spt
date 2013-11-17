@@ -1,0 +1,23 @@
+module errors
+
+language MiniC
+start symbol Program
+
+ 
+// A type error occurs, when the type of an expression does not conform to its expected type.
+// Consider the following test case as an example:
+
+// In MiniJava, System.out.println() can only print integers.
+// Thus, there should be an error on true, when we pass it to the print statement.
+// Similarly, type errors can occur in other statements, expressions,
+// and method declarations. You should come up with test cases for such errors.
+// Again, keep in mind that coverage is the main criterion for your grade.
+
+
+test print boolean [[
+    class Main {
+        public static void main (String[] args) {
+            System.out.println([[true]]);
+        }
+    }
+]] 1 error
