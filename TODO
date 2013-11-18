@@ -10,3 +10,19 @@ Develop a test suite for type analysis. The test suite should provide
 	type errors in expressions,
 	type errors in statements, and
 	type errors in method definitions.
+
+
+How should I handle ifs and elses in the type analysis test cases since there is no bool is C?
+
+They require integers, right? You can check for this.
+
+Should I force forward declarations exist? (such as in "normal" C)
+
+Yes.
+
+Is method overloading permitted?
+
+Assume it is allowed.
+
+In addition when can we meet for grading of the previous assignments?
+I prefer at the beginning (8/8.30) or at the end (17.30/18) of the day, any weekday but Friday. Currently I am working on my thesis in a company and therefore my availability is unfortunately more restricted.
