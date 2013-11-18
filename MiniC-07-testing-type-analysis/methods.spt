@@ -69,6 +69,7 @@ test method name resolution [[
 // on method overriding. Similar to previous test cases,
 // you can pair up positive (0 errors) and negative test cases.
 
+// Day 05 Testing Name Analysis includes tests on forward declarations
 // Assuming method overloading is acceptable
 test correct program[[
   int foo(){return 0;}

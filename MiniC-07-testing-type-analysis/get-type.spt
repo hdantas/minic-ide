@@ -1,4 +1,4 @@
-module type-of
+module get-type
 
 language MiniC
 start symbol Program
