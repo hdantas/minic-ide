@@ -81,6 +81,19 @@ test integer literal type [[
 test integer literal type [[
   int main() {
     int a;
+    if ([[1 < 2]])
+      a = 0;
+    else
+      a = 1;
+      
+     return a;
+  }
+  0
+]] run get-type to Int()
+
+test integer literal type [[
+  int main() {
+    int a;
     if (1 < [[2]])
       a = 0;
     else
@@ -98,6 +111,17 @@ test integer literal type [[
     a = 0;
     while (a < [[4]])
       a = a + 1;
+    return a;
+  }
+  0
+]] run get-type to Int()
+
+test integer literal type [[
+  int main() {
+    int a;
+    a = 0;
+    while ([[5 < 4]])
+      a = 1;;
     return a;
   }
   0
@@ -406,6 +430,19 @@ test variable reference integer type [[
   0
 ]] run get-type to Int()
 
+test int literal type [[
+  int main() {
+    int a;
+    a = 1;
+    if ([[1 < a]])
+      a = 0;
+    else
+      a = 1;
+      
+     return a;
+  }
+  0
+]] run get-type to Int()
 
 test variable reference integer type [[
   int main() {
@@ -419,6 +456,33 @@ test variable reference integer type [[
   }
   0
 ]] run get-type to Int()
+
+test variable reference integer type [[
+  int main() {
+    int a;
+    a = 0;
+    int b;
+    b = 4;
+    while ([[a < b]])
+      a = a + 1;
+    return a;
+  }
+  0
+]] run get-type to Int()
+
+test variable reference float type [[
+  int main() {
+    int a;
+    a = 0;
+    float b;
+    b = 4.2;
+    while ([[a < b]])
+      a = a + 1;
+    return a;
+  }
+  0
+]] run get-type to Int()
+
 
 test variable reference integer type [[
   int main() {
