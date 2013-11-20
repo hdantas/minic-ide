@@ -1,0 +1,38 @@
+Specify type analysis for MiniJava in NaBL, TS and Stratego and generate an Eclipse editor from it. The specification should include:
+
+1. Name binding rules for
+	this expressions,
+	method declarations and
+	method calls.
+2. Typing rules for
+	integer and boolean literals,
+	unary and binary expressions,
+	variable and field references,
+	object creation,
+	this expressions,
+	and method calls.
+3. Custom constraint rules for type errors in
+	expressions,
+	statements and
+	method declarations.
+
+
+name binding (15 points)
+	this expressions (5 points)
+	method declarations (4 points)
+	method calls (6 points)
+typing rules (25 points)
+	unary expressions (5 points)
+	binary expressions (10 points)
+	object creation (1 point)
+	this expression (2 points)
+	variable and field references (2 points)
+	method call (5 points)
+constraints (30 points)
+	expressions (10 points)
+	statements and method declarations (20 points)
+challenge (5 points)
+
+You can earn up to 10 points for your messages in errors and warnings. We particular focus on readibility, precision, and the level of detail in your messages.
+
+Finally, you can earn up to 5 points for the organisation of your NaBL, TS and Stratego files and up to 10 points for the quality of your code. We focus on readibility in general, meaningful variable names and the consistent use of NaBL Stratego paragdims. We will consider the fact that both languages are new to you.
