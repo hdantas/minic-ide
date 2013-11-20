@@ -41,26 +41,26 @@ test method name resolution [[
   0
 ]] resolve #2 to #1
 
-test method name resolution [[
-  int foo() { return 0; }
-  int main(){ return [[foo]](1); }
-  int [[foo]](int a) { return a; }
-  0
-]] resolve #1 to #2
+// test method name resolution [[
+//   int foo() { return 0; }
+//   int main(){ return [[foo]](1); }
+//   int [[foo]](int a) { return a; }
+//   0
+// ]] resolve #1 to #2
+
+// test method name resolution [[
+//   int main(){ return [[foo]](1); }
+//   int foo() { return 0; }
+//   int [[foo]](int a) { return a; }
+//   0
+// ]] resolve #1 to #2
 
 test method name resolution [[
-  int main(){ return [[foo]](1); }
-  int foo() { return 0; }
-  int [[foo]](int a) { return a; }
-  0
-]] resolve #1 to #2
-
-test method name resolution [[
-  float main(){ return [[foo]](1.0, 0); }
   float foo(int a, float b) { return a; }
   float [[foo]](float a, int b) { return a; }
+  float main(){ return [[foo]](1.0, 0); }
   0
-]] resolve #1 to #2
+]] resolve #2 to #1
 
 // %% Method errors %%
 // You should also come up with test cases for error checking on method names.
@@ -104,6 +104,12 @@ test undefined function [[
   int foo(float a, int b){ return 0;}
   int foo(int a, float b){ return 0;}
   [[foo]](0.1, 0.1)
+]] 1 error
+
+test undefined function [[
+  int foo(float a, int b){ return [[bar]]();}
+  int bar(){ return 0;}
+  
 ]] 1 error
 
 test error on duplicate function with same signature [[

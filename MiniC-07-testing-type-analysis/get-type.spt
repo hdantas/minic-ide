@@ -121,7 +121,7 @@ test integer literal type [[
     int a;
     a = 0;
     while ([[5 < 4]])
-      a = 1;;
+      a = 1;
     return a;
   }
   0
@@ -430,7 +430,7 @@ test variable reference integer type [[
   0
 ]] run get-type to Int()
 
-test int literal type [[
+test variable reference integer type [[
   int main() {
     int a;
     a = 1;
