@@ -133,6 +133,16 @@ test integer literal type [[
 ]] run get-type to Int()
 
 test integer literal type [[
+  int main() { return [[sizeof(4)]]; }
+  0
+]] run get-type to Int()
+
+test integer literal type [[
+  int main() { return [[sizeof(4.2)]]; }
+  0
+]] run get-type to Int()
+
+test integer literal type [[
   int main() { return [[4 + 1]]; }
   0
 ]] run get-type to Int()
@@ -169,6 +179,24 @@ test float literal type [[
   int main() {
     float a;
     a = [[4.2]];
+    return 0;
+  }
+  0
+]] run get-type to Float()
+
+test float literal type [[
+  int main() {
+    float a;
+    a = [[4.1 + 0.1]];
+    return 0;
+  }
+  0
+]] run get-type to Float()
+
+test float literal type [[
+  int main() {
+    float a;
+    a = [[4.0 + 2]];
     return 0;
   }
   0
@@ -389,6 +417,15 @@ test variable reference integer type [[
 ]] run get-type to Int()
 
 test variable reference integer type [[
+  int main() {
+    int a;
+    a = 4;
+    return [[a + 2]];
+  }
+  0
+]] run get-type to Int()
+
+test variable reference integer type [[
   int a;
   int main() {
     a = 4;
@@ -504,7 +541,7 @@ test variable reference integer type [[
 test variable reference integer type [[
   int main() {
     int a; a = 4;
-    return [[(a)]];
+    return ([[a]]);
   }
   0
 ]] run get-type to Int()

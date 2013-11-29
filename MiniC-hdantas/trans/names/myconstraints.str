@@ -110,7 +110,7 @@ rules //duplicates
     FunctionDef(_, f, p, _, _) -> <fail>
     where
       task := <nabl-lookup-lexical(|ctx)> f
-    ; msg  := $[Duplicate Function [f]] 
+    ; msg  := $[Duplicate Function [f].] 
     ; <task-create-error-on-multiple(|ctx, task, msg)> f
 
 
@@ -145,7 +145,7 @@ rules //hiding
     ; msg  := $[Argument array [v] is hiding previous definition]
     ; <task-create-warning-on-success(|ctx, task, msg)> v
       
-      
+/* TS file already does this      
 rules //wrong types      
     nabl-constraint(|ctx): //assigning wrong type
     Assignment(v, e) -> <fail>
@@ -192,10 +192,10 @@ rules //wrong types
     nabl-constraint(|ctx): //checking return type of a function
     FunctionDef(t, _, _, _, r) -> <fail>
     where
-      fun-type := <type-lookup(|ctx)> t
-    ; ret-type := <type-lookup(|ctx)> r
+      ret-type := <type-lookup(|ctx)> r
     ; match    := <type-match(|ctx, t)> ret-type
     ; msg      := ["Error! Function should return type ", t, ". Returning ", ret-type, "."]
     ; <task-create-error-on-failure(|ctx, match, msg)> r
     
-      
+ */
+ 

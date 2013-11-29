@@ -23,7 +23,7 @@ imports
 	editor/outline
 	editor/builders
 	analysis/desugar
-  type
+  trans/type-ts.generated
 
 rules // Analysis
 	

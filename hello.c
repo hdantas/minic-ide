@@ -19,7 +19,8 @@ int main(){
 
     //root->next = 0;
     //root->x = 5;
-
-	printf("Hello World!\n");
+	int a = sizeof(int);
+	int b = sizeof(int[5]);
+	printf("Hello World! a = %d, b = %d\n", a, b);
 	return 0;
 }

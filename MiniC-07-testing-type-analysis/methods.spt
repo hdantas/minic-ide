@@ -109,7 +109,7 @@ test undefined function [[
 test undefined function [[
   int foo(float a, int b){ return [[bar]]();}
   int bar(){ return 0;}
-  
+  0
 ]] 1 error
 
 test error on duplicate function with same signature [[

@@ -1,0 +1,15 @@
+module testing
+
+language MiniC
+start symbol Program
+
+test [[
+
+int foo(int a, float b) {
+  int a;
+  a = ([[1]]) + 1;
+  return 1;
+}
+  
+0
+]] run get-type to Struct("Bar")

@@ -1,4 +1,4 @@
-module type
+module type-str
 
 imports
   include/MiniC
@@ -21,7 +21,7 @@ rules // unary and binary expressions
   ; task-returned := <new-task(|ctx)> Rewrite("return-types", task0)   // corresponding return types
   ; task2 := <type-match(|ctx, task1)> task-expected                   // match expected and actual subexp type
   ; task3 := <new-task(|ctx)> Rewrite("return-un-type", (task2, task0))
-  ; msg  := ["The unary operator is not expection a subexpression of type: ", task1, ".
+  ; msg  := ["The unary operator is not expecting a subexpression of type: ", task1, ".
     Only accepts one of the following: ", task-expected, "."]
   ; <task-create-error-on-failure(|ctx, task2, ["Type match failure. ", msg])> e1
   // ; <task-create-error-on-success(|ctx, task2, ["Type match success.", msg])> e1  

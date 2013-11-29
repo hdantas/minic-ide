@@ -1,5 +1,5 @@
 C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\include/minic.ctree: \
-	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/type.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/type-ts.generated.str \
 	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/analysis/desugar.str \
 	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/editor/builders.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/editor/outline-library.str \
