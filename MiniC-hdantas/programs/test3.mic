@@ -1,20 +1,13 @@
-int s;
+int k[5];
 
-float main ()
-{
-  int x;
-  int s;
-  
-	x = x * 1 + 2;
-	x = 1 + 2;
-	x = 2 < 1;
-	x = 2 && 1;
-	
-	x = +1;
-	x = -1;
-	x = 021;
-	
+float foo(float a, float b){return 1.0;}
+
+int main() {
+  int a;
+  float b;
+  b = foo(1.0, 1.0);
+
   return 0;
 }
 
-s
+k[5] + 1.0

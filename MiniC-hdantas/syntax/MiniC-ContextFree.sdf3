@@ -42,6 +42,7 @@ module MiniC-ContextFree
     ArrayType.ArrayFloat              = <float>
     Type.Int                          = <int>
     Type.Float                        = <float>
+    // Type.Struct                       = <struct <ID; text="StructName">>
     Type.Struct                       = <struct <ID; text="StructName">>
 
     Statement                         = <<VarDec>>
@@ -61,7 +62,7 @@ else
 >
 
     Statement.PrintfInt               = <printf("%i", <Exp; text="IntegerVar">);>
-    Statement.PrinfFloat              = <printf("%f", <Exp; text="FloatVar">);>
+    Statement.PrintfFloat              = <printf("%f", <Exp; text="FloatVar">);>
     Statement.CodeBlock               = <{
 <Statement*; separator="\n">
 }>

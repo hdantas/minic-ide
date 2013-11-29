@@ -1,14 +1,11 @@
-
-struct Bar {
-  int a;
-};
-
-int s;
-
-int main() {
-  int s;
-  float a;
-  return 4.2;
+float foo(int a, float b){
+  return 10;
 }
 
-0
+int main() {
+  int l;  
+  l = foo(1, 1.1);
+  return 0;
+}
+
+1000

@@ -82,7 +82,7 @@ regular tree grammar
     Exp                    -> IntConst(INT)
     Exp                    -> OctalConst(OCTAL)
     Statement              -> CodeBlock(ListStarOfStatement0)
-    Statement              -> PrinfFloat(Exp)
+    Statement              -> PrintfFloat(Exp)
     Statement              -> PrintfInt(Exp)
     Statement              -> While(Exp,Statement)
     Statement              -> IfElse(Exp,Statement,Statement)

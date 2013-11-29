@@ -23,7 +23,7 @@ exports
     "if" "(" Exp ")" Statement "else" Statement                          -> Statement   {cons("IfElse")}
     "while" "(" Exp ")" Statement                                        -> Statement   {cons("While")}
     "printf(" "\"" "%i" "\"" "," Exp ");"                                -> Statement   {cons("PrintfInt")}
-    "printf(" "\"" "%f" "\"" "," Exp ");"                                -> Statement   {cons("PrinfFloat")}
+    "printf(" "\"" "%f" "\"" "," Exp ");"                                -> Statement   {cons("PrintfFloat")}
     "{" Statement* "}"                                                   -> Statement   {cons("CodeBlock")}
     OCTAL                                                                -> Exp         {cons("OctalConst")}
     INT                                                                  -> Exp         {cons("IntConst")}
