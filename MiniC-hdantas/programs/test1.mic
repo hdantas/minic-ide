@@ -1,11 +1,24 @@
-float foo(int a, float b){
-  return 10;
+
+struct bar {float a;};
+struct foo {struct bar a;};
+
+float foo(float m, int a) {
+  int l;
+  l = a;
+  return m;
 }
 
-int main() {
-  int l;  
-  l = foo(1, 1.1);
-  return 0;
+int foo(int m, int a) { return a;}
+
+float main(float n, int y) {
+  struct foo f;
+  float a; 
+  f.a = 2.0;
+  a = 1.0;
+  
+  return f.a; 
 }
 
-1000
+
+
+ 0

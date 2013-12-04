@@ -1,14 +1,20 @@
+Overloading:
+	using properties
+	on the call(c, _) refer to the properties of variables so it works with overloading
+	in functiondef remove type(p, t) since it will not work anymore. have to look at the properties instead
+
+
 You can earn up to 75 points for the correctness of your name and type analysis. Therefor, we run several test cases against your implementation. You earn points, when your implementation passes test cases. The total number of points depends on how many test cases you pass in each of the following groups:
 
-name binding (5 points)
-	inheritance (5 points)
+// name binding (5 points)
+	// inheritance (5 points) - NOT APPLICABLE
 subtyping (25 points)
 	parent types (15 points)
 	ancestor types (10 points)
 constraints (40 points)
-	hiding variables and fields (5 points)
+	// hiding variables and fields (5 points) - DONE ALREADY
 	method overloading and method overriding (20 points)
-	cyclic inheritance (10 points)
+	// cyclic inheritance (10 points)
 	subtyping in assignments, return expressions, method calls (5 points)
 challenge (using TS) (5 points)
 

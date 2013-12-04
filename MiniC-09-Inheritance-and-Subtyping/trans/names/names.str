@@ -116,7 +116,7 @@ rules
           , uri__
           , NablNsStruct()
           , Unique()
-          , [Subsequent()]
+          , Current()
           , [NablNsField()]
           , []
           )
@@ -190,7 +190,7 @@ rules
           , uri__
           , NablNsField()
           , Unique()
-          , [Subsequent()]
+          , Current()
           , []
           , []
           )
@@ -235,7 +235,7 @@ rules
           , uri__
           , NablNsField()
           , Unique()
-          , [Subsequent()]
+          , Current()
           , []
           , []
           )
@@ -328,7 +328,7 @@ rules
           , uri__
           , NablNsVariable()
           , Unique()
-          , [Subsequent()]
+          , Current()
           , []
           , []
           )
@@ -373,7 +373,7 @@ rules
           , uri__
           , NablNsVariable()
           , Unique()
-          , [Subsequent()]
+          , Current()
           , []
           , []
           )
@@ -420,7 +420,7 @@ rules
           , uri__
           , NablNsVariable()
           , Unique()
-          , [Subsequent()]
+          , Current()
           , []
           , []
           )
@@ -465,7 +465,7 @@ rules
           , uri__
           , NablNsVariable()
           , Unique()
-          , [Subsequent()]
+          , Current()
           , []
           , []
           )
@@ -612,7 +612,7 @@ rules
           , uri__
           , NablNsVariable()
           , Unique()
-          , [Subsequent()]
+          , Current()
           , [NablNsVariable()]
           , []
           )

@@ -5,11 +5,16 @@ start symbol Program
 
 test [[
 
-int foo(int a, float b) {
+struct Foo {float a;};
+
+int foo(int i){ return 0;}
+
+float main(){
+  struct Foo f;
   int a;
-  a = ([[1]]) + 1;
-  return 1;
+  return [[f.a]];
 }
+
   
 0
-]] run get-type to Struct("Bar")
+]] run get-type to Foo()

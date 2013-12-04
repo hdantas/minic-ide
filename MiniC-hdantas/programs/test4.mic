@@ -1,4 +1,4 @@
-/*
+
 
 struct Point {
   int x;
@@ -6,10 +6,10 @@ struct Point {
 };
 
 int x;
-int main (float a, int b[], float c )
+int main (int a, int b, int c )
 {
   struct Point p;
-  int d;    int e;    float x;    int f [5];
+  int d;    int e;    int x;    int f [5];
   int g;
 
   if (a < 3){
@@ -19,18 +19,14 @@ int main (float a, int b[], float c )
       a = d + 1;    
   } else {b = b + 1;}
   
-  printf( " %f" , a);
+  printf( " %f" , 1.0);
   return a;
 }
 
-int b() {
+int main() {
   return 0;
 }
 
 
 
 x
-
-*/
-
-0
