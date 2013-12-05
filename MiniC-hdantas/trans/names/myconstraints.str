@@ -113,7 +113,7 @@ rules //duplicates
     FunctionDef(t, f, p, _, _) -> <fail>
     where
       type-local := <type-task(|ctx)> p                                 // lookup parameter types current function
-    ; task := <nabl-lookup-lexical-parent(|ctx, parameter-types)> f                      // Lookup other functions with the same name
+    ; task := <nabl-lookup-lexical(|ctx)> f                      // Lookup other functions with the same name
     ; type-other := <type-lookup(|ctx)> task                                 // Retrieve their types
     // ; type-other := <new-task(|ctx)> Rewrite("parameter-types", task2)  // Rewrite tasks for the parameter types
     ; match := <type-match(|ctx, type-other)> type-local

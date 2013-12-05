@@ -2,7 +2,7 @@
 struct bar {float a;};
 struct foo {struct bar a;};
 
-float foo(float m, int a) {
+int foo(float m, int a) {
   int l;
   l = a;
   return m;
