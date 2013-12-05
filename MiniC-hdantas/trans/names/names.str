@@ -588,17 +588,17 @@ rules
 rules
 
   nabl-get-scope =
-    ?FunctionDef(t, f, p, _, _)
+    ?FunctionDef(t, f, p*, _, _)
     ; ![NablNsVariable()]
 
   nabl-get-name :
-    FunctionDef(t, f, p, _, _) -> f
+    FunctionDef(t, f, p*, _, _) -> f
 
   nabl-name-apply(s) =
     FunctionDef(id, s, id, id, id)
 
   nabl-def-site(child-uris__, sibl-uris__, implicits__|lang__, partition__, uniques__, uri__, states__) =
-    ?FunctionDef(t, f, p, _, _)
+    ?FunctionDef(t, f, p*, _, _)
     ; origin-track-forced(
         FunctionDef(
           id
@@ -627,9 +627,9 @@ rules
       )
 
   nabl-prop-site(|lang__, partition__, uris__, states__, implicits__) =
-    ?FunctionDef(t, f, p, _, _)
+    ?FunctionDef(t, f, p*, _, _)
     ; origin-track-forced(
-        where(r1-1-1__ := <get-property-task(|Type())> p)
+        where(r1-1-1__ := <get-property-task(|Type())> p*)
         ; FunctionDef(
             id
           , nabl-store-props(
