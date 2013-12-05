@@ -1,5 +1,0 @@
-Problems:
-
-going up multiple levels of scopes
-if i put subsequent scopes everywhere they I start having failed resolution or duplicate parameters. moreover lookup-parent only lookup the previous function not all of them
-
