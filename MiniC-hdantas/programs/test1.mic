@@ -2,23 +2,14 @@
 struct bar {float a;};
 struct foo {struct bar a;};
 
-float foo(float m, int a) {
+struct bar f;
+int foo(int m, int a) {
+  struct foo f;
+  f.a = 2.0;
+  
   int l;
   l = a;
   return m;
 }
 
-int foo(int m, int a) { return a;}
-
-float main(float n, int y) {
-  struct foo f;
-  float a; 
-  f.a = 2.0;
-  a = 1.0;
-  
-  return f.a; 
-}
-
-
-
- 0
+0

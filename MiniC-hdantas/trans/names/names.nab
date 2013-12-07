@@ -60,13 +60,13 @@ binding rules // Function (shares the namespace with variable)
   //   where params has type pt
   //   scopes Variable
   
-  FunctionDef(t, f, p, _, _) :
+  FunctionDef(t, f, p*, _, _) :
     defines Variable f
       of type t 
-      of parameter-types pt
+      of parameter-types pt*
       in subsequent scope
     where
-      p has type pt
+      p* has type pt*
     scopes Variable  
   
 

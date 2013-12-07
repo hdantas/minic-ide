@@ -1,117 +1,117 @@
-C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\include/minic.ctree: \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/type-ts.generated.str \
-	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/analysis/desugar.str \
-	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/editor/builders.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/editor/outline-library.str \
-	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/editor/outline.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/MiniC-ContextFree.pp.generated.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/MiniC-Lexical.pp.generated.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/MiniC.pp.generated.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/include/MiniC-parenthesize.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/tmpl/pp.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/pp.str \
-	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/generate.str \
-	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/check.str \
-	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/names/types.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/types/query.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/new-messages.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/constraints.str \
-	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/names/myconstraints.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/queue.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/positions.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/interop.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/editor.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/annotations.str \
-	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/names/names.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/index/utils.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/index/query.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/index/partition.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/index/legacy.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/index/globals.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/index/core.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/task/utils.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/task/tasks.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/task/new-messages.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/task/messages.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/task/interface.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/task/debug.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/task/core.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/types/query.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/types/interface.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/types/collect.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/properties/tasks.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/properties/query.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/properties/interface.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/properties/eq.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/properties/entries.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/properties/collect.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/utils.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/uri.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/tasks.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/resolve.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/query.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/namegen.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/lookup.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/interface.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/incremental.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/entries.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/constraints.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/complete.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/collect.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/check.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/single.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/resolve.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/analysis/defaults.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/reanalysis.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/multiple.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/interface.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/editor/queue.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/analysis/multiple.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/analysis/single.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/analysis/core.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/defaults.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/editor/interop.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/debug.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/debug.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/analysis/interface.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/core.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/index/utils.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/index/core.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/core.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/uri.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/types/interface.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/types/collect.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/properties/tasks.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/properties/entries.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/properties/collect.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/utils.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/interface.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/namegen.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/check.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/resolve.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/entries.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/properties/interface.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/properties/query.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/properties/eq.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/incremental.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/index/query.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/query.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/lookup.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/utils.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/tasks.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/messages.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/interface.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/tasks.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/collect.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/complete.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/complete.str \
+H:\My Documents\compiler-construction-lab\MiniC-hdantas\include/minic.ctree: \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/trans/type-ts.generated.str \
+	H:/My Documents/compiler-construction-lab/MiniC-hdantas/trans/analysis/desugar.str \
+	H:/My Documents/compiler-construction-lab/MiniC-hdantas/trans/editor/builders.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/editor/outline-library.str \
+	H:/My Documents/compiler-construction-lab/MiniC-hdantas/trans/editor/outline.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/trans/MiniC-ContextFree.pp.generated.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/trans/MiniC-Lexical.pp.generated.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/trans/MiniC.pp.generated.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/include/MiniC-parenthesize.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/tmpl/pp.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/trans/pp.str \
+	H:/My Documents/compiler-construction-lab/MiniC-hdantas/trans/generate.str \
+	H:/My Documents/compiler-construction-lab/MiniC-hdantas/trans/check.str \
+	H:/My Documents/compiler-construction-lab/MiniC-hdantas/trans/names/types.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/types/query.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/new-messages.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/constraints.str \
+	H:/My Documents/compiler-construction-lab/MiniC-hdantas/trans/names/myconstraints.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/annotations.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/queue.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/positions.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/interop.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/editor.str \
+	H:/My Documents/compiler-construction-lab/MiniC-hdantas/trans/names/names.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/index/utils.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/index/query.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/index/partition.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/index/legacy.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/index/globals.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/index/core.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/task/new-messages.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/task/utils.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/task/tasks.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/task/messages.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/task/interface.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/task/debug.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/task/core.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/types/query.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/types/interface.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/types/collect.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/properties/tasks.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/properties/query.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/properties/interface.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/properties/eq.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/properties/entries.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/properties/collect.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/utils.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/uri.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/tasks.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/resolve.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/query.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/namegen.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/lookup.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/interface.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/incremental.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/entries.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/constraints.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/complete.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/collect.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/nabl/check.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/single.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/resolve.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/analysis/defaults.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/reanalysis.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/multiple.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/interface.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/editor/queue.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/analysis/multiple.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/analysis/single.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/analysis/core.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/defaults.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/editor/interop.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/debug.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/debug.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/analysis/interface.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/core.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/index/utils.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/index/core.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/core.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/uri.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/types/interface.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/types/collect.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/properties/tasks.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/properties/entries.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/properties/collect.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/utils.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/interface.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/namegen.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/check.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/resolve.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/entries.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/properties/interface.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/properties/query.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/properties/eq.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/incremental.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/index/query.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/query.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/lookup.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/utils.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/tasks.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/messages.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/interface.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/tasks.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/collect.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/complete.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/analysis/complete.str \
 	 \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/editor-common.generated.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/origins.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/editor/annotations.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/editor/editor.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/editor/origins.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/outline-library.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/editor/MiniC-Outliner.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/include/MiniC.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\trans/minic.str
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/editor-common.generated.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/origins.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/editor/annotations.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/editor/editor.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\lib/runtime/editor/origins.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/outline-library.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/editor/MiniC-Outliner.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas/include/MiniC.str \
+	H:\My Documents\compiler-construction-lab\MiniC-hdantas\trans/minic.str
