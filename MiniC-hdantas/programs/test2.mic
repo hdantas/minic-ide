@@ -4,8 +4,7 @@ struct foo {
  };
 
 int main(){
-  struct foo f;
-  f.x = 1;
+
   return 0;
 }
  

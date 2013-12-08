@@ -1,4 +1,4 @@
-module names/names
+module analysis/names
 
 imports
   lib/runtime/nabl/-
@@ -7,7 +7,7 @@ imports
   lib/runtime/types/-
   lib/runtime/editor/-
   include/MiniC
-  names/types
+  analysis/types
   analysis/desugar
 
 

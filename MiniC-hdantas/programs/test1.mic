@@ -1,15 +1,7 @@
 
-struct bar {float a;};
-struct foo {struct bar a;};
-
-struct bar f;
-int foo(int m, int a) {
-  struct foo f;
-  f.a = 2.0;
-  
-  int l;
-  l = a;
-  return m;
+int main(){
+  printf("%i", 0);
+  return 0;
 }
 
 0

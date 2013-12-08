@@ -1,8 +1,8 @@
-module names/names
+module analysis/names
 
 imports
   include/MiniC
-  names/types
+  analysis/types
   analysis/desugar
   
 namespaces

@@ -1,4 +1,21 @@
 C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\include/minic.ctree: \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/jasmin/JasminXT-pp.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/jasmin/JasminXT.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/codegen.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/analysis/types.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/analysis/names.str \
+	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/analysis/types.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/queue.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/positions.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/interop.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/editor.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/annotations.str \
+	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/analysis/names.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/types/query.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/new-messages.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/constraints.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/analysis/myconstraints.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/analysis/desugar.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/type-ts.generated.str \
 	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/analysis/desugar.str \
 	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/editor/builders.str \
@@ -12,17 +29,6 @@ C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\include/minic.ct
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/pp.str \
 	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/generate.str \
 	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/check.str \
-	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/names/types.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/types/query.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/task/new-messages.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\lib/runtime/nabl/constraints.str \
-	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/names/myconstraints.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/queue.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/positions.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/interop.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/editor.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/editor/annotations.str \
-	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/names/names.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/index/utils.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/index/query.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/runtime/index/partition.str \

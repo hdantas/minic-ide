@@ -1,4 +1,4 @@
-module names/myconstraints
+module analysis/myconstraints
 
 imports
 
@@ -6,9 +6,8 @@ imports
   runtime/nabl/-
   runtime/task/-
   runtime/types/-
-  names/names
   analysis/desugar
-  names/names
+  analysis/names
  
 
 strategies

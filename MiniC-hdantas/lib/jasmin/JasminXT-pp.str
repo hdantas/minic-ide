@@ -1,0 +1,12 @@
+module JasminXT-pp
+
+imports
+	libstratego-gpp
+  libstratego-aterm
+
+rules
+	
+	pp-jasminxt-string =
+    ast2abox(|[<import-term(lib/jasmin/JasminXT.generated.pp.af)>,
+               <import-term(lib/jasmin/JasminXT.pp.af)>]);
+    box2text-string(|100)
