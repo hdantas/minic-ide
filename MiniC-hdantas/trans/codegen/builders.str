@@ -1,0 +1,80 @@
+module codegen/builders
+
+imports
+	lib/editor-common.generated
+	lib/jasmin/JasminXT
+	codegen/codegen
+	lib/jasmin/JasminXT-pp
+	
+rules
+	 write-file:
+	   (filename, content) -> newfilename
+	 with
+	    newfilename := <guarantee-extension(|"j")> filename
+	 ;  fd := <fopen> (newfilename, "w")
+	 ; <fputs> (content, fd)
+	 ; <fclose> fd
+	 ; <refresh-workspace-file> newfilename
+	   
+	      
+	// Generates the Java class file
+	generate-class:
+		(selected, position, ast, path, project-path) -> None()
+		with
+		  (filename, ast') := <generate-class-files> (selected, position, ast, path, project-path)
+		; path' := <write-file> (path, ast')
+		;	parentdir := <dirname> path'
+		;	<try(call)> ("java", ["-jar", $[[<project-path>]/lib/jasmin.jar], "-d", parentdir, path'])
+		// where
+		// 	cfname := <concat-strings ; guarantee-extension(|"class")> [project-path, "/", <dirname> path', "/", <class-name> ast'] ;
+		// 	<refresh-workspace-file> cfname
+			
+	execute-class:
+		(selected, position, ast, path, project-path) -> (filename, result)
+		with
+			filename := <guarantee-extension(|"result.txt")> path
+		with
+			cname := <class-name ; string-replace(|"/",".")> ast ;
+			cpath := <concat-strings> [project-path, "/", <dirname> path] ;
+			<execute-java(|cpath) ; process-output> cname => result
+		
+	class-name: JBCFile(JBCHeader(_, _, JBCClass(_, name), _, _, _, _, _), _, _) -> name	
+	
+	process-output: Output(result, "") -> result
+
+	process-output: Output(result, error) -> $[[result] Runtime error: [error]]
+		where not (<""> error)
+		
+signature constructors
+	
+	Output: String * String -> Term
+
+strategies
+	
+	external execute-java(|path)
+	external execute-jasmin(|)
+
+
+rules
+
+  generate-class-files:
+    (selected, position, ast, path, project-path) -> (filename, result)
+  with
+    filename := <guarantee-extension(|"mic.class")> path
+  ; jbc      := <program-to-jbc> ast
+  ; result   := <pp-jasminxt-string> jbc    
+  
+    
+  generate-jbc:
+    (selected, position, ast, path, project-path) -> (filename, result)
+  with
+    filename := <guarantee-extension(|"mic.j")> path
+  ; jbc      := <program-to-jbc> ast
+  ; result   := <pp-jasminxt-string> jbc
+    
+  partial-generate-jbc:
+    (selected, position, ast, path, project-path) -> (filename, result)
+  with
+    filename := <guarantee-extension(|"mic.j")> path
+  ; jbc      := <to-jbc> selected
+  ; result   := <pp-jasminxt-string> jbc

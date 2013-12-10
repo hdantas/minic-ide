@@ -24,5 +24,7 @@ menus
     
     action: "Generate Java Bytecode"              = generate-jbc (openeditor) (meta)
     action: "Partially Generate Java Bytecode"    = partial-generate-jbc (openeditor) (meta)
-    
+    action: "Generate Java Class File"            = generate-class (source)
+    action: "Execute"                             = execute-class (openeditor)
+    // action: "Generate Java Class Files"           = //In MiniC there will never be more than one class
     
