@@ -1,7 +1,6 @@
-
-int bar(){
-  printf("%i", 4);
-  return 1;
+int barfoo(){
+  printf("%i", 1);
+  return 0;
 }
 
-0
+5

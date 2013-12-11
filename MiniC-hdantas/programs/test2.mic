@@ -1,11 +1,12 @@
-struct foo {
-  int x;
-  int y;
- };
+int foo(){
+  printf("%f", 2.0);
+  printf("%f", 2.0);
+  return 1;
+}
 
-int main(){
-
-  return 0;
+int bar(){
+  printf("%f", 2.0);
+  return 1;
 }
  
-100
+3.1

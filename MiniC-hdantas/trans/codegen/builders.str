@@ -6,75 +6,75 @@ imports
 	codegen/codegen
 	lib/jasmin/JasminXT-pp
 	
-rules
-	 write-file:
-	   (filename, content) -> newfilename
-	 with
-	    newfilename := <guarantee-extension(|"j")> filename
-	 ;  fd := <fopen> (newfilename, "w")
-	 ; <fputs> (content, fd)
-	 ; <fclose> fd
-	 ; <refresh-workspace-file> newfilename
-	   
+rules // Class files
 	      
-	// Generates the Java class file
-	generate-class:
+	generate-class: // Generates the MiniC (single) class file and put in bin/
 		(selected, position, ast, path, project-path) -> None()
 		with
-		  (filename, ast') := <generate-class-files> (selected, position, ast, path, project-path)
-		; path' := <write-file> (path, ast')
-		;	parentdir := <dirname> path'
-		;	<try(call)> ("java", ["-jar", $[[<project-path>]/lib/jasmin.jar], "-d", parentdir, path'])
-		// where
-		// 	cfname := <concat-strings ; guarantee-extension(|"class")> [project-path, "/", <dirname> path', "/", <class-name> ast'] ;
-		// 	<refresh-workspace-file> cfname
-			
-	execute-class:
-		(selected, position, ast, path, project-path) -> (filename, result)
-		with
-			filename := <guarantee-extension(|"result.txt")> path
-		with
-			cname := <class-name ; string-replace(|"/",".")> ast ;
-			cpath := <concat-strings> [project-path, "/", <dirname> path] ;
-			<execute-java(|cpath) ; process-output> cname => result
-		
-	class-name: JBCFile(JBCHeader(_, _, JBCClass(_, name), _, _, _, _, _), _, _) -> name	
-	
-	process-output: Output(result, "") -> result
-
-	process-output: Output(result, error) -> $[[result] Runtime error: [error]]
-		where not (<""> error)
-		
-signature constructors
-	
-	Output: String * String -> Term
-
-strategies
-	
-	external execute-java(|path)
-	external execute-jasmin(|)
+		  (path', ast') := <generate-jbc> (selected, position, ast, path, project-path)
+		// ; path'         := <write-file> (path, ast')
+		;	parentdir     := <dirname> path
+		; dir           := $[[parentdir]/bin/[<base-filename> path']]
+		; <try(mkdir)> dir
+		;	<try(call)> ("java", ["-jar", $[[<project-path>]/lib/jasmin.jar], "-d", dir, path'])
+		where
+			cfname := <concat-strings ; guarantee-extension(|"class")> [project-path, "/", dir, "/", "Main"] ;
+			<refresh-workspace-file> cfname
 
 
-rules
-
-  generate-class-files:
-    (selected, position, ast, path, project-path) -> (filename, result)
-  with
-    filename := <guarantee-extension(|"mic.class")> path
-  ; jbc      := <program-to-jbc> ast
-  ; result   := <pp-jasminxt-string> jbc    
-  
+rules // Jamin bytecode
     
-  generate-jbc:
+  generate-jbc: // Generates the Jasmin bytecode file and put in src-gen/
     (selected, position, ast, path, project-path) -> (filename, result)
   with
-    filename := <guarantee-extension(|"mic.j")> path
-  ; jbc      := <program-to-jbc> ast
-  ; result   := <pp-jasminxt-string> jbc
+    parentdir := <dirname> path
+  ; dir       := $[[parentdir]/src-gen]
+  ; <try(mkdir)> dir
+  ; filename  := <guarantee-extension(|"j")> $[[dir]/[<base-filename> path]]
+  ; jbc       := <program-to-jbc> ast
+  ; result    := <pp-jasminxt-string> jbc
+  ; <write-file> (filename, result)
+
     
   partial-generate-jbc:
     (selected, position, ast, path, project-path) -> (filename, result)
   with
-    filename := <guarantee-extension(|"mic.j")> path
+    filename := <guarantee-extension(|"j")> path
   ; jbc      := <to-jbc> selected
   ; result   := <pp-jasminxt-string> jbc
+
+rules // Run class files
+
+  execute-class:
+    (selected, position, ast, path, project-path) -> None()
+    with
+      <generate-class> (selected, position, ast, path, project-path);
+      cname := "Main" ;
+      dirname := <base-filename; guarantee-extension(|"j")> path;
+      cpath := <concat-strings> [<dirname> path, "/bin/", dirname] ;
+      <call> ("java", ["-cp", cpath, "Main"])
+      // <process-output> Output => result
+
+  process-output: Output(result, "") -> result
+
+  process-output: Output(result, error) -> $[[result] Runtime error: [error]]
+    where not (<""> error)
+         
+signature constructors
+  
+  Output: String * String -> Term
+
+      
+    
+rules // Auxiliary
+  
+  rules
+   write-file:
+     (filename, content) -> filename
+   with
+     fd := <fopen> (filename, "w")
+   ; <fputs> (content, fd)
+   ; <fclose> fd
+   ; <refresh-workspace-file> filename
+     
+     
