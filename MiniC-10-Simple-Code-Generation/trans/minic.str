@@ -15,7 +15,6 @@ imports
 	lib/runtime/task/-
 	lib/runtime/index/-
 	
-	check
 	generate
 	trans/pp
 	editor/outline
@@ -42,8 +41,8 @@ rules // Analysis
 	analysis-multiple-default-interface = 
 		analysis-multiple-default(parse-file <+ !(), id, id, id|<language>, <project-path>)
 */	
-	editor-save = analysis-save-default(|<language>)
-
+	// editor-save = analysis-save-default(|<language>)
+  editor-save = where(analysis-save-default(|<language>)); generate-class
 rules // Editor services
 	
 	// Resolves a reference when the user control-clicks or presses F3 in the editor.

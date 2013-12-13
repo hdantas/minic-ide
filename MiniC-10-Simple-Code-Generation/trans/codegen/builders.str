@@ -1,0 +1,80 @@
+module codegen/builders
+
+imports
+	lib/editor-common.generated
+	lib/jasmin/JasminXT
+	codegen/codegen
+	lib/jasmin/JasminXT-pp
+	
+rules // Class files
+	      
+	generate-class: // Generates the MiniC (single) class file and put in bin/
+		(selected, position, ast, path, project-path) -> None()
+		with
+		  (path', ast') := <generate-jbc> (selected, position, ast, path, project-path)
+		// ; path'         := <write-file> (path, ast')
+		;	parentdir     := <dirname> path
+		; dir           := $[[parentdir]/bin/[<base-filename> path']]
+		; <try(mkdir)> dir
+		;	<try(call)> ("java", ["-jar", $[[<project-path>]/lib/jasmin.jar], "-d", dir, path'])
+		where
+			cfname := <concat-strings ; guarantee-extension(|"class")> [project-path, "/", dir, "/", "Main"] ;
+			<refresh-workspace-file> cfname
+
+
+rules // Jamin bytecode
+    
+  generate-jbc: // Generates the Jasmin bytecode file and put in src-gen/
+    (selected, position, ast, path, project-path) -> (filename, result)
+  with
+    parentdir := <dirname> path
+  ; dir       := $[[parentdir]/src-gen]
+  ; <try(mkdir)> dir
+  ; filename  := <guarantee-extension(|"j")> $[[dir]/[<base-filename> path]]
+  ; jbc       := <program-to-jbc> ast
+  ; result    := <pp-jasminxt-string> jbc
+  ; <write-file> (filename, result)
+
+    
+  partial-generate-jbc:
+    (selected, position, ast, path, project-path) -> (filename, result)
+  with
+    filename := <guarantee-extension(|"j")> path
+  ; jbc      := <to-jbc> selected
+  ; result   := <pp-jasminxt-string> jbc
+
+rules // Run class files
+
+  execute-class:
+    (selected, position, ast, path, project-path) -> None()
+    with
+      <generate-class> (selected, position, ast, path, project-path);
+      cname := "Main" ;
+      dirname := <base-filename; guarantee-extension(|"j")> path;
+      cpath := <concat-strings> [<dirname> path, "/bin/", dirname] ;
+      <call> ("java", ["-cp", cpath, "Main"])
+      // <process-output> Output => result
+
+  process-output: Output(result, "") -> result
+
+  process-output: Output(result, error) -> $[[result] Runtime error: [error]]
+    where not (<""> error)
+         
+signature constructors
+  
+  Output: String * String -> Term
+
+      
+    
+rules // Auxiliary
+  
+  rules
+   write-file:
+     (filename, content) -> filename
+   with
+     fd := <fopen> (filename, "w")
+   ; <fputs> (content, fd)
+   ; <fclose> fd
+   ; <refresh-workspace-file> filename
+     
+     

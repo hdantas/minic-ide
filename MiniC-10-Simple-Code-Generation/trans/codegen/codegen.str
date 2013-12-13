@@ -11,57 +11,77 @@ imports
   analysis/desugar
   analysis/names
   lib/jasmin/JasminXT
-  lib/jasmin/JasminXT-pp
+  
 
 rules
+  
 
-  generate-jbc:
-    (selected, position, ast, path, project-path) -> (filename, result)
-  with
-    filename := <guarantee-extension(|"jbc.mic")> path
-  ; result   := <program-to-jbc> ast
-    
-  partial-generate-jbc:
-    (selected, position, ast, path, project-path) -> (filename, result)
-  with
-    filename := <guarantee-extension(|"jbc.mic")> path
-  ; jbc      := <to-jbc> selected
-  ; result   := <pp-jasminxt-string> jbc
       
   exp-to-jbc: IntConst(i)   -> [LDC(i)]
-  // exp-to-jbc: FloatConst(f) -> [LDC(f)]
+  exp-to-jbc: FloatConst(f) -> [LDC(f)]
   
   // Provide a rule for stmt-to-jbc, which translates a print statement from MiniJava
   // into a sequence of Java bytecode instructions. This rule should call exp-to-jbc to
   // translate the expression inside the print statement to a Java bytecode sequence.
-  stmt-to-jbc: PrintfInt(i) -> instr
+  stmt-to-jbc: PrintfInt(i) -> instr*
   with
-    instr1 := "getstatic java/lang/System/out Ljava/io/PrintStream;" // push System.out onto the stack
-  ; instr2 := <exp-to-jbc> i                                         // push a string onto the stack
-  ; instr3 := "invokevirtual java/io/PrintStream/println(I)V"        // call the PrintStream.println() method.
-  ; instr  := [instr1, instr2, instr3]
+    header := "\n\tgetstatic java/lang/System/out Ljava/io/PrintStream;" // push System.out onto the stack
+  ; exp*   := <exp-to-jbc> i                                         // push a string onto the stack
+  ; print  := "\n\tinvokevirtual java/io/PrintStream/println(I)V"        // call the PrintStream.println() method.
+  ; instr* := [header, "\n", exp*, print]
       
-  // stmt-to-jbc: PrintfFloat(f) -> instr*
-  // with
-  //   instr1* := "getstatic java/lang/System/out Ljava/io/PrintStream;" // push System.out onto the stack
-  // ; instr2* := <exp-to-jbc> f                                         // push a string onto the stack
-  // ; instr3* := "invokevirtual java/io/PrintStream/println(I)V"        // call the PrintStream.println() method.
-  // ; instr*  := [instr1*, instr2*, instr3*]
-    
+  stmt-to-jbc: PrintfFloat(f) -> instr*
+  with
+    header := "\n\tgetstatic java/lang/System/out Ljava/io/PrintStream;" // push System.out onto the stack
+  ; exp*   := <exp-to-jbc> f                                         // push a string onto the stack
+  ; print  := "\n\tinvokevirtual java/io/PrintStream/println(F)V"        // call the PrintStream.println() method.
+  ; instr* := [header, "\n", exp*, print]
   
   // Provide a rule for class-to-jbc, which translates a main class from MiniJava
   // into a Jasmin class file. This rule should call stmt-to-jbc to translate the
   // statement inside the main method to a Java bytecode sequence.
-  function-to-jbc: FunctionDef(t, i, p, [s], e) -> instr
+  function-to-jbc: FunctionDef(t, i, p, [s], e*) -> instr*
   with
-    instr := <stmt-to-jbc> s
-  
+    header  := <concat-strings> ["\n\n.method public static ", i ,"([Ljava/lang/String;)V"] //only way to not get a space ' ' after i
+  ; stack   := "\n\t.limit stack 2"
+  ; stmt*   := <stmt-to-jbc> s
+  ; return  := "\n\treturn"
+  ; end     := "\n.end method"
+  ; instr*  := [header, stack, stmt*, return, end]
+
+  main-to-jbc: IntConst(i) -> instr* // the return value of the program is converted a printf on the main function
+  with
+    header  := "\n\n.method public static main([Ljava/lang/String;)V"
+  ; stack   := "\n\t.limit stack 2"
+  ; stmt*   := <stmt-to-jbc> PrintfInt(IntConst(i))
+  ; return  := "\n\treturn" 
+  ; end     := "\n.end method"
+  ; instr*  := [header, stack, stmt*, return, end]
+
+  main-to-jbc: FloatConst(i) -> instr* // the return value of the program is converted a printf on the main function
+  with
+    header  := "\n\n.method public static main([Ljava/lang/String;)V"
+  ; stack   := "\n\t.limit stack 2"
+  ; stmt*   := <stmt-to-jbc> PrintfFloat(FloatConst(i))
+  ; return  := "\n\treturn" 
+  ; end     := "\n.end method"
+  ; instr*  := [header, stack, stmt*, return, end]
+        
   // Provide a rule for program-to-jbc, which translates a MiniJava program into a
   // list of Jasmin class files. This rule should call class-to-jbc to translate the
   // main class of the program into a Jasmin class file.
-  program-to-jbc: File(t, v, [f], e) -> instr
+  program-to-jbc: File(t, v, [f], e) -> instr*
   with
-    instr := <function-to-jbc> f
+    header := ".class public Main\n.super java/lang/Object"
+  ; init  := "
+.method public <init>()V
+    aload_0
+    invokenonvirtual java/lang/Object/<init>()V
+    return
+.end method"
+  ; fun* := <function-to-jbc> f
+  ; main* := <main-to-jbc> e
+  ; instr* := [header, init, fun*, main*]
   
   
   to-jbc = program-to-jbc + function-to-jbc + stmt-to-jbc + exp-to-jbc
