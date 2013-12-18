@@ -1,17 +1,23 @@
-Automatic codegen?
+Automatic codegen? (from day 10)
 
-transformation (50 points)
-	-- program (2 points)
-	-- main class (18 points)
-	-- main method (13 points)
-	-- print statement (17 points)
-menu actions (15 points)
-	-- Jasmin (5 points)
-	-- Java class file (10 points)
+transformation (55 points)
+	classes (8 points)
+	methods (7 points)
+	statements (13 points)
+		block statements (2 points)
+		if statements (5 points)
+		while loops (6 points)
+	expressions (27 points)
+		logic constants (1 point)
+		unary expressions (5 points)
+		binary expressions (14 points)
+		object creation (1 point)
+		this expressions (1 point)
+		method calls (5 points)
 challenges (10 points)
-	-- target directories (4 points)
-	-- runner (6 points)
+	overlays (2 points)
+	reusable method descriptors (2 points)
+	stack limits (6 points)
 
 
-You can earn up to 5 points for the organisation of your Stratego files and up to 10 points for the quality of your code. We focus on readibility in general, meaningful variable names and the consistent use of Stratego paragdims. We will consider the fact that Stratego is new to you.
-
+You can earn up to 5 points for the organisation of your Stratego files and up to 5 points for the quality of your code. We focus on readibility in general, meaningful variable names and the consistent use of Stratego paragdims. We will consider the fact that Stratego is new to you.

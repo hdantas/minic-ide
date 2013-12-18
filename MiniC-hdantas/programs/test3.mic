@@ -1,6 +1,90 @@
-int foo(){
-  printf("%i", 2);
+struct barfoo{
+  int a;
+};
+
+// classes without fields.
+struct foobar{};
+
+
+int bar(int b){
   return 1;
+}
+
+ // methods without parameters and local variables,
+int bar() {
+  return 0;
+}
+
+
+
+int foo(){
+  
+// NOT APPLICABLE
+// this expressions,
+
+  int a;
+  // all kinds of unary and binary expressions,
+  a = +1;
+  a = -1;
+  a = !1;
+  a = sizeof(1);
+  
+  a = 1 + 1;
+  a = 1 - 1;
+  a = 1 * 1;
+  a = 1 && 1;
+  a = 1 < 1;
+
+// object creation,
+//   struct bar b;
+
+// method calls without arguments
+  a = bar();  
+  
+// block statements,
+{
+  printf("%i", 2);
+  printf("%f", 1.0);
+  printf("%i", 1);
+  {
+	  printf("%i", 2);
+	  printf("%f", 1.0);
+	  printf("%i", 1);
+	  {
+		  printf("%i", 2);
+		  {
+	      printf("%i", 2);
+	    }
+		}
+	  printf("%i", 2);
+	  printf("%f", 1.0);
+	  printf("%i", 1);
+  }
+  printf("%i", 2);
+  printf("%f", 1.0);
+  printf("%i", 1);
+}
+
+{}
+// if statements,
+  if (1)
+    printf("%i", 1);
+  else
+    printf("%i", 2);
+  
+  // while statements,
+  a = 0;
+  while (a < 2) {
+    a = a + 1;
+  }
+  
+
+  return 1;
+}
+
+int main(){
+  printf("%i", 2);
+  return 0;
 }
  
 9

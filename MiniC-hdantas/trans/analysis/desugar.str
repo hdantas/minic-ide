@@ -12,21 +12,21 @@ signature
   
   constructors
       
-	  Plus:    BinOp
-	  Minus:   BinOp
-	  Mul:     BinOp
-	  And:     BinOp
-	  Lt:      BinOp
+	  Plus   : BinOp
+	  Minus  : BinOp
+	  Mul    : BinOp
+	  And    : BinOp
+	  Lt     : BinOp
 	
-	  UPLUS:   UnOp
-	  UMINUS:  UnOp
-	  UNOT:    UnOp
-	  USIZEOF:    UnOp
+	  UPLUS  : UnOp
+	  UMINUS : UnOp
+	  UNOT   : UnOp
+	  USIZEOF: UnOp
 	    
-	  BinExp: BinOp * Exp * Exp -> Exp
-	  UnExp:  UnOp  * Exp -> Exp
+	  BinExp : BinOp * Exp * Exp -> Exp
+	  UnExp  : UnOp  * Exp -> Exp
 	  
-	  Field:  Var -> Var
+	  Field  : Var -> Var
   
 rules
 

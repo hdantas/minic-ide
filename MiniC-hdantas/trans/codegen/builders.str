@@ -25,7 +25,7 @@ rules // Class files
 rules // Jamin bytecode
     
   generate-jbc: // Generates the Jasmin bytecode file and put in src-gen/
-    (selected, position, ast, path, project-path) -> (filename, result)
+    (selected, position, ast, path, project-path) -> None() //(filename, result)
   with
     parentdir := <dirname> path
   ; dir       := $[[parentdir]/src-gen]

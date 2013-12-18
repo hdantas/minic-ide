@@ -1,32 +1,11 @@
-
-
-struct Point {
-  int x;
-  int y;
-};
-
-int x;
-int main (int a, int b, int c )
-{
-  struct Point p;
-  int d;    int e;    int x;    int f [5];
-  int g;
-
-  if (a < 3){
-      d = - 1;
-      c = b + 1;
-      b = c + 1;
-      a = d + 1;    
-  } else {b = b + 1;}
-  
-  printf( " %f" , 1.0);
-  return a;
-}
-
-int main() {
-  return 0;
+int foo() {
+  if(1){
+    printf("%i", 1);
+  }else{ 
+    printf("%i", 2);
+  }return 0;
 }
 
 
 
-x
+0
