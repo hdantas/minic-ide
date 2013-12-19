@@ -147,25 +147,31 @@ rules // day 11
 
   stmt-to-jbc: IfElse(cond, if-stmt, else-stmt) -> instr*
   with
-	  instr* := [
+    else-label := [<newname>]
+  ; end-label  := [<newname>]
+	; instr*     := [
 	    [<exp-to-jbc> cond]
-	  , IFEQ(LabelRef("Else"))
+	  , IFEQ(LabelRef(else-label))
 		, [<stmt-to-jbc> if-stmt]
-		, GOTO(LabelRef("End"))
-		, JBCLabel("Else")
+		, GOTO(LabelRef(end-label))
+		, JBCLabel(else-label)
 		, [<stmt-to-jbc> else-stmt]
-		, JBCLabel("End")
+		, JBCLabel(end-label)
 		]
 	          
   stmt-to-jbc: While(cond, stmt) -> instr*
   with
-    instr* := [
-      JBCLabel("Loop")
-    , [<exp-to-jbc> cond]
-    , IFEQ(LabelRef("End"))
+    cond-label := [<newname>]
+  ; loop-label := [<newname>]
+  ; end-label  := [<newname>]
+  ; instr*     := [
+    GOTO(LabelRef(cond-label))
+    , JBCLabel(loop-label)
     , [<stmt-to-jbc> stmt]
-    , GOTO(LabelRef("Loop"))
-    , JBCLabel("End")
+    , JBCLabel(cond-label)
+    , [<exp-to-jbc> cond]
+    , IFNE(LabelRef(loop-label))
+    , JBCLabel(end-label)
     ]
     
   // 4. - Provide rules for exp-to-jbc, which translate unary and binary expressions from MiniJava into 
@@ -187,25 +193,49 @@ rules // day 11
     
   exp-to-jbc: UnExp(uop, e) -> instr*
   with
-    op*    := <op-to-jbc> uop
-  ; instr* := ""
+    op     := <op-to-jbc> uop
+  ; instr* := [<exp-to-jbc>, op]
       
       
   exp-to-jbc: BinExp(bop, e1, e2) -> instr*
   with
-    op*    := <op-to-jbc> bop
-  ; instr* := ""
+    op     := <op-to-jbc> bop
+  ; instr* := [<exp-to-jbc> e1, <exp-to-jbc> e2, op]
     
-  op-to-jbc: UPLUS()   -> [] //TODO
-  op-to-jbc: UMINUS()  -> [] //TODO
-  op-to-jbc: UNOT()    -> [] //TODO
-  op-to-jbc: USIZEOF() -> [] //TODO
+  op-to-jbc: UPLUS()   -> []
+  op-to-jbc: UMINUS()  -> []
+  op-to-jbc: UNOT()    -> instr*
+  with
+    true-label  := [<newname>]
+  ; false-label := [<newname>]
+  ; end-label   := [<newname>]
+  ; instr*      := [
+      IFNE(LabelRef(false-label))
+    , ICONST_1()
+    , GOTO(LabelRef(end-label))
+    , JBCLabel(false-label)
+    , ICONST_0()
+    , JBCLabel(end-label)
+    ]
+    
+  op-to-jbc: USIZEOF() -> [] // TODO
   
   op-to-jbc: Plus()    -> [IADD()]
   op-to-jbc: Minus()   -> [ISUB()] 
   op-to-jbc: Mul()     -> [IMUL()]
-  op-to-jbc: And()     -> [LAND()] //TODO
-  op-to-jbc: Lt()      -> [] //TODO
+  op-to-jbc: And()     -> [LAND()] //TODO Lazy-way
+  op-to-jbc: Lt()      -> instr*
+  with
+    false-label := [<newname>]
+  ; end-label   := [<newname>]  
+  ; instr*      := [
+		  IF_ICMPGE(LabelRef(false-label))
+		, ICONST_1()
+		, GOTO(LabelRef(end-label))
+		, JBCLabel(false-label)
+		, ICONST_0()
+		, JBCLabel(end-label)
+		]
 
 // Code Generation for Methods
 // 
@@ -242,9 +272,9 @@ rules // day 11
   with
     instr* := [INVOKEVIRTUAL(
       JBCMethodRef(
-        CRef("java/io/PrintStream")
+        CRef("example/HelloWorld")
       , MRef(c)
-      , JBCMethodDesc([Reference(CRef("java/lang/String"))], Void())
+      , JBCMethodDesc([], Void())
       )
     )]
     

@@ -1,11 +1,7 @@
 int foo() {
-  if(1){
-    printf("%i", 1);
-  }else{ 
-    printf("%i", 2);
-  }return 0;
+  int a;
+  
+  return foo();
 }
-
-
 
 0
