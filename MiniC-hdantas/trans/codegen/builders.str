@@ -3,7 +3,9 @@ module codegen/builders
 imports
 	lib/editor-common.generated
 	lib/jasmin/JasminXT
-	codegen/codegen
+	codegen/day10
+	codegen/day11
+	codegen/day12
 	lib/jasmin/JasminXT-pp
 	
 rules // Class files

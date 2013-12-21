@@ -43,10 +43,10 @@ rules
     where id
   
   create-type-task(|ctx) :
-    BinExp(op, e1, e2) -> <type-is(|ctx, [t11, expected-type, return-type, e1-type, e2-type, eq1, eq2])> return-type
-    where t11 := <type-task(|ctx)> op;
-          expected-type := <new-task(|ctx)> Rewrite("proj0", t11);
-          return-type := <new-task(|ctx)> Rewrite("proj1", t11);
+    BinExp(op, e1, e2) -> <type-is(|ctx, [t1, expected-type, return-type, e1-type, e2-type, eq1, eq2])> return-type
+    where t1 := <type-task(|ctx)> op;
+          expected-type := <new-task(|ctx)> Rewrite("proj0", t1);
+          return-type := <new-task(|ctx)> Rewrite("proj1", t1);
           e1-type := <type-task(|ctx)> e1;
           e2-type := <type-task(|ctx)> e2;
           eq1 := <type-match(|ctx, e1-type)> expected-type;

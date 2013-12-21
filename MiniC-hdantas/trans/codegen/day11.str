@@ -1,0 +1,208 @@
+module codegen/day11
+
+imports
+  libstratego-gpp
+  lib/runtime/tmpl/pp
+  include/MiniC
+  include/MiniC-parenthesize
+  runtime/nabl/-
+  runtime/task/-
+  runtime/types/-
+  analysis/desugar
+  analysis/names
+  lib/jasmin/JasminXT
+  
+
+rules // day 11  
+  // 1. - Provide a rule for stmt-to-jbc, which translates a block statement from MiniJava into a sequence of Java bytecode instructions.
+  // This rule should call stmt-to-jbc recursively to translate the inner statements to Java bytecode sequences.
+  stmt-to-jbc: CodeBlock(c) -> <stmt-to-jbc> c
+    
+  stmt-to-jbc: [s, t | ts] -> instr*
+  with
+    head-stmt* := <stmt-to-jbc> s
+  ; tail-stmt* := <stmt-to-jbc> [t | ts]
+  ; instr*     := [head-stmt*, tail-stmt*]
+  
+  stmt-to-jbc: [s] -> <stmt-to-jbc> s
+  stmt-to-jbc: [] -> []
+
+  
+  // 2. - Provide rules for exp-to-jbc, which translate logic constants true and false from MiniJava into sequences of Java bytecode instructions.
+  // NOT APPLICABLE
+  
+  // 3. - Provide rules for stmt-to-jbc, which translate if and while statements from MiniJava into sequences of Java bytecode instructions.
+  // These rules should call stmt-to-jbc recursively to translate inner statements to Java bytecode sequences.
+  // The JVM documentation discusses an efficient translation pattern for while loops.
+  // These statements require labels. You can apply newname from Stratego's standard library
+  // to a string, to obtain a fresh name starting with the given string.
+
+  stmt-to-jbc: IfElse(cond, if-stmt, else-stmt) -> instr*
+  with
+    else-label := [<newname>]
+  ; end-label  := [<newname>]
+  ; instr*     := [
+      [<exp-to-jbc> cond]
+    , IFEQ(LabelRef(else-label))
+    , [<stmt-to-jbc> if-stmt]
+    , GOTO(LabelRef(end-label))
+    , JBCLabel(else-label)
+    , [<stmt-to-jbc> else-stmt]
+    , JBCLabel(end-label)
+    ]
+            
+  stmt-to-jbc: While(cond, stmt) -> instr*
+  with
+    cond-label := [<newname>]
+  ; loop-label := [<newname>]
+  ; end-label  := [<newname>]
+  ; instr*     := [
+    GOTO(LabelRef(cond-label))
+    , JBCLabel(loop-label)
+    , [<stmt-to-jbc> stmt]
+    , JBCLabel(cond-label)
+    , [<exp-to-jbc> cond]
+    , IFNE(LabelRef(loop-label))
+    , JBCLabel(end-label)
+    ]
+    
+  // 4. - Provide rules for exp-to-jbc, which translate unary and binary expressions from MiniJava into 
+  // sequences of Java bytecode instructions. These rules should call exp-to-jbc recursively to 
+  // translate subexpressions to Java bytecode sequences. Furthermore, they should call a strategy 
+  // op-to-jbc to translate unary and binary operators to Java bytcode instructions. The only 
+  // exception is the && operator, which needs to be treated differently, due to its lazy 
+  // evaluation semantics.
+
+  exp-to-jbc: [e, t | ts] -> instr*
+  with
+    head-exp* := <exp-to-jbc> e
+  ; tail-exp* := <exp-to-jbc> [t | ts]
+  ; instr*    := [head-exp*, tail-exp*]
+  
+  exp-to-jbc: [e] -> <exp-to-jbc> e
+  exp-to-jbc: []  -> []   
+    
+    
+  exp-to-jbc: UnExp(uop, e) -> instr*
+  with
+    op     := <op-to-jbc> uop
+  ; instr* := [<exp-to-jbc>, op]
+      
+      
+  exp-to-jbc: BinExp(bop, e1, e2) -> instr*
+  with
+    op     := <op-to-jbc> bop
+  ; instr* := [<exp-to-jbc> e1, <exp-to-jbc> e2, op]
+    
+  op-to-jbc: UPLUS()   -> []
+  op-to-jbc: UMINUS()  -> []
+  op-to-jbc: UNOT()    -> instr*
+  with
+    true-label  := [<newname>]
+  ; false-label := [<newname>]
+  ; end-label   := [<newname>]
+  ; instr*      := [
+      IFNE(LabelRef(false-label))
+    , ICONST_1()
+    , GOTO(LabelRef(end-label))
+    , JBCLabel(false-label)
+    , ICONST_0()
+    , JBCLabel(end-label)
+    ]
+    
+  op-to-jbc: USIZEOF() -> [] // TODO
+  
+  op-to-jbc: Plus()    -> [IADD()]
+  op-to-jbc: Minus()   -> [ISUB()] 
+  op-to-jbc: Mul()     -> [IMUL()]
+  op-to-jbc: And()     -> [LAND()] //TODO Lazy-way
+  op-to-jbc: Lt()      -> instr*
+  with
+    false-label := [<newname>]
+  ; end-label   := [<newname>]  
+  ; instr*      := [
+      IF_ICMPGE(LabelRef(false-label))
+    , ICONST_1()
+    , GOTO(LabelRef(end-label))
+    , JBCLabel(false-label)
+    , ICONST_0()
+    , JBCLabel(end-label)
+    ]
+
+// Code Generation for Methods
+	// 
+	// Now you need to define a strategy function-to-jbc to handle methods without local variables.
+	// 
+	// 1. - Provide a rule for function-to-jbc, which translates a method without parameters and local variables from MiniJava into a Jasmin method.
+	// This rule should call stmt-to-jbc to translate the statements of the method to a Java bytecode sequence.
+  function-to-jbc: [f, t | ts] -> instr*
+  with
+    head-fun* := <function-to-jbc> f
+  ; tail-fun* := <function-to-jbc> [t | ts]
+  ; instr*     := [head-fun*, tail-fun*]
+  
+  function-to-jbc: [f] -> <function-to-jbc> f
+  function-to-jbc: [] -> []
+  
+  function-to-jbc: FunctionDef(t, i, p, s, e) -> instr*
+  with
+    types   := [PUBLIC(), STATIC()]
+  ; method  := [JBCMethodDesc([Array(Reference(CRef("java/lang/String")))], Void())]
+  ; stack   := [JBCLimitStack("2")]
+  ; stmt    := [<stmt-to-jbc> s]
+  ; return  := [RETURN()]
+  ; instr*  := [JBCMethod(types, i, method, [stack, stmt, return])]
+ 
+	// 2. - Provide a rule for exp-to-jbc, which translates this expressions from MiniJava into sequences of Java bytecode instructions.
+	// NOT APPLICABLE
+	
+	// 3. - Provide a rule for exp-to-jbc, which translates method calls without arguments
+	// from MiniJava into sequences of Java bytecode instructions.
+	// This rule should call exp-to-jbc recursively to translate subexpressions to Java bytecode sequences.
+	// For this rule, you need to know the name of the class containing the method and the type of the method.
+	// You can extract the class name from the URI of the method name. The following strategies might be useful:
+	// 
+	// nabl-uri extracts the URI from an annotated name.
+	// nabl-uri-parent rewrites an URI to the URI of the enclosing scope.
+	// nabl-uri-name rewrites an URI to the name of the definition it identifies.
+	// You can query the type associated with the method name with get-type. This requires access to the index and the task engine,
+	// which needs to be setup. You should do this in your builder strategies by adding the following strategy calls:
+	// 
+	// index-setup(|<language>, project-path); task-setup(|project-path)
+  exp-to-jbc: Call(c, e) -> instr*
+  with
+    instr* := [INVOKEVIRTUAL(
+      JBCMethodRef(
+        CRef(<nabl-uri-parent; nabl-uri-name>)
+      , MRef(c)
+      , JBCMethodDesc([], Void())
+      )
+    )]
+    
+	// 4. - Extend the rule for class-to-jbc, which handles empty classes,
+	// in order to include code generation for methods.
+	// NOT APPLICABLE
+	
+	// 5. - Provide a rule for exp-to-jbc, which translates object creation expressions
+	// into sequences of Java bytecode instructions.
+	// NOT APPLICABLE 
+
+
+// Use Overlays
+
+overlays
+
+  DEFAULT-CONSTRUCTOR(c, p) =
+    JBCMethod(
+      [PUBLIC()]
+    , Init()
+    , JBCMethodDesc([], Void())
+    , [ JBCLimitStack("1"), JBCLimitLocals("1")
+      , THIS-DECLARATION(c)
+      , JBCLabel("start")
+      , ALOAD_0()
+      , INVOKE-CONSTRUCTOR(p)
+      , RETURN()
+      , JBCLabel("end")
+      ]
+    )
