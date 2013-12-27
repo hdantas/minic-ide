@@ -11,6 +11,8 @@ imports
   analysis/desugar
   analysis/names
   lib/jasmin/JasminXT
+  trans/codegen/challenges
+  trans/codegen/day11
   
 
 rules // Day 10
@@ -18,66 +20,24 @@ rules // Day 10
   exp-to-jbc: IntConst(i)   -> [LDC(i)]
   exp-to-jbc: FloatConst(f) -> [LDC(f)]
   
-  stmt-to-jbc: PrintfInt(i) -> instr*
-  with
-    header := [GETSTATIC(
-      JBCFieldRef(
-        CRef("java/lang/System")
-      , FRef("out")
-      , JBCFieldDesc(Reference(CRef("java/io/PrintStream")))
-      )
-    )] // push System.out onto the stack
-  ; exp*   := [<exp-to-jbc> i]                                         // push a string onto the stack
-  ; print* := [INVOKEVIRTUAL(
-      JBCMethodRef(
-        CRef("java/io/PrintStream")
-      , MRef("println")
-      , JBCMethodDesc([Int()], Void())
-      )
-    )] // call the PrintStream.println() method.
-  ; instr* := [header, exp*, print*]
-      
-  stmt-to-jbc: PrintfFloat(f) -> instr*
-  with
-    header := [GETSTATIC(
-      JBCFieldRef(
-        CRef("java/lang/System")
-      , FRef("out")
-      , JBCFieldDesc(Reference(CRef("java/io/PrintStream")))
-      )
-    )] // push System.out onto the stack
-  ; exp*   := [<exp-to-jbc> f]                                         // push a string onto the stack
-  ; print*  := [INVOKEVIRTUAL(
-      JBCMethodRef(
-        CRef("java/io/PrintStream")
-      , MRef("println")
-      , JBCMethodDesc([Float()], Void())
-      )
-    )] // call the PrintStream.println() method.
-  ; instr* := [header, exp*, print*]
+  stmt-to-jbc: PrintfInt(i)   -> Printf(Int(), <exp-to-jbc> i)
+  stmt-to-jbc: PrintfFloat(f) -> Printf(Float(), <exp-to-jbc> f)
   
   // Provide a rule for class-to-jbc, which translates a main class from MiniJava
   // into a Jasmin class file. This rule should call stmt-to-jbc to translate the
   // statement inside the main method to a Java bytecode sequence.
 
 
-  main-to-jbc: IntConst(i) -> instr* // the return value of the program is converted a printf on the main function
+  main-to-jbc: IntConst(i) -> Function-Constructor(types, "main", stmts*) // the return value of the program is converted a printf on the main function
   with
     types   := [PUBLIC(), STATIC()]
-  ; method* := [JBCMethodDesc([Array(Reference(CRef("java/lang/String")))], Void())]
-  ; stack   := [JBCLimitStack("2")]
-  ; stmt*   := <stmt-to-jbc> PrintfInt(IntConst(i))
-  ; return  := [RETURN()]
-  ; instr*  := [JBCMethod(types, "main", method*, [stack, stmt*, return])]
-
-  main-to-jbc: FloatConst(f) -> instr* // the return value of the program is converted a printf on the main function
+  ; stmts*  := [<stmt-to-jbc> PrintfInt(IntConst(i))]
+    
+  main-to-jbc: FloatConst(f) -> Function-Constructor(types, "main", stmts*) // the return value of the program is converted a printf on the main function
   with
     types   := [PUBLIC(), STATIC()]
-  ; method* := [JBCMethodDesc([Array(Reference(CRef("java/lang/String")))], Void())]
-  ; stack   := [JBCLimitStack("2")]
-  ; stmt*   := <stmt-to-jbc> PrintfFloat(FloatConst(f))
-  ; return  := [RETURN()]
-  ; instr*  := [JBCMethod(types, "main", method*, [stack, stmt*, return])]
+  ; stmts*  := [<stmt-to-jbc> PrintfInt(FloatConst(f))]
+        
         
   // Provide a rule for program-to-jbc, which translates a MiniJava program into a
   // list of Jasmin class files. This rule should call class-to-jbc to translate the

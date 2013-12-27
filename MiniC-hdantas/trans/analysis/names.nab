@@ -14,6 +14,7 @@ namespaces
 properties 
 
   parameter-types of Variable: List(Type)
+  descriptor      of Variable: MethodDescriptor
   
 //in C functions and variables share the namespace
 binding rules // Files
@@ -54,11 +55,6 @@ binding rules // Variable
   CodeBlock(_): scopes Variable
   
 binding rules // Function (shares the namespace with variable)
-  
-  // FunctionDef(t, f, params, _, _):
-  //   defines Variable f of type (t, pt) in subsequent scope
-  //   where params has type pt
-  //   scopes Variable
   
   FunctionDef(t, f, p*, _, _) :
     defines Variable f

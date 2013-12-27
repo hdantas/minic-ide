@@ -11,6 +11,7 @@ imports
   analysis/desugar
   analysis/names
   lib/jasmin/JasminXT
+  trans/codegen/challenges
   
 
 rules // day 11  
@@ -139,20 +140,17 @@ rules // day 11
   with
     head-fun* := <function-to-jbc> f
   ; tail-fun* := <function-to-jbc> [t | ts]
-  ; instr*     := [head-fun*, tail-fun*]
+  ; instr*    := [head-fun*, tail-fun*]
   
   function-to-jbc: [f] -> <function-to-jbc> f
   function-to-jbc: [] -> []
   
-  function-to-jbc: FunctionDef(t, i, p, s, e) -> instr*
+  function-to-jbc: FunctionDef(t, i, p, s, e) -> [descr]//Function-Constructor(types, i, stmts*)
   with
-    types   := [PUBLIC(), STATIC()]
-  ; method  := [JBCMethodDesc([Array(Reference(CRef("java/lang/String")))], Void())]
-  ; stack   := [JBCLimitStack("2")]
-  ; stmt    := [<stmt-to-jbc> s]
-  ; return  := [RETURN()]
-  ; instr*  := [JBCMethod(types, i, method, [stack, stmt, return])]
- 
+    types  := [PUBLIC(), STATIC()]
+  ; stmts* := [<stmt-to-jbc> s]
+  ; descr  := [<get-descriptor> i]
+
 	// 2. - Provide a rule for exp-to-jbc, which translates this expressions from MiniJava into sequences of Java bytecode instructions.
 	// NOT APPLICABLE
 	
@@ -178,6 +176,7 @@ rules // day 11
       , JBCMethodDesc([], Void())
       )
     )]
+  ; descr := <get-descriptor> c
     
 	// 4. - Extend the rule for class-to-jbc, which handles empty classes,
 	// in order to include code generation for methods.
@@ -190,19 +189,7 @@ rules // day 11
 
 // Use Overlays
 
-overlays
 
-  DEFAULT-CONSTRUCTOR(c, p) =
-    JBCMethod(
-      [PUBLIC()]
-    , Init()
-    , JBCMethodDesc([], Void())
-    , [ JBCLimitStack("1"), JBCLimitLocals("1")
-      , THIS-DECLARATION(c)
-      , JBCLabel("start")
-      , ALOAD_0()
-      , INVOKE-CONSTRUCTOR(p)
-      , RETURN()
-      , JBCLabel("end")
-      ]
-    )
+    
+    
+ 

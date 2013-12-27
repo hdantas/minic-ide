@@ -29,7 +29,8 @@ rules // Jamin bytecode
   generate-jbc: // Generates the Jasmin bytecode file and put in src-gen/
     (selected, position, ast, path, project-path) -> None() //(filename, result)
   with
-    parentdir := <dirname> path
+    index-setup(|<language>, project-path); task-setup(|project-path)
+  ; parentdir := <dirname> path
   ; dir       := $[[parentdir]/src-gen]
   ; <try(mkdir)> dir
   ; filename  := <guarantee-extension(|"j")> $[[dir]/[<base-filename> path]]
@@ -41,9 +42,11 @@ rules // Jamin bytecode
   partial-generate-jbc:
     (selected, position, ast, path, project-path) -> (filename, result)
   with
-    filename := <guarantee-extension(|"j")> path
+  index-setup(|<language>, project-path); task-setup(|project-path)
+  ; filename := <guarantee-extension(|"j")> path
   ; jbc      := <to-jbc> selected
   ; result   := <pp-jasminxt-string> jbc
+  
 
 rules // Run class files
 

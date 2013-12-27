@@ -1,6 +1,7 @@
-int barfoo(){
-  printf("%i", 1);
-  return 0;
+float barfoo(){
+  
+  printf("%f", 0.1);
+  return 0.1;
 }
 
 5
