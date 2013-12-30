@@ -7,6 +7,8 @@ imports
 	codegen/day11
 	codegen/day12
 	lib/jasmin/JasminXT-pp
+	lib/runtime/task/-
+	lib/runtime/index/-
 	
 rules // Class files
 	      

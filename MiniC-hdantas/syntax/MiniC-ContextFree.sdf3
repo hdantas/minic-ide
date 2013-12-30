@@ -38,8 +38,8 @@ module MiniC-ContextFree
     Parameter.Arg                     = <<Type; text="Type"> <ID; text="Name">>
     Parameter.ArrayArg                = <<ArrayType; text="Type"> <ID; text="Name">[]>
     
-    ArrayType.ArrayInt                = <int>
-    ArrayType.ArrayFloat              = <float>
+    ArrayType.Int                = <int>
+    ArrayType.Float              = <float>
     Type.Int                          = <int>
     Type.Float                        = <float>
     // Type.Struct                       = <struct <ID; text="StructName">>
@@ -74,7 +74,7 @@ else
     Lvalue.Var                        = <<ID; text="VarName">>
     // Field.Field                       = <<ID; text="VarName">>
     Lvalue.StructMember               = <<Lvalue; text="StructName">.<Lvalue; text="StructMember">> {left}
-    Lvalue.ArrayVar                   = <<Lvalue; text="ArrayName">[<Exp; text="Index">]>
+    Lvalue.ArrayVar                   = <<ID; text="ArrayName">[<Exp; text="Index">]>
     Exp                               = <<Lvalue>>
     
     

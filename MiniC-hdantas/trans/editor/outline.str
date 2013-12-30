@@ -61,15 +61,15 @@ rules
       
   pp: Int()        -> "int"
   pp: Float()      -> "float"
-  pp: ArrayInt()     -> label
-  where
-  	brackets := "[]"
-  	;label := $[int [brackets]]
-  		 	
-  pp: ArrayFloat()     -> label
-  where
-  	brackets := "[]"
-  	;label := $[float [brackets]]
+  // pp: ArrayInt()     -> label
+  // where
+  // 	brackets := "[]"
+  // 	;label := $[int [brackets]]
+  // 		 	
+  // pp: ArrayFloat()     -> label
+  // where
+  // 	brackets := "[]"
+  // 	;label := $[float [brackets]]
   	 		 	
   pp: Struct(t)    -> t
 

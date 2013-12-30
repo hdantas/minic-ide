@@ -26,7 +26,8 @@ signature
 	  BinExp : BinOp * Exp * Exp -> Exp
 	  UnExp  : UnOp  * Exp -> Exp
 	  
-	  Field  : Var -> Var
+	  Field       : Var -> Var
+	  ArrayField  : ID * index -> ArrayVar
   
 rules
 
@@ -46,6 +47,7 @@ rules
   
   // desugar: StructMemberAssignment(v, Var(f), e) -> StructMemberAssignment(v, Field(f), e)
   desugar: StructMember(v, Var(f))              -> StructMember(v, Field(f))
+  desugar: StructMember(v, ArrayVar(f, exp))    -> StructMember(v, ArrayField(f, exp))
   // desugar: ... -> ...
   
 strategies

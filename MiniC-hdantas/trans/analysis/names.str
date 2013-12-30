@@ -163,7 +163,7 @@ rules
           , uri__
           , NablNsStruct()
           , Unique()
-          , [Subsequent()]
+          , Current()
           , [NablNsField()]
           , []
           )
@@ -237,7 +237,7 @@ rules
           , uri__
           , NablNsField()
           , Unique()
-          , [Subsequent()]
+          , Current()
           , []
           , []
           )
@@ -282,7 +282,7 @@ rules
           , uri__
           , NablNsField()
           , Unique()
-          , [Subsequent()]
+          , Current()
           , []
           , []
           )
@@ -351,6 +351,50 @@ rules
     , (Struct(s), [])
     ) -> s
 
+  nabl-get-name :
+    StructMember(v, ArrayField(f, _)) -> f
+
+  nabl-name-apply(s) =
+    StructMember(id, ArrayField(s, id))
+
+  nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
+    ?StructMember(v, ArrayField(f, _))
+    ; origin-track-forced(
+        where(r6-1-1-1__ := <get-property-task(|Type())> v)
+        ; where(r6-1-1-1-1__ := <new-task(|partition__)> Rewrite("match6-1-1-1-1", (r6-1-1-1__, [])))
+        ; StructMember(
+            id
+          , ArrayField(
+              nabl-use(
+              | lang__
+              , partition__
+              , uniques__
+              , uris__
+              , [ UseCandidate(
+                    NablNsField()
+                  , []
+                  , Context(
+                      NablNsStruct()
+                    , r6-1-1-1-1__
+                    , []
+                    , Current()
+                    )
+                  , True()
+                  , [r6-1-1-1-1__]
+                  )
+                ]
+              )
+            , id
+            )
+          )
+      |
+      )
+
+  task-rewrite :
+    ( "match6-1-1-1-1"
+    , (Struct(s), [])
+    ) -> s
+
 
 rules
 
@@ -375,7 +419,7 @@ rules
           , uri__
           , NablNsVariable()
           , Unique()
-          , [Subsequent()]
+          , Current()
           , []
           , []
           )
@@ -420,7 +464,7 @@ rules
           , uri__
           , NablNsVariable()
           , Unique()
-          , [Subsequent()]
+          , Current()
           , []
           , []
           )
@@ -467,7 +511,7 @@ rules
           , uri__
           , NablNsVariable()
           , Unique()
-          , [Subsequent()]
+          , Current()
           , []
           , []
           )
@@ -512,7 +556,7 @@ rules
           , uri__
           , NablNsVariable()
           , Unique()
-          , [Subsequent()]
+          , Current()
           , []
           , []
           )
@@ -621,6 +665,35 @@ rules
       |
       )
 
+  nabl-get-name :
+    ArrayField(f, _) -> f
+
+  nabl-name-apply(s) =
+    ArrayField(s, id)
+
+  nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
+    ?ArrayField(f, _)
+    ; origin-track-forced(
+        ArrayField(
+          nabl-use(
+          | lang__
+          , partition__
+          , uniques__
+          , uris__
+          , [ UseCandidate(
+                NablNsField()
+              , []
+              , Current()
+              , True()
+              , []
+              )
+            ]
+          )
+        , id
+        )
+      |
+      )
+
   nabl-scoping-site =
     ?CodeBlock(_)
     ; origin-track-forced(
@@ -659,7 +732,7 @@ rules
           , uri__
           , NablNsVariable()
           , Unique()
-          , [Subsequent()]
+          , Current()
           , [NablNsVariable()]
           , []
           )

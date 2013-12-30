@@ -73,8 +73,8 @@ exports
     Type ID "(" {Parameter ","}* ")" "{" Statement* "return" Exp ";" "}" -> FunctionDec {cons("FunctionDef")}
     Type ID                                                              -> Parameter   {cons("Arg")}
     ArrayType ID "[]"                                                    -> Parameter   {cons("ArrayArg")}
-    "int"                                                                -> ArrayType   {cons("ArrayInt")}
-    "float"                                                              -> ArrayType   {cons("ArrayFloat")}
+    "int"                                                                -> ArrayType   {cons("Int")}
+    "float"                                                              -> ArrayType   {cons("Float")}
     "int"                                                                -> Type        {cons("Int")}
     "float"                                                              -> Type        {cons("Float")}
     "struct" ID                                                          -> Type        {cons("Struct")}
@@ -90,7 +90,7 @@ exports
     FLOAT                                                                -> Exp         {cons("FloatConst")}
     ID                                                                   -> Lvalue      {cons("Var")}
     Lvalue "." Lvalue                                                    -> Lvalue      {cons("StructMember"), left}
-    Lvalue "[" Exp "]"                                                   -> Lvalue      {cons("ArrayVar")}
+    ID "[" Exp "]"                                                       -> Lvalue      {cons("ArrayVar")}
     Lvalue                                                               -> Exp         
     Exp "&&" Exp                                                         -> Exp         {cons("And"), left}
     Exp "<" Exp                                                          -> Exp         {cons("Lt"), non-assoc}

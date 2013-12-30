@@ -18,13 +18,13 @@ rules
     where id
   
   create-type-task(|ctx) :
-    UnExp(op, e1) -> <type-is(|ctx, [t0, expected-type, return-type, e1-type, eq0])> return-type
-    where t0 := <type-task(|ctx)> op;
-          expected-type := <new-task(|ctx)> Rewrite("proj2", t0);
-          return-type := <new-task(|ctx)> Rewrite("proj3", t0);
+    UnExp(op, e1) -> <type-is(|ctx, [t26, expected-type, return-type, e1-type, eq64])> return-type
+    where t26 := <type-task(|ctx)> op;
+          expected-type := <new-task(|ctx)> Rewrite("proj38", t26);
+          return-type := <new-task(|ctx)> Rewrite("proj39", t26);
           e1-type := <type-task(|ctx)> e1;
-          eq0 := <type-match(|ctx, e1-type)> expected-type;
-          <task-create-error-on-failure(|ctx, eq0, ["Unexpected subexpression type for unary operator. Received ", e1-type, " expecting ", expected-type, "."])> e1
+          eq64 := <type-match(|ctx, e1-type)> expected-type;
+          <task-create-error-on-failure(|ctx, eq64, ["Unexpected subexpression type for unary operator. Received ", e1-type, " expecting ", expected-type, "."])> e1
   
   create-type-task(|ctx) :
     UMINUS() -> <type-is(|ctx, [])> (Int(), Int())
@@ -43,16 +43,16 @@ rules
     where id
   
   create-type-task(|ctx) :
-    BinExp(op, e1, e2) -> <type-is(|ctx, [t3, expected-type, return-type, e1-type, e2-type, eq1, eq2])> return-type
-    where t3 := <type-task(|ctx)> op;
-          expected-type := <new-task(|ctx)> Rewrite("proj0", t3);
-          return-type := <new-task(|ctx)> Rewrite("proj1", t3);
+    BinExp(op, e1, e2) -> <type-is(|ctx, [t27, expected-type, return-type, e1-type, e2-type, eq65, eq66])> return-type
+    where t27 := <type-task(|ctx)> op;
+          expected-type := <new-task(|ctx)> Rewrite("proj36", t27);
+          return-type := <new-task(|ctx)> Rewrite("proj37", t27);
           e1-type := <type-task(|ctx)> e1;
           e2-type := <type-task(|ctx)> e2;
-          eq1 := <type-match(|ctx, e1-type)> expected-type;
-          <task-create-error-on-failure(|ctx, eq1, ["Unexpected 1st subexpression type for unary operator. Received ", e1-type, " expecting ", expected-type, "."])> e1;
-          eq2 := <type-match(|ctx, e2-type)> expected-type;
-          <task-create-error-on-failure(|ctx, eq2, ["Unexpected 2nd subexpression type for unary operator. Received ", e2-type, " expecting ", expected-type, "."])> e2
+          eq65 := <type-match(|ctx, e1-type)> expected-type;
+          <task-create-error-on-failure(|ctx, eq65, ["Unexpected 1st subexpression type for unary operator. Received ", e1-type, " expecting ", expected-type, "."])> e1;
+          eq66 := <type-match(|ctx, e2-type)> expected-type;
+          <task-create-error-on-failure(|ctx, eq66, ["Unexpected 2nd subexpression type for unary operator. Received ", e2-type, " expecting ", expected-type, "."])> e2
   
   create-type-task(|ctx) :
     Plus() -> <type-is(|ctx, [])> (Int(), Int())
@@ -83,6 +83,10 @@ rules
     where ty := <type-lookup(|ctx)> f
   
   create-type-task(|ctx) :
+    StructMember(v, ArrayField(f, e)) -> <type-is(|ctx, [ty])> ty
+    where ty := <type-lookup(|ctx)> f
+  
+  create-type-task(|ctx) :
     Arg(t, p) -> <type-is(|ctx, [])> t
     where id
   
@@ -94,55 +98,55 @@ rules
     Assignment(v, e) -> <fail>
     where type-e := <type-task(|ctx)> e;
           type-v := <type-task(|ctx)> v;
-          subtype0 := <create-subtype-task(|ctx)>("<:", type-v, type-e);
-          <task-create-error-on-failure(|ctx, subtype0, ["Assigning expression of type ", type-e, " to variable of type ", type-v, "."])> e
+          subtype16 := <create-subtype-task(|ctx)>("<:", type-v, type-e);
+          <task-create-error-on-failure(|ctx, subtype16, ["Assigning expression of type ", type-e, " to variable of type ", type-v, "."])> e
   
   nabl-constraint(|ctx) :
     IfElse(e, a, b) -> <fail>
     where type := <type-task(|ctx)> e;
-          eq3 := <type-match(|ctx, Int())> type;
-          <task-create-error-on-failure(|ctx, eq3, ["If statement requires an Int. Received ", type, "."])> e
+          eq67 := <type-match(|ctx, Int())> type;
+          <task-create-error-on-failure(|ctx, eq67, ["If statement requires an Int. Received ", type, "."])> e
   
   nabl-constraint(|ctx) :
     While(e, b) -> <fail>
     where type := <type-task(|ctx)> e;
-          eq4 := <type-match(|ctx, Int())> type;
-          <task-create-error-on-failure(|ctx, eq4, ["While statement requires an Int. Received ", type, "."])> e
+          eq68 := <type-match(|ctx, Int())> type;
+          <task-create-error-on-failure(|ctx, eq68, ["While statement requires an Int. Received ", type, "."])> e
   
   nabl-constraint(|ctx) :
     PrintfInt(e) -> <fail>
     where type := <type-task(|ctx)> e;
-          eq5 := <type-match(|ctx, Int())> type;
-          <task-create-error-on-failure(|ctx, eq5, ["%i expects an Int. Received ", type, "."])> e
+          eq69 := <type-match(|ctx, Int())> type;
+          <task-create-error-on-failure(|ctx, eq69, ["%i expects an Int. Received ", type, "."])> e
   
   nabl-constraint(|ctx) :
     PrintfFloat(e) -> <fail>
     where type := <type-task(|ctx)> e;
-          eq6 := <type-match(|ctx, Float())> type;
-          <task-create-error-on-failure(|ctx, eq6, ["%f expects a Float. Received ", type, "."])> e
+          eq70 := <type-match(|ctx, Float())> type;
+          <task-create-error-on-failure(|ctx, eq70, ["%f expects a Float. Received ", type, "."])> e
   
   nabl-constraint(|ctx) :
     FunctionDef(t, a, b, c, r) -> <fail>
     where ret-type := <type-lookup(|ctx)> r;
-          subtype1 := <create-subtype-task(|ctx)>("<:", t, ret-type);
-          <task-create-error-on-failure(|ctx, subtype1, ["Unexpect type for returning expression: ", ret-type, ". Expecting ", t, "."])> r
+          subtype17 := <create-subtype-task(|ctx)>("<:", t, ret-type);
+          <task-create-error-on-failure(|ctx, subtype17, ["Unexpect type for returning expression: ", ret-type, ". Expecting ", t, "."])> r
   
   create-subtype-task(|ctx) :
-    ("<:", ty1, ty2) -> eq7
-    where eq7 := <type-match(|ctx, ty2)> ty1
+    ("<:", ty1, ty2) -> eq71
+    where eq71 := <type-match(|ctx, ty2)> ty1
   
   
 rules // projections
   
   task-rewrite :
-    ("proj3", (expected-type, return-type)) -> return-type
+    ("proj39", (expected-type, return-type)) -> return-type
   
   task-rewrite :
-    ("proj2", (expected-type, return-type)) -> expected-type
+    ("proj38", (expected-type, return-type)) -> expected-type
   
   task-rewrite :
-    ("proj1", (expected-type, return-type)) -> return-type
+    ("proj37", (expected-type, return-type)) -> return-type
   
   task-rewrite :
-    ("proj0", (expected-type, return-type)) -> expected-type
+    ("proj36", (expected-type, return-type)) -> expected-type
   

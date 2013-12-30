@@ -23,25 +23,29 @@ binding rules // Files
 
 binding rules // Struct and Fields
   StructDec(s, _) :
-    defines Struct s of type s in subsequent scope
+    defines Struct s of type s //in subsequent scope
     scopes Field
 
   Struct(s): refers to Struct s
 
-  FieldDec(t, v)         : defines Field v of type t in subsequent scope
-  FieldArrayDec(t, v, _) : defines Field v of type t in subsequent scope
+  FieldDec(t, v)         : defines Field v of type t //in subsequent scope
+  FieldArrayDec(t, v, _) : defines Field v of type t //in subsequent scope
   
   StructMember(v, Field(f)):
     refers to Field f in Struct s
     where v has type Struct(s)
-    
+
+  StructMember(v, ArrayField(f, _)):
+    refers to Field f in Struct s
+    where v has type Struct(s)
+        
 binding rules // Variable
             
-  VarDec(t, v)      : defines Variable v of type t in subsequent scope
-  ArrayDec(t, v, _) : defines Variable v of type t in subsequent scope
+  VarDec(t, v)      : defines Variable v of type t //in subsequent scope
+  ArrayDec(t, v, _) : defines Variable v of type t //in subsequent scope
       
-  Arg(t, a)      : defines Variable a of type t in subsequent scope
-  ArrayArg(t, a) : defines Variable a of type t in subsequent scope
+  Arg(t, a)      : defines Variable a of type t //in subsequent scope
+  ArrayArg(t, a) : defines Variable a of type t //in subsequent scope
 
   ArrayVar(v, _):
     refers to Variable v
@@ -50,6 +54,9 @@ binding rules // Variable
     refers to Variable v
     
   Field(f):
+    refers to Field f
+  
+  ArrayField(f, _):
     refers to Field f
    
   CodeBlock(_): scopes Variable
@@ -60,7 +67,7 @@ binding rules // Function (shares the namespace with variable)
     defines Variable f
       of type t 
       of parameter-types pt*
-      in subsequent scope
+      //in subsequent scope
     where
       p* has type pt*
     scopes Variable  

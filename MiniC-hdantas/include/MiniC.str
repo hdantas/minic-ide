@@ -2,7 +2,7 @@ module MiniC
 
 signature
   constructors
-    ArrayVar      : Lvalue * Exp -> Lvalue
+    ArrayVar      : ID * Exp -> Lvalue
     StructMember  : Lvalue * Lvalue -> Lvalue
     Var           : ID -> Lvalue
     Uplus         : Exp -> Exp
@@ -29,8 +29,8 @@ signature
     Struct        : ID -> Type
     Float         : Type
     Int           : Type
-    ArrayFloat    : ArrayType
-    ArrayInt      : ArrayType
+    Float         : ArrayType
+    Int           : ArrayType
     ArrayArg      : ArrayType * ID -> Parameter
     Arg           : Type * ID -> Parameter
     FunctionDef   : Type * ID * List(Parameter) * List(Statement) * Exp -> FunctionDec

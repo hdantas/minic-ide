@@ -43,7 +43,7 @@ completions
   completion template Lvalue : "StructName.StructMember" =
     <StructName:Lvalue> "." <StructMember:Lvalue>                
   completion template Lvalue : "ArrayName[Index]" =
-    <ArrayName:Lvalue> "[" <Index:Exp> "]"                              
+    <ArrayName:ID> "[" <Index:Exp> "]"                                  
   completion template Exp : "Value && Value" =
     <Value:Exp> " && " <Value:Exp>                                           
   completion template Exp : "Value < Value" =

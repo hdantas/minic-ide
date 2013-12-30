@@ -33,7 +33,14 @@ rules // unresolved
     ; msg  := ["Unresolved Field ", f, " in Struct ", <strip-annos> s, "."] 
     ; <task-create-error-on-failure(|ctx, task, msg)> f
 
-
+  nabl-constraint(|ctx): //unresolved array field
+    StructMember(s, ArrayField(f, e)) -> <fail>
+    where
+      <has-annotation(?Use(task))> f
+    ; msg  := ["Unresolved Array Field ", f, " in Struct ", <strip-annos> s, "."] 
+    ; <task-create-error-on-failure(|ctx, task, msg)> f
+      
+      
   nabl-constraint(|ctx): //unresolved var
     Var(v) -> <fail>
     where

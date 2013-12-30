@@ -12,7 +12,40 @@ imports
   analysis/names
   lib/jasmin/JasminXT
   
-
-
+rules // Generate Code for Fields and Field Access
+	
+	// Type: convert MiniC types to Jasmin's
+  type-to-jbc: Int()   -> Int()
+  type-to-jbc: Float() -> Float()
   
-   
+  field-to-jbc: FieldDec(ty, name) -> instr*
+  with
+    descript := JBCFieldDesc(ty)
+  ; instr*   := JBCField([PRIVATE()], name, descript, None(), None())
+    
+    
+  class-to-jbc: FieldDec(ty, name) -> instr*
+  with
+  	instr* := <field-to-jbc> FieldDec(ty, name)
+  	
+  exp-to-jbc: StructMember(var, field) -> instr*
+  with
+    fielddesc := JBCFieldDesc(<get-type> field)
+  ; fieldref  := FRef(field)
+  ; classref  := CRef(<get-type> var)
+  ; instr*    := JBCFieldRef(classref, fieldref, fielddesc)
+
+  stmt-to-jbc: Assignment(StructMember(var, field), exp) -> instr*  //assignments to non-array fields
+  with
+    fieldaccess := <exp-to-jbc> StructMember(var, field)
+  ; expaccess   := <exp-to-jbc> exp
+  ; instr*      := [exp, PUTFIELD(fieldaccess)]
+    
+  stmt-to-jbc: Assignment(StructMember(var, ArrayField(f, index)), exp) -> instr* //assignments to array fields
+  with
+    fieldaccess := <exp-to-jbc> StructMember(var, ArrayField(f, index))
+  ; expaccess   := <exp-to-jbc> exp
+  ; instr*      := [exp, PUTFIELD(fieldaccess)]
+    
+    
+ rules // Generate Code for Local Variables and Variable Access
