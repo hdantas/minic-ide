@@ -1,0 +1,19 @@
+module codegen/type-to-jbc
+
+imports
+  libstratego-gpp
+  lib/runtime/tmpl/pp
+  include/MiniC
+  include/MiniC-parenthesize
+  runtime/nabl/-
+  runtime/task/-
+  runtime/types/-
+  analysis/desugar
+  analysis/names
+  lib/jasmin/JasminXT
+  codegen/-
+
+rules
+  // Type: convert MiniC types to Jasmin's
+  type-to-jbc: Int()   -> Int()
+  type-to-jbc: Float() -> Float()

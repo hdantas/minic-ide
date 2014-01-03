@@ -1,0 +1,72 @@
+module codegen/function-to-jbc
+
+imports
+  libstratego-gpp
+  lib/runtime/tmpl/pp
+  include/MiniC
+  include/MiniC-parenthesize
+  runtime/nabl/-
+  runtime/task/-
+  runtime/types/-
+  analysis/desugar
+  analysis/names
+  lib/jasmin/JasminXT
+  codegen/-
+
+
+rules
+
+  // recursive call for multiple functions
+  function-to-jbc: [FunctionDef(ty, i, p, s, e), t | ts] -> instr*
+  with
+    head-fun* := <function-to-jbc> FunctionDef(ty, i, p, s, e)
+  ; tail-fun* := <function-to-jbc> [t | ts]
+  ; instr*    := [head-fun*, tail-fun*]
+  
+  function-to-jbc: [FunctionDef(t, i, p, s, e)] -> [<function-to-jbc> FunctionDef(t, i, p, s, e)]
+  function-to-jbc: [] -> []
+  
+  // function without parameters or local variables
+  function-to-jbc: FunctionDef(t, i, p, s, e) -> instr*
+  with
+    types  := [PUBLIC(), STATIC()]
+  ; descr  := <get-descriptor> i
+  ; stmts* := <stmt-to-jbc> s
+  ; instr* := Function-Constructor(types, i, descr, stmts*)
+  
+
+
+
+overlays
+
+  Function-Constructor(types, name, descr, stmts) =
+  [
+    JBCMethod(
+      types
+    , name
+    , descr
+    , [ JBCLimitStack("4"), JBCLimitLocals("2")
+        // JBCLimitStack(<stack-limit> [0, stmts])
+      , stmts
+      , RETURN()
+      ]
+    )
+  ]
+
+
+
+rules
+
+    stack-limit: [previous-limit, statements] -> current-limit
+  with
+    //current-limit := <foldr(!0, add, inc)> statements
+    current-limit := "TODO STACK-LIMIT"
+
+  nabl-prop-site(|lang, ctx, uris, states, implicits): FunctionDef(ty, mname, param*, stmt*, exp) -> <fail>
+  where
+    new-param := <map(get-type)> param*
+  ; descr := [JBCMethodDesc(new-param, ty)] // create descriptor
+  ; <store-descriptor(|ctx, descr)> mname
+    
+    
+    

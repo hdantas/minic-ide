@@ -1,0 +1,118 @@
+module codegen/stmt-to-jbc
+
+imports
+  libstratego-gpp
+  lib/runtime/tmpl/pp
+  include/MiniC
+  include/MiniC-parenthesize
+  runtime/nabl/-
+  runtime/task/-
+  runtime/types/-
+  analysis/desugar
+  analysis/names
+  lib/jasmin/JasminXT
+  codegen/-
+
+rules
+
+  stmt-to-jbc: PrintfInt(i)   -> Printf(Int(), <exp-to-jbc> i)
+  stmt-to-jbc: PrintfFloat(f) -> Printf(Float(), <exp-to-jbc> f)
+
+
+    // StructDec("foo", [FieldDec(Int(), "a")])
+rules // STATEMENTS 
+  
+  // Recursive call when multiple statements exist
+  stmt-to-jbc: [s, t | ts] -> instr*
+  with
+    head-stmt* := <stmt-to-jbc> s
+  ; tail-stmt* := <stmt-to-jbc> [t | ts]
+  ; instr*     := [head-stmt*, tail-stmt*]
+  
+  stmt-to-jbc: [s] -> [<stmt-to-jbc> s]
+  stmt-to-jbc: []  -> []
+  
+
+  stmt-to-jbc: CodeBlock(c) -> [<stmt-to-jbc> c]
+
+  stmt-to-jbc: IfElse(cond, if-stmt, else-stmt) -> instr*
+  with
+    else-label := [<newname>]
+  ; end-label  := [<newname>]
+  ; instr*     := [
+      <exp-to-jbc> [cond]
+    , IFEQ(LabelRef(else-label))
+    , <stmt-to-jbc> [if-stmt]
+    , GOTO(LabelRef(end-label))
+    , JBCLabel(else-label)
+    , <stmt-to-jbc> [else-stmt]
+    , JBCLabel(end-label)
+    ]
+            
+  stmt-to-jbc: While(cond, stmt) -> instr*
+  with
+    cond-label := [<newname>]
+  ; loop-label := [<newname>]
+  ; end-label  := [<newname>]
+  ; instr*     := [
+    GOTO(LabelRef(cond-label))
+    , JBCLabel(loop-label)
+    , <stmt-to-jbc> [stmt]
+    , JBCLabel(cond-label)
+    , <exp-to-jbc> [cond]
+    , IFNE(LabelRef(loop-label))
+    , JBCLabel(end-label)
+    ]
+
+
+
+
+
+  stmt-to-jbc: Assignment(StructMember(var, field), exp) -> instr*  //assignments to non-array fields
+  with
+    fieldaccess := <exp-to-jbc> StructMember(var, field)
+  ; expaccess   := <exp-to-jbc> exp
+  ; instr*      := [exp, PUTFIELD(fieldaccess)]
+    
+  stmt-to-jbc: Assignment(StructMember(var, ArrayField(f, index)), exp) -> instr* //assignments to array fields
+  with
+    fieldaccess := <exp-to-jbc> StructMember(var, ArrayField(f, index))
+  ; expaccess   := <exp-to-jbc> exp
+  ; instr*      := [exp, PUTFIELD(fieldaccess)]
+  
+    
+ rules // Generate Code for Local Variables and Variable Access
+
+  stmt-to-jbc: VarDec(ty, name) -> instr
+  with
+    descript := JBCFieldDesc(ty)
+  ; instr    := [JBCField([PRIVATE()], name, descript, None(), None())]
+
+
+rules //assignments Assignment(Var("a"), IntConst("1"))
+  stmt-to-jbc: Assignment(var, exp) -> instr*
+  with
+  	result* := [<exp-to-jbc> exp]
+  ; save*   := [ISTORE_0()]
+  ; instr*  := [result*, save*]
+
+overlays
+
+  Printf(type, i) = //printfInt or printfFloat
+  [
+    [GETSTATIC(
+      JBCFieldRef(
+        CRef("java/lang/System")
+      , FRef("out")
+      , JBCFieldDesc(Reference(CRef("java/io/PrintStream")))
+      )
+    )] // push System.out onto the stack
+  , [i] // push a string onto the stack
+  , [INVOKEVIRTUAL(
+      JBCMethodRef(
+        CRef("java/io/PrintStream")
+      , MRef("println")
+      , JBCMethodDesc(type, Void())
+      )
+    )]
+  ]

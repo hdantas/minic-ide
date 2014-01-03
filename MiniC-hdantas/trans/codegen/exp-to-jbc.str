@@ -1,4 +1,4 @@
-module codegen/day11
+module codegen/exp-to-jbc
 
 imports
   libstratego-gpp
@@ -11,58 +11,17 @@ imports
   analysis/desugar
   analysis/names
   lib/jasmin/JasminXT
-  trans/codegen/challenges
-  
-rules // STRUCT
-    
-  // StructDec("foo", [FieldDec(Int(), "a")])
-rules // STATEMENTS 
-  
-  // Recursive call when multiple statements exist
-  stmt-to-jbc: [s, t | ts] -> instr*
-  with
-    head-stmt* := <stmt-to-jbc> s
-  ; tail-stmt* := <stmt-to-jbc> [t | ts]
-  ; instr*     := [head-stmt*, tail-stmt*]
-  
-  stmt-to-jbc: [s] -> [<stmt-to-jbc> s]
-  stmt-to-jbc: []  -> []
-  
+  codegen/-
 
-  stmt-to-jbc: CodeBlock(c) -> [<stmt-to-jbc> c]
 
-  stmt-to-jbc: IfElse(cond, if-stmt, else-stmt) -> instr*
-  with
-    else-label := [<newname>]
-  ; end-label  := [<newname>]
-  ; instr*     := [
-      [<exp-to-jbc> cond]
-    , IFEQ(LabelRef(else-label))
-    , [<stmt-to-jbc> if-stmt]
-    , GOTO(LabelRef(end-label))
-    , JBCLabel(else-label)
-    , [<stmt-to-jbc> else-stmt]
-    , JBCLabel(end-label)
-    ]
-            
-  stmt-to-jbc: While(cond, stmt) -> instr*
-  with
-    cond-label := [<newname>]
-  ; loop-label := [<newname>]
-  ; end-label  := [<newname>]
-  ; instr*     := [
-    GOTO(LabelRef(cond-label))
-    , JBCLabel(loop-label)
-    , [<stmt-to-jbc> stmt]
-    , JBCLabel(cond-label)
-    , [<exp-to-jbc> cond]
-    , IFNE(LabelRef(loop-label))
-    , JBCLabel(end-label)
-    ]
+rules
 
-rules // EXPRESSIONS
-	
-	// recursive call for multiple expressions
+
+  exp-to-jbc: IntConst(i)   -> [LDC(i)]
+  exp-to-jbc: FloatConst(f) -> [LDC(f)]
+
+
+// recursive call for multiple expressions
   exp-to-jbc: [e, t | ts] -> instr*
   with
     head-exp* := <exp-to-jbc> e
@@ -110,7 +69,7 @@ rules // EXPRESSIONS
   // Binary Operators
   op-to-jbc: BinExp(Plus(), e1, e2) -> instr*
   with
-  	exp1*  := <exp-to-jbc> e1
+    exp1*  := <exp-to-jbc> e1
   ; exp2*  := <exp-to-jbc> e2
   ; instr* := [exp1*, exp2*, IADD()]
   
@@ -143,40 +102,27 @@ rules // EXPRESSIONS
     , JBCLabel(end-label)
     ]
 
-rules // FUNCTIONS/METHODS
-
-  // recursive call for multiple functions
-  function-to-jbc: [f, t | ts] -> instr*
-  with
-    head-fun* := <function-to-jbc> f
-  ; tail-fun* := <function-to-jbc> [t | ts]
-  ; instr*    := [head-fun*, tail-fun*]
-  
-  function-to-jbc: [f] -> [<function-to-jbc> f]
-  function-to-jbc: [] -> []
-  
-  // function without parameters or local variables
-  function-to-jbc: FunctionDef(t, i, p, s, e) -> instr*
-  with
-    types  := [PUBLIC(), STATIC()]
-  ; descr  := <get-descriptor> i
-  ; stmts* := <stmt-to-jbc> s
-  ; instr* := Function-Constructor(types, i, descr, stmts*)
-  
   exp-to-jbc: Call(c, e) -> instr*
   with
     // descr := <get-descriptor> c
-    descr := [JBCMethodDesc([Void()], Void())]
-  ; instr* := [INVOKEVIRTUAL(
+    descr  := [JBCMethodDesc([Int()], Int())]
+  ; args*  := <exp-to-jbc> e
+  ; call*  := [INVOKESTATIC(
       JBCMethodRef(
         CRef("example/HelloWorld")
       , MRef(c)
       , descr
       )
     )]
+  ; instr* := [args*, call*]
+    
+    
+  exp-to-jbc: StructMember(var, field) -> instr*
+  with
+    fielddesc := JBCFieldDesc(<get-type> field)
+  ; fieldref  := FRef(field)
+  ; classref  := CRef(<get-type> var)
+  ; instr*    := JBCFieldRef(classref, fieldref, fielddesc)
+    
+    
   
-    
-
-    
-    
- 

@@ -1,0 +1,92 @@
+module codegen/program-to-jbc
+
+imports
+  libstratego-gpp
+  lib/runtime/tmpl/pp
+  include/MiniC
+  include/MiniC-parenthesize
+  runtime/nabl/-
+  runtime/task/-
+  runtime/types/-
+  analysis/desugar
+  analysis/names
+  lib/jasmin/JasminXT
+  codegen/-
+
+
+rules
+
+program-to-jbc: File(t, v, f, e) -> instr*
+  with
+    JBCheader   := JBCHeader(
+      None()
+    , None()
+    , JBCClass([PUBLIC()], "example/HelloWorld")
+    , JBCSuper("java/lang/Object")
+    , []
+    , None()
+    , None()
+    , None()
+    )
+  ; JBCfields*  := <stmt-to-jbc> v
+  ; init        :=
+    JBCMethod(
+      [PUBLIC()]
+    , Init()
+    , JBCMethodDesc([], Void())
+    , [ ALOAD_0()
+      , INVOKESPECIAL(
+          JBCMethodRef(CRef("java/lang/Object"), MRef(Init()), JBCMethodDesc([], Void()))
+        )
+      , RETURN()
+      ]
+    )
+  ; fun*        := <function-to-jbc> f
+  ; main*       := [Main(<exp-to-jbc> e, <get-type> e)]
+  ; JBCmethods* := [init, fun*, main*]
+  ; instr*      := JBCFile(JBCheader, JBCfields*, JBCmethods*)
+
+
+overlays 
+
+  File(JBCfields, JBCmethods) = //main-to-c
+  JBCFile(
+    JBCHeader(
+      None()
+    , None()
+    , JBCClass([PUBLIC()], "example/HelloWorld")
+    , JBCSuper("java/lang/Object")
+    , []
+    , None()
+    , None()
+    , None()
+    )
+  , JBCfields
+  , JBCmethods
+  )
+  
+  Main(return-exp, type) =
+    JBCMethod(
+      [PUBLIC(), STATIC()]
+    , "main"
+    , JBCMethodDesc([Array(Reference(CRef("java/lang/String")))], Void())
+    , [ JBCLimitStack("2")
+      , GETSTATIC(
+          JBCFieldRef(
+            CRef("java/lang/System")
+          , FRef("out")
+          , JBCFieldDesc(Reference(CRef("java/io/PrintStream")))
+          )
+        )
+      , return-exp
+      , INVOKEVIRTUAL(
+          JBCMethodRef(
+            CRef("java/io/PrintStream")
+          , MRef("println")
+          , JBCMethodDesc([type], Void())
+          )
+        )
+      , RETURN()
+      ]
+    )
+    

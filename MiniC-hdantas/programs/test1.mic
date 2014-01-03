@@ -1,13 +1,7 @@
-struct foo{
-  float a;
-  float b[5];
-};  
-  
-int l(int b){
-  struct foo f;
-  f.a = 0;
-  f.b[0] = 1.0;
+int l(int a, float b){
+  int lol;
+  printf("%i", 0);
   return 0;
 }
 
-0
+l(1, 1.0)

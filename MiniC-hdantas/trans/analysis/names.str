@@ -22,12 +22,13 @@ signature
   constructors
     NablProp_parameter-types : Property
     NablProp_descriptor      : Property
+    NablProp_var-index       : Property
 
 
 rules
 
   nabl-custom-properties(add-properties) =
-    ![NablProp_parameter-types(), NablProp_descriptor()]
+    ![NablProp_parameter-types(), NablProp_descriptor(), NablProp_var-index()]
     ; add-properties
 
   parameter-types-is(|task*) =
@@ -119,6 +120,51 @@ rules
   create-property-task(|partition, kind):
     term -> <create-descriptor-task(|partition)> term
     where NablProp_descriptor() := kind
+
+  var-index-is(|task*) =
+    nabl-prop-calc(|task*, [])
+
+  var-index-is(|task*, dep*) =
+    nabl-prop-calc(|task*, dep*)
+
+  var-index-list(|task*) =
+    nabl-prop-list(|task*, [])
+
+  var-index-list(|task*, dep*) =
+    nabl-prop-list(|task*, dep*)
+
+  var-index-lookup(|task*) =
+    nabl-prop-lookup(|NablProp_var-index(), task*, [])
+
+  var-index-lookup(|task*, dep*) =
+    nabl-prop-lookup(|NablProp_var-index(), task*, dep*)
+
+  var-index-match(|task*, expected) =
+    nabl-prop-match(
+    | NablProp_var-index()
+    , task*
+    , Eq()
+    , expected
+    )
+
+  var-index-match(|task*, relation, expected) =
+    nabl-prop-match(|NablProp_var-index(), task*, relation, expected)
+
+  create-var-index-task(|task*) =
+    fail
+
+  get-var-index =
+    get-property(|NablProp_var-index())
+
+  store-var-index(|partition, prop) =
+    nabl-store-prop(
+    | partition
+    , Prop(NablProp_var-index(), prop, [])
+    )
+
+  create-property-task(|partition, kind):
+    term -> <create-var-index-task(|partition)> term
+    where NablProp_var-index() := kind
 
 
 rules

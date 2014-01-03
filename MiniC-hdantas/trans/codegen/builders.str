@@ -3,9 +3,7 @@ module codegen/builders
 imports
 	lib/editor-common.generated
 	lib/jasmin/JasminXT
-	codegen/day10
-	codegen/day11
-	codegen/day12
+	codegen/-
 	lib/jasmin/JasminXT-pp
 	lib/runtime/task/-
 	lib/runtime/index/-
@@ -75,13 +73,13 @@ signature constructors
     
 rules // Auxiliary
   
-  rules
-   write-file:
-     (filename, content) -> filename
-   with
-     fd := <fopen> (filename, "w")
-   ; <fputs> (content, fd)
-   ; <fclose> fd
-   ; <refresh-workspace-file> filename
-     
-     
+  write-file: (filename, content) -> filename
+  with
+    fd := <fopen> (filename, "w")
+  ; <fputs> (content, fd)
+  ; <fclose> fd
+  ; <refresh-workspace-file> filename
+
+
+  to-jbc = program-to-jbc + function-to-jbc + stmt-to-jbc + exp-to-jbc
+

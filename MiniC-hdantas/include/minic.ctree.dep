@@ -1,12 +1,20 @@
 C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\include/minic.ctree: \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/day12.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/day11.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/day10.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/challenges.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/type-to-jbc.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/stmt-to-jbc.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/program-to-jbc.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/function-to-jbc.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/field-to-jbc.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/exp-to-jbc.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/class-to-jbc.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/jasmin/JasminXT-pp.str \
-	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/codegen/day12.str \
-	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/codegen/day11.str \
-	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/codegen/day10.str \
+	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/codegen/type-to-jbc.str \
+	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/codegen/stmt-to-jbc.str \
+	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/codegen/program-to-jbc.str \
+	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/codegen/function-to-jbc.str \
+	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/codegen/field-to-jbc.str \
+	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/codegen/exp-to-jbc.str \
+	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/codegen/class-to-jbc.str \
+	C:/Users/henrique/repos/compiler-construction-lab/MiniC-hdantas/trans/codegen/builders.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/jasmin/JasminXT.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/builders.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/analysis/types.str \

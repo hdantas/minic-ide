@@ -1,0 +1,25 @@
+module codegen/class-to-jbc
+
+imports
+  libstratego-gpp
+  lib/runtime/tmpl/pp
+  include/MiniC
+  include/MiniC-parenthesize
+  runtime/nabl/-
+  runtime/task/-
+  runtime/types/-
+  analysis/desugar
+  analysis/names
+  lib/jasmin/JasminXT
+  codegen/-
+
+
+
+  rules
+
+
+
+
+  class-to-jbc: FieldDec(ty, name) -> instr*
+  with
+    instr* := <field-to-jbc> FieldDec(ty, name)

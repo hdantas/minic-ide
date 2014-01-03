@@ -15,6 +15,7 @@ properties
 
   parameter-types of Variable: List(Type)
   descriptor      of Variable: MethodDescriptor
+  var-index       of Variable: Int
   
 //in C functions and variables share the namespace
 binding rules // Files
