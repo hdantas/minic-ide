@@ -1,12 +1,17 @@
-module codegen/builders
+module trans/codegen/builders
 
 imports
 	lib/editor-common.generated
 	lib/jasmin/JasminXT
-	codegen/-
 	lib/jasmin/JasminXT-pp
 	lib/runtime/task/-
 	lib/runtime/index/-
+	
+	trans/codegen/program
+	trans/codegen/struct
+	trans/codegen/function
+	trans/codegen/stmt
+	trans/codegen/exp
 	
 rules // Class files
 	      
@@ -81,5 +86,5 @@ rules // Auxiliary
   ; <refresh-workspace-file> filename
 
 
-  to-jbc = program-to-jbc + function-to-jbc + stmt-to-jbc + exp-to-jbc
+  to-jbc = program-to-jbc + struct-to-jbc + function-to-jbc + stmt-to-jbc + exp-to-jbc
 

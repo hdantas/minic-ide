@@ -1,7 +1,14 @@
-int l(int a, float b){
-  int lol;
-  printf("%i", 0);
-  return 0;
+struct a {int a; float b;};
+struct b {int a; float b;};
+struct c {int a; float b;};
+
+int c;
+int d;
+struct a object;
+
+int e(int f, float g){ 
+	struct a aaa;
+	return 0;
 }
 
-l(1, 1.0)
+e(1, 2.0)

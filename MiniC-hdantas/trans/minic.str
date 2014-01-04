@@ -22,7 +22,8 @@ imports
   trans/type-ts.generated
   
   trans/analysis/-
-  trans/codegen/-
+  trans/codegen/builders
+  trans/codegen/program
 
 rules // Analysis
 	

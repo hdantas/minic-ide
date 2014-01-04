@@ -1,4 +1,4 @@
-module codegen/function-to-jbc
+module trans/codegen/function
 
 imports
   libstratego-gpp
@@ -11,7 +11,7 @@ imports
   analysis/desugar
   analysis/names
   lib/jasmin/JasminXT
-  codegen/-
+  trans/codegen/-
 
 
 rules

@@ -1,4 +1,4 @@
-module codegen/class-to-jbc
+module trans/codegen/field
 
 imports
   libstratego-gpp
@@ -11,15 +11,8 @@ imports
   analysis/desugar
   analysis/names
   lib/jasmin/JasminXT
-  codegen/-
+  trans/codegen/-
 
 
+rules
 
-  rules
-
-
-
-
-  class-to-jbc: FieldDec(ty, name) -> instr*
-  with
-    instr* := <field-to-jbc> FieldDec(ty, name)

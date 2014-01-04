@@ -1,24 +1,23 @@
-module codegen/program-to-jbc
+module trans/codegen/program
 
 imports
-  libstratego-gpp
-  lib/runtime/tmpl/pp
   include/MiniC
-  include/MiniC-parenthesize
   runtime/nabl/-
   runtime/task/-
   runtime/types/-
   analysis/desugar
   analysis/names
   lib/jasmin/JasminXT
-  codegen/-
 
+  trans/codegen/stmt
+  trans/codegen/function
+  trans/codegen/exp
 
 rules
 
-program-to-jbc: File(t, v, f, e) -> instr*
+program-to-jbc: File(structs, vars, functions, expression) -> instr*
   with
-    JBCheader   := JBCHeader(
+    header   := JBCHeader(
       None()
     , None()
     , JBCClass([PUBLIC()], "example/HelloWorld")
@@ -28,7 +27,7 @@ program-to-jbc: File(t, v, f, e) -> instr*
     , None()
     , None()
     )
-  ; JBCfields*  := <stmt-to-jbc> v
+  ; fields*  := [<stmt-to-jbc> vars]
   ; init        :=
     JBCMethod(
       [PUBLIC()]
@@ -41,31 +40,17 @@ program-to-jbc: File(t, v, f, e) -> instr*
       , RETURN()
       ]
     )
-  ; fun*        := <function-to-jbc> f
-  ; main*       := [Main(<exp-to-jbc> e, <get-type> e)]
-  ; JBCmethods* := [init, fun*, main*]
-  ; instr*      := JBCFile(JBCheader, JBCfields*, JBCmethods*)
+  ; fun*        := [<function-to-jbc> functions]
+  ; main*       := [Main-Constructor(<exp-to-jbc> expression, <get-type> expression)]
+  ; methods*    := [init, fun*, main*]
+  ; instr*      := JBCFile(header, fields*, methods*)
 
 
 overlays 
 
-  File(JBCfields, JBCmethods) = //main-to-c
-  JBCFile(
-    JBCHeader(
-      None()
-    , None()
-    , JBCClass([PUBLIC()], "example/HelloWorld")
-    , JBCSuper("java/lang/Object")
-    , []
-    , None()
-    , None()
-    , None()
-    )
-  , JBCfields
-  , JBCmethods
-  )
+
   
-  Main(return-exp, type) =
+  Main-Constructor(return-exp, type) =
     JBCMethod(
       [PUBLIC(), STATIC()]
     , "main"
