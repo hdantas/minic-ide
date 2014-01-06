@@ -1,14 +1,11 @@
-struct a {int a; float b;};
-struct b {int a; float b;};
-struct c {int a; float b;};
+struct foo {};
+struct bar {};
 
-int c;
-int d;
-struct a object;
+int a;
+float b;
 
-int e(int f, float g){ 
-	struct a aaa;
+int ni(int f, float g){ 
 	return 0;
 }
 
-e(1, 2.0)
+42

@@ -12,6 +12,7 @@ imports
   trans/codegen/stmt
   trans/codegen/function
   trans/codegen/exp
+  trans/codegen/struct
 
 rules
 
@@ -44,6 +45,7 @@ program-to-jbc: File(structs, vars, functions, expression) -> instr*
   ; main*       := [Main-Constructor(<exp-to-jbc> expression, <get-type> expression)]
   ; methods*    := [init, fun*, main*]
   ; instr*      := JBCFile(header, fields*, methods*)
+  ; <struct-to-jbc> structs
 
 
 overlays 

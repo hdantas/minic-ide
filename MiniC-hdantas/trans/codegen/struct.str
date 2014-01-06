@@ -11,7 +11,7 @@ imports
   analysis/desugar
   analysis/names
   lib/jasmin/JasminXT
-  codegen/-
+  trans/codegen/builders
 
 
 
@@ -27,13 +27,14 @@ imports
   struct-to-jbc: []  -> []
   
   
-  struct-to-jbc: StructDec(name, fields) -> instr*
+  struct-to-jbc: StructDec(name, fields) -> ""
   with 
     name-jbc    := [JBCClass([PUBLIC()], name)]
   ; superclass  := [JBCSuper("java/lang/Object")]
   ; fields-jbc* := <struct-to-jbc> fields
   ; methods     := ["TODO Methods"]
   ; instr*      := Class-Constructor(name-jbc, superclass, fields-jbc*, methods)
+  ; <write-file> (name, instr*)
     
     
   struct-to-jbc: [FieldDec(ty, name), t | ts] -> instr*

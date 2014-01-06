@@ -38,10 +38,10 @@ rules // Jamin bytecode
   ; parentdir := <dirname> path
   ; dir       := $[[parentdir]/src-gen]
   ; <try(mkdir)> dir
-  ; filename  := <guarantee-extension(|"j")> $[[dir]/[<base-filename> path]]
+  ; filename  := <base-filename> path
   ; jbc       := <program-to-jbc> ast
-  ; result    := <pp-jasminxt-string> jbc
-  ; <write-file> (filename, result)
+  // ; result    := <pp-jasminxt-string> jbc
+  ; <write-file> (filename, jbc)
 
     
   partial-generate-jbc:
@@ -78,10 +78,15 @@ signature constructors
     
 rules // Auxiliary
   
-  write-file: (filename, content) -> filename
+  write-file: (classname, jbc) -> filename
   with
-    fd := <fopen> (filename, "w")
-  ; <fputs> (content, fd)
+    dir         := <getcwd> // obtain current working directory
+  ; src-dir     := $[[dir]/programs/src-gen]
+  ; <try(mkdir)> src-dir
+  ; filename    := <guarantee-extension(|"j")> $[[src-dir]/[classname]]
+  ; result      := <pp-jasminxt-string> jbc
+  ; fd          := <fopen> (filename, "w")
+  ; <fputs> (result, fd)
   ; <fclose> fd
   ; <refresh-workspace-file> filename
 

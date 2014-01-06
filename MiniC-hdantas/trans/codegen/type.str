@@ -17,3 +17,23 @@ rules
   // Type: convert MiniC types to Jasmin's
   type-to-jbc: Int()   -> Int()
   type-to-jbc: Float() -> Float()
+  type-to-jbc: Struct(ty) -> instr*
+  with // Struct("yaha"), "object"
+    instr* := ["TODO innerclass"]
+  // ; constructor := [ // innerclass constructor   
+	 //    INVOKEVIRTUAL(
+	 //      JBCMethodRef(
+		//       CRef("HelloWorld/innerclasse")
+		//     , MRef(Init())
+		//     , JBCMethodDesc(
+		//         [Reference(CRef("HelloWorld")), Reference(CRef("HelloWorld"))]
+		//       , Void()
+		//       )
+		//     )
+		//   )
+		// ]
+  
+    stmt-to-jbc: VarDec(ty, name) -> instr
+  with
+    descript := JBCFieldDesc(ty)
+  ; instr    := [JBCField([PRIVATE()], name, descript, None(), None())]

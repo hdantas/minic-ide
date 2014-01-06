@@ -11,7 +11,9 @@ imports
   analysis/desugar
   analysis/names
   lib/jasmin/JasminXT
-  trans/codegen/-
+  
+  trans/codegen/type
+  trans/codegen/exp
 
 rules
 
@@ -64,10 +66,6 @@ rules // STATEMENTS
     , JBCLabel(end-label)
     ]
 
-
-
-
-
   stmt-to-jbc: Assignment(StructMember(var, field), exp) -> instr*  //assignments to non-array fields
   with
     fieldaccess := <exp-to-jbc> StructMember(var, field)
@@ -83,9 +81,14 @@ rules // STATEMENTS
     
  rules // Generate Code for Local Variables and Variable Access
 
+stmt-to-jbc: VarDec(Struct(ty), name) -> instr
+  with
+    descript := <type-to-jbc> Struct(ty)
+  ; instr    := [JBCField([PRIVATE()], name, descript, None(), None())]
+    
   stmt-to-jbc: VarDec(ty, name) -> instr
   with
-    descript := JBCFieldDesc(ty)
+    descript := JBCFieldDesc(<type-to-jbc> ty)
   ; instr    := [JBCField([PRIVATE()], name, descript, None(), None())]
 
 
