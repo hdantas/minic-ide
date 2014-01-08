@@ -32,7 +32,7 @@ imports
     name-jbc    := [JBCClass([PUBLIC()], name)]
   ; superclass  := [JBCSuper("java/lang/Object")]
   ; fields-jbc* := <struct-to-jbc> fields
-  ; methods     := ["TODO Methods"]
+  ; methods     := [] // structs dont have methods in C
   ; instr*      := Class-Constructor(name-jbc, superclass, fields-jbc*, methods)
   ; <write-file> (name, instr*)
     

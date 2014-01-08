@@ -1,11 +1,12 @@
-struct foo {};
-struct bar {};
+struct test{float a;};
 
-int a;
+int a[5];
 float b;
+struct test foo;
 
-int ni(int f, float g){ 
-	return 0;
+float ni(){
+	foo.a = a[3];
+	return 1.;
 }
 
-42
+ni()

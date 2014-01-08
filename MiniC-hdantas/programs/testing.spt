@@ -12,9 +12,9 @@ int foo(int i){ return 0;}
 float main(){
   struct Foo f;
   int a;
-  return [[f.a]];
+  return [[f]].a;
 }
 
   
 0
-]] run get-type to Foo()
+]] run get-type to Struct("Foo"{_})

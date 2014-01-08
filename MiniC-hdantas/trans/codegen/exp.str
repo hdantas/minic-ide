@@ -11,12 +11,10 @@ imports
   analysis/desugar
   analysis/names
   lib/jasmin/JasminXT
-  trans/codegen/-
 
+  trans/codegen/type
 
 rules
-
-
   exp-to-jbc: IntConst(i)   -> [LDC(i)]
   exp-to-jbc: FloatConst(f) -> [LDC(f)]
 
@@ -85,8 +83,20 @@ rules
   ; exp2*  := <exp-to-jbc> e2
   ; instr* := [exp1*, exp2*, IMUL()]
     
-  op-to-jbc: BinExp(And(), e1, e2) -> ["TODO AND()"] //TODO Lazy-way
-  
+  op-to-jbc: BinExp(And(), e1, e2) -> instr*
+  with
+    exp1*     := <exp-to-jbc> e1
+  ; end-label := <newname>
+  ; instr*    := [
+      exp1*
+      , DUP()
+      , IFEQ(LabelRef(end-label))
+      , POP()
+      , <exp-to-jbc> e2
+      , JBCLabel(end-label) 
+    ]
+    
+    
   op-to-jbc: BinExp(Lt(), e1, e2) -> instr*
   with
     false-label := <newname>
@@ -105,8 +115,8 @@ rules
   exp-to-jbc: Call(c, e) -> instr*
   with
     // descr := <get-descriptor> c
-    descr  := [JBCMethodDesc([Int()], Int())]
-  ; args*  := <exp-to-jbc> e
+    args*  := <exp-to-jbc> e
+  ; descr  := [JBCMethodDesc([Void()], <get-type> c)]
   ; call*  := [INVOKESTATIC(
       JBCMethodRef(
         CRef("example/HelloWorld")
@@ -115,14 +125,17 @@ rules
       )
     )]
   ; instr* := [args*, call*]
-    
-    
-  exp-to-jbc: StructMember(var, field) -> instr*
-  with
-    fielddesc := JBCFieldDesc(<get-type> field)
-  ; fieldref  := FRef(field)
-  ; classref  := CRef(<get-type> var)
+  
+    // StructMember(Var("foo"), Field("a"))
+  exp-to-jbc: StructMember(Var(v), Field(f)) -> instr*
+  with //GETFIELD(JBCFieldRef(CRef("HelloWorld/innerclasse"), FRef("innervar"), JBCFieldDesc(Int())))
+    fielddesc := JBCFieldDesc(<type-to-jbc> Field(f))
+  ; fieldref  := FRef(f)
+  ; classref  := <type-to-jbc> Var(v)
   ; instr*    := JBCFieldRef(classref, fieldref, fielddesc)
     
     
-  
+  exp-to-jbc: Var(v) -> instr
+  with
+  	fielddesc := JBCFieldDesc(<type-to-jbc> Var(v))
+  ;	instr     := JBCFieldRef(CRef("HelloWorld"), FRef(v), fielddesc)

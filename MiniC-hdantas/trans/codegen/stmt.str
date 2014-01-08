@@ -65,21 +65,9 @@ rules // STATEMENTS
     , IFNE(LabelRef(loop-label))
     , JBCLabel(end-label)
     ]
-
-  stmt-to-jbc: Assignment(StructMember(var, field), exp) -> instr*  //assignments to non-array fields
-  with
-    fieldaccess := <exp-to-jbc> StructMember(var, field)
-  ; expaccess   := <exp-to-jbc> exp
-  ; instr*      := [exp, PUTFIELD(fieldaccess)]
+ 
     
-  stmt-to-jbc: Assignment(StructMember(var, ArrayField(f, index)), exp) -> instr* //assignments to array fields
-  with
-    fieldaccess := <exp-to-jbc> StructMember(var, ArrayField(f, index))
-  ; expaccess   := <exp-to-jbc> exp
-  ; instr*      := [exp, PUTFIELD(fieldaccess)]
-  
-    
- rules // Generate Code for Local Variables and Variable Access
+rules // Generate Code for Local Variables and Variable Access
 
 stmt-to-jbc: VarDec(Struct(ty), name) -> instr
   with
@@ -93,12 +81,31 @@ stmt-to-jbc: VarDec(Struct(ty), name) -> instr
 
 
 rules //assignments Assignment(Var("a"), IntConst("1"))
-  stmt-to-jbc: Assignment(var, exp) -> instr*
+  
+  stmt-to-jbc: Assignment(StructMember(var, field), ArrayVar(array, index)) -> instr* //array assignments to fields
+  with 
+    fieldaccess  := <exp-to-jbc> StructMember(var, field)
+  ; arrayaccess  := <exp-to-jbc> Var(array)
+  ; indexaccess* := [<exp-to-jbc> index, IALOAD()]
+  ; instr*       := [GETFIELD(arrayaccess), indexaccess*, PUTFIELD(fieldaccess)]
+    
+  stmt-to-jbc: Assignment(StructMember(var, field), exp) -> instr*  //assignments to fields
   with
-  	result* := [<exp-to-jbc> exp]
-  ; save*   := [ISTORE_0()]
-  ; instr*  := [result*, save*]
+    fieldaccess := <exp-to-jbc> StructMember(var, field)
+  ; expaccess   := <exp-to-jbc> exp
+  ; instr*      := [<get-field-or-const> [exp, expaccess], PUTFIELD(fieldaccess)]
 
+  stmt-to-jbc: Assignment(var, exp) -> instr
+  with
+    expaccess := <exp-to-jbc> exp
+  ; varaccess := <exp-to-jbc> var
+  ; instr     := [<get-field-or-const> [exp, expaccess], PUTFIELD(varaccess)]
+    
+rules // auxiliary
+  get-field-or-const: [IntConst(_), jbc] -> jbc // dont use GETFIELD() for constants 
+  get-field-or-const: [FloatConst(_), jbc] -> jbc
+  get-field-or-const: [var, jbc] -> GETFIELD(jbc)
+  
 overlays
 
   Printf(type, i) = //printfInt or printfFloat

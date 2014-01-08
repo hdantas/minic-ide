@@ -1,55 +1,17 @@
 DAY 10
+	Jasmin code examples
 	Automatic codegen? (from day 10)
 
 DAY 11
-	transformation (55 points)
-		classes (8 points)
-		methods (7 points)
-	++	statements (13 points)
-	--		block statements (2 points)
-	--		if statements (5 points)
-	--		while loops (6 points)
-		expressions (27 points)
-	**		logic constants (1 point)
-	--		unary expressions (5 points)
-	--		binary expressions (14 points)
-	**		object creation (1 point)
-	**		this expressions (1 point)
-	??		method calls (5 points)
-	challenges (10 points)
-	--	overlays (2 points)
-	??	reusable method descriptors (2 points)
-	??	stack limits (6 points)
-
-	TODO
-		improve if+else and while code generation
-		USIZEOF
-		make sure builders are correct in Generate Multiple Class Files section
-		find out how to return things in methods
-		do descriptors the right way
-		do descriptors in method calls
-		do stack limits
-		check day10
+	Jasmin code examples
+	reusable method descriptors (2 points)
+	stack limits (6 points)
 
 DAY 12
-
-	You can earn up to 25 points for your example MiniJava programs and their corresponding Jasmin programs. We will focus on completeness and correctness of your examples. Furthermore, you can earn up to 65 points for your code generator:
-
-	transformation (55 points)
-		types (5 points)
-		fields (10 points)
-		methods (15 points)
-		variables (10 points)
-		assignments (15 points)
+	Jasmin Code examples
+	Generate Code for Local Variables and Variable Access
 	challenges (10 points)
 		reusable field descriptors (2 points)
 		reusable variable accessors (2 points)
 		debug information (6 points)
 
-	You can earn up to 5 points for the organisation of your Stratego files and up to 5 points for the quality of your code. We focus on readibility in general, meaningful variable names and the consistent use of Stratego paragdims. We will consider the fact that Stratego is new to you.
-
-	In this assignment, we also give you the chance to earn up to 10 bonus points. This works like a challenge, but it gives you extra points on top of the total points of your assignment.
-
-
-	TODO
-		make sure i can access array fields
