@@ -15,6 +15,7 @@ imports
   trans/codegen/struct
   trans/codegen/field
   trans/codegen/type
+  trans/codegen/array
 
 rules
 
@@ -61,27 +62,7 @@ main-to-jbc: [vars, expression] -> instr*
     return-exp*  := [LDC(0)]
   ; exp-type     := Int()
     
-  array-init-to-jbc: [f, t | ts] -> instr*
-  with
-    head-field* := <array-init-to-jbc> f
-  ; tail-field* := <array-init-to-jbc> [t | ts]
-  ; instr*      := [head-field*, tail-field*]
-  
-  array-init-to-jbc: [f] -> <array-init-to-jbc> f
-  array-init-to-jbc: []  -> []
-  
-
-  array-init-to-jbc: ArrayDec(type, name, size) -> instr* //for non array fields no init is necessary
-  with
-   load-size*  := <exp-to-jbc> IntConst(<dec-string-to-int> size) // array size is always an integer constant
-  ; <debug> ["load-size: ", load-size*]
-  ; newarray    := NEWARRAY(<type-array-to-jbc> type) // NEWARRAY(IntName())
-  ; field-desc  := <get-field-descriptor> name
-  ; store-field := PUTSTATIC(JBCFieldRef(CRef("HelloWorld"), FRef(name), field-desc))
-  ; instr*      := [load-size*, newarray, store-field]
-  ; <debug> ["array-init: ", instr*]
-    
-  array-init-to-jbc: nonarraydecs -> [] //for non array fields no init is necessary
+ 
   
   
 overlays 

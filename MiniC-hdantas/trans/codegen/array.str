@@ -1,0 +1,39 @@
+module trans/codegen/array
+
+imports
+  libstratego-gpp
+  lib/runtime/tmpl/pp
+  include/MiniC
+  include/MiniC-parenthesize
+  runtime/nabl/-
+  runtime/task/-
+  runtime/types/-
+  analysis/desugar
+  analysis/names
+  lib/jasmin/JasminXT
+  
+  trans/codegen/type
+  trans/codegen/exp
+  
+rules  
+   array-init-to-jbc: [f, t | ts] -> instr*
+  with
+    head-field* := <array-init-to-jbc> f
+  ; tail-field* := <array-init-to-jbc> [t | ts]
+  ; instr*      := [head-field*, tail-field*]
+  
+  array-init-to-jbc: [f] -> <array-init-to-jbc> f
+  array-init-to-jbc: []  -> []
+  
+
+  array-init-to-jbc: ArrayDec(type, name, size) -> instr* //for non array fields no init is necessary
+  with
+   load-size*  := <exp-to-jbc> IntConst(<dec-string-to-int> size) // array size is always an integer constant
+  ; newarray    := NEWARRAY(<type-array-to-jbc> type) // NEWARRAY(IntName())
+  ; field-desc  := <get-field-descriptor> name
+  ; store-field := PUTSTATIC(JBCFieldRef(CRef("HelloWorld"), FRef(name), field-desc))
+  ; instr*      := [load-size*, newarray, store-field]
+    
+  array-init-to-jbc: nonarraydecs -> [] //for non array fields no init is necessary
+  
+  

@@ -101,7 +101,6 @@ rules
   where
     descr := JBCFieldDesc(Array(<type-to-jbc> ty)) 
   ; <store-field-descriptor(|ctx, descr)> name
-  ; <debug> ["Array:", <get-field-descriptor> name]
     
   nabl-prop-site(|lang, ctx, uris, states, implicits): FieldDec(ty, name) -> <fail>
   where

@@ -11,7 +11,7 @@ imports
   analysis/desugar
   analysis/names
   lib/jasmin/JasminXT
-  trans/codegen/-
+  
 
 rules
   // Type: convert MiniC types to Jasmin's

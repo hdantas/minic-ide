@@ -1,0 +1,116 @@
+module trans/codegen/stack
+
+imports
+  libstratego-gpp
+  lib/runtime/tmpl/pp
+  include/MiniC
+  include/MiniC-parenthesize
+  runtime/nabl/-
+  runtime/task/-
+  runtime/types/-
+  analysis/desugar
+  analysis/names
+  lib/jasmin/JasminXT
+  
+  rules // TODO
+  stack-limit: arg -> instr*
+  with
+    parameter      := <Fst> arg
+  ; statements     := <Snd> arg
+  ; ret-expression := <Third> arg
+  ; stack-limit*   := [JBCLimitStack("8")]
+  ; locals-limit*  := [JBCLimitLocals("16")]
+  ; <debug> ["statements stack-limit:", <stmt-stack-limit-aux> statements]
+  ; <debug> ["ret-expression stack-limit:", <exp-stack-limit-aux> ret-expression]
+  ; instr*         := [stack-limit*, locals-limit*]
+
+  // stack-limit-aux: VarDec(_, _) -> 1
+  // stack-limit-aux: anything -> 0
+  // locals-limit-aux: VarDec(_, _) -> 1
+  // locals-limit-aux: anything -> 0
+
+// exp
+  exp-stack-limit-aux: [e, t | ts] -> instr*
+  with
+    head-exp* := <exp-stack-limit-aux> e
+  ; tail-exp* := <exp-stack-limit-aux> [t | ts]
+  ; instr*    := [head-exp*, tail-exp*]
+  
+  exp-stack-limit-aux: [e] -> <exp-stack-limit-aux> e
+  exp-stack-limit-aux: []  -> [] 
+  
+  
+  exp-stack-limit-aux: IntConst(_)        -> 1
+  exp-stack-limit-aux: FloatConst(_)      -> 1
+  exp-stack-limit-aux: Var(_)             -> 0
+  exp-stack-limit-aux: StructMember(_, _) -> 0
+  exp-stack-limit-aux: ArrayVar(_, _)     -> 2
+  exp-stack-limit-aux: Call(_, e)         -> <length> e
+  
+  exp-stack-limit-aux: BinExp(And(), _, _)   -> 1
+  exp-stack-limit-aux: BinExp(Lt(), _, _)    -> 2
+  exp-stack-limit-aux: BinExp(Plus(), _, _)  -> 2
+  exp-stack-limit-aux: BinExp(Minus(), _, _) -> 2
+  exp-stack-limit-aux: BinExp(Mul(), _, _)   -> 2
+  
+  exp-stack-limit-aux: UnExp(UNOT(), _)    -> 1
+  exp-stack-limit-aux: UnExp(USIZEOF(), _) -> 9 //TODO
+  exp-stack-limit-aux: UnExp(UMINUS(), _)  -> 2
+  exp-stack-limit-aux: UnExp(UPLUS(), _)   -> 1
+  
+  exp-stack-limit-aux: remaining -> 0
+
+
+// statements
+  stmt-stack-limit-aux: [e, t | ts] -> instr*
+  with
+    head-exp* := <stmt-stack-limit-aux> e
+  ; tail-exp* := <stmt-stack-limit-aux> [t | ts]
+  ; instr*    := [head-exp*, tail-exp*]
+  
+  stmt-stack-limit-aux: [e] -> <exp-stack-limit-aux> e
+  stmt-stack-limit-aux: []  -> []
+    
+  stmt-stack-limit-aux: PrintfInt(_)   -> 2
+  stmt-stack-limit-aux: PrintfFloat(_) -> 2
+  
+  stmt-stack-limit-aux: IfElse(cond, if-stmt, else-stmt) -> limit
+  with
+    limit-cond  := <exp-stack-limit-aux> cond
+  ; limit-if    := <stmt-stack-limit-aux> if-stmt
+  ; limit-else  := <stmt-stack-limit-aux> else-stmt
+  ; max-if-else := <max> (limit-if, limit-else)
+  ; limit       := <addi> (limit-cond, max-if-else) 
+    
+  stmt-stack-limit-aux: While(cond, stmt) -> limit
+  with
+    limit-cond := <exp-stack-limit-aux> cond
+  ; else-stmt  := <stmt-stack-limit-aux> stmt
+  ; limit      := <addi> (limit-cond, else-stmt)
+    
+  stmt-stack-limit-aux: VarDec(Struct(_), _) -> 3
+  stmt-stack-limit-aux: VarDec(_, _)         -> 1
+  stmt-stack-limit-aux: ArrayDec(_, _, _)    -> 1
+  
+  stmt-stack-limit-aux: Assignment(StructMember(_, _), ArrayVar(_, _)) -> 3
+  stmt-stack-limit-aux: Assignment(StructMember(_, _), exp) -> limit
+  with
+    limit-var := 1 //local array = 1, global array = 2
+  ; limit-exp := <exp-stack-limit-aux> exp
+  ; limit     := <addi> (limit-var, limit-exp)
+  
+  stmt-stack-limit-aux: Assignment(ArrayVar(name, _), exp) -> limit
+  with
+    limit-var := 2 //local array = 1, global array = 2
+  ; limit-exp := <exp-stack-limit-aux> exp
+  ; limit     := <addi> (limit-var, limit-exp)
+    
+  stmt-stack-limit-aux: Assignment(var, exp) -> limit
+  with
+    limit-var := <if(<get-var-index> var, 1, 2)> //local var = 1, global var = 2
+  ; limit-exp := <exp-stack-limit-aux> exp
+  ; limit     := <addi> (limit-var, limit-exp)
+  
+  stmt-stack-limit-aux: remaining -> 0
+  
+  

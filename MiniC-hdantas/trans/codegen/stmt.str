@@ -32,12 +32,10 @@ rules // STATEMENTS
   stmt-to-jbc: PrintfInt(i) -> instr
   with
     instr := <printf-aux> i
-  ; <debug> instr
   
   stmt-to-jbc: PrintfFloat(f) -> instr
   with
     instr := <printf-aux> f
-  ; <debug> instr
   
   printf-aux: expression -> instr*
   with
@@ -116,7 +114,7 @@ rules // Generate Code for Local Variables and Variable Access
 
 
 rules //assignments Assignment(Var("a"), IntConst("1"))
-  // TODOs
+
   stmt-to-jbc: Assignment(StructMember(var, field), ArrayVar(array, index)) -> instr* //array assignments to fields
   with 
     fieldaccess  := <exp-to-jbc> StructMember(var, field)
@@ -128,10 +126,8 @@ rules //assignments Assignment(Var("a"), IntConst("1"))
   stmt-to-jbc: Assignment(StructMember(var, Field(f)), exp) -> instr*  //assignments to fields
   with
     varaccess*  := <exp-to-jbc> var
-  ; <debug> ["varaccess*:", varaccess*]
   ; expaccess*  := <exp-to-jbc> exp
   ; class-name  := $[HelloWorld/[<get-type; get-arguments; index(|1)> var]]
-  ; <debug> ["class-name:", class-name]
   ; setter-name := $[set_[f]]
   ; exp-type    := <get-type> exp
   ; instr*      := [varaccess*, expaccess*, INVOKESTATIC(
@@ -141,7 +137,6 @@ rules //assignments Assignment(Var("a"), IntConst("1"))
 		  , JBCMethodDesc([Reference(CRef(class-name)), exp-type], exp-type)
 		  )
 		), POP()]
-	; <debug> instr*
 
 
   stmt-to-jbc: Assignment(ArrayVar(arrayname, index), exp) -> instr*
@@ -157,14 +152,12 @@ rules //assignments Assignment(Var("a"), IntConst("1"))
   
   stmt-to-jbc: Assignment(var, exp) -> instr
   with
-  <debug> ["stmt-to-jbc:", <strip-annos> var]
   //only local vars have indices
-  ; instr := <if(<get-var-index> var, <local-stmt-to-jbc> Assignment(var, exp), <global-stmt-to-jbc> Assignment(var, exp))>
+    instr := <if(<get-var-index> var, <local-stmt-to-jbc> Assignment(var, exp), <global-stmt-to-jbc> Assignment(var, exp))>
     
   local-stmt-to-jbc: Assignment(var, exp) -> instr* // assignment to local var
   with
-    <debug> ["local-stmt-to-jbc:", <strip-annos> var]
-  ; var-index  := <get-var-index> var // fails for non local var
+    var-index  := <get-var-index> var // fails for non local var
   ; exp-jbc*   := <exp-to-jbc> exp
   ; store-jbc* := <Snd> var-index //retrieve store instr from index
   ; instr*     := [exp-jbc*, store-jbc*]
@@ -175,8 +168,7 @@ rules //assignments Assignment(Var("a"), IntConst("1"))
     
   global-stmt-to-jbc: Assignment(var, exp) -> instr* // assignment to global var
   with
-    <debug> ["global-stmt-to-jbc:", <strip-annos> var]
-  ; expaccess* := <exp-to-jbc> exp
+    expaccess* := <exp-to-jbc> exp
   ; var-jbc    := <exp-to-jbc> var
   ; varaccess  := <get-arguments; index(|1); get-arguments; index(|1)> var-jbc //remove outer "GETSTATIC()"
   ; instr*     := [expaccess*, PUTSTATIC(varaccess)]

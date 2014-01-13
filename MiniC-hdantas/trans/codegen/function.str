@@ -11,9 +11,13 @@ imports
   analysis/desugar
   analysis/names
   lib/jasmin/JasminXT
-  trans/codegen/-
-
-
+  
+  trans/codegen/stack
+  trans/codegen/type
+  trans/codegen/exp
+  trans/codegen/array
+  trans/codegen/stmt
+  
 rules
 
   // recursive call for multiple functions
@@ -30,12 +34,11 @@ rules
   function-to-jbc: FunctionDef(t, i, p, s, e) -> instr*
   with
     types         := [PUBLIC()]
-  ; stack-limit*  := <stack-limit> s //TODO
+  ; stack-limit*  := <stack-limit> (p, s, e)
   ; descr*        := <get-method-descriptor> i
   ; stmts*        := <stmt-to-jbc> s
   ; return-jbc*   := <return-aux> (e, <get-type> e)
   ; method-stmts* := [stack-limit*, stmts*, return-jbc*]
-  ; <debug> method-stmts*
   ; instr*        := Function-Constructor(types, i, descr*, method-stmts*)
   
 
@@ -73,14 +76,12 @@ rules
     param-type    := <map(get-type; type-to-jbc)> param* //type descriptor
   ; descr         := JBCMethodDesc(param-type, <type-to-jbc> ty) 
   ; <store-method-descriptor(|ctx, descr)> mname
-  ; <debug> ["method-descriptor:", <strip-annos> mname, <get-method-descriptor> mname] 
   
   ; indexed-param := <map-with-index(id)> param* //parameter indices
   ; <map(map-index(|ctx, 0))> indexed-param
   
   ; number-param  := <length> param*
   ; cleaned-stmt := <retain-all(nmap-aux)> stmt* //remove non-declarations stmts from list
-  ; <debug> ["cleaned-stmt:", cleaned-stmt]
   ; indexed-stmt  := <map-with-index(id)> cleaned-stmt //statement indices
   ; <map(map-index(|ctx, number-param))> indexed-stmt //indices for locals start after args
     
@@ -94,14 +95,12 @@ rules // auxiliary
     new-index := <add> (length, index)
   ; instr     := <var-index-aux> (new-index, <get-type> name)
   ; <store-var-index(|ctx, instr)> name
-  ; <debug> ["var-index:", <strip-annos> name, <get-var-index> name]
     
   map-index(|ctx, length): (index, ArrayDec(type, name, size)) -> ""
   where
     new-index := <add> (length, index)
   ; instr     := <array-index-aux> (new-index, <get-type> name)
   ; <store-var-index(|ctx, instr)> name
-  ; <debug> ["var-index:", <strip-annos> name, <get-var-index> name]    
   
   var-index-aux: (index, Int())   -> ([ILOAD(index)], [ISTORE(index)])
   var-index-aux: (index, Float()) -> ([FLOAD(index)], [FSTORE(index)])
@@ -112,15 +111,4 @@ rules // auxiliary
   
   map-index(|ctx, length): (index, _) -> "" //ignore other statements
   
-rules // TODO
-  stack-limit: expressions -> [JBCLimitStack("8"), JBCLimitLocals("16")] // limit
-  // where
-  //   // limit := "TODO STACK-LIMIT"
-  //   limit-list := <map(stack-limit-aux)> expressions
-  // // ; <debug> ["limit-list: ", limit-list]  
-  // ; limit      := <foldr(!0, add)> limit-list
-  // // ; <debug> ["limit: ", limit]
 
-
-  stack-limit-aux: VarDec(_, _) -> 1
-  stack-limit-aux: anything -> 0

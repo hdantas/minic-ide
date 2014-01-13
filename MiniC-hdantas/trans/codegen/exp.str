@@ -35,7 +35,6 @@ rules
   with
     exp*   := <op-to-jbc> UnExp(uop, e)
   ; instr* := [exp*]
-  ; <debug> instr*
 
   // Unary Operators
   op-to-jbc: UnExp(UPLUS(), e) -> instr*
@@ -71,7 +70,6 @@ rules
   with
     exp*   := <op-to-jbc> BinExp(bop, e1, e2)
   ; instr* := [exp*]
-  ; <debug> instr*
    
   // Binary Operators
   op-to-jbc: BinExp(Plus(), e1, e2) -> instr*
@@ -140,7 +138,6 @@ rules
       )
     )]
   ; instr* := [args*, call*]
-  ; <debug> ["instr*: ", instr*]
   
   exp-to-jbc: StructMember(Var(v), Field(f)) -> instr*
   with
@@ -156,28 +153,23 @@ rules
 	    )
     )
   ; instr*      := [var-jbc*, invoke-get]
-  ; <debug> instr*
     
   exp-to-jbc: ArrayVar(name, index) -> instr //only local vars have indices
   with //ArrayVar("global", IntConst("0"))
-  <debug> ["exp-to-jbc:", <strip-annos> name]
-  ; instr := <if(<get-var-index> name, <local-array-to-jbc> (name, index), <global-array-to-jbc> (name, index))>
+    instr := <if(<get-var-index> name, <local-array-to-jbc> (name, index), <global-array-to-jbc> (name, index))>
     
   local-array-to-jbc: (name, index) -> instr* //handles local arrays
   with
-    <debug> ["local-array", <strip-annos> name, index]
-  ; var-index    := <get-var-index> name
+    var-index    := <get-var-index> name
   ; load-instr*  := <Fst> var-index //get load instr from index
   ; index-instr* := <exp-to-jbc> index
-  ; <debug> ["var-index", <strip-annos> name, var-index]
   ; load-array*  := <Third> var-index
   ; instr*       := [load-instr*, index-instr*, load-array*]
   
   
   global-array-to-jbc: (name, index) -> instr* //handles global arrays
   with
-    <debug> ["global-array", <strip-annos> name, index]
-  ; fielddesc   := <get-field-descriptor> name
+    fielddesc   := <get-field-descriptor> name
   ; load-instr   := GETSTATIC(JBCFieldRef(CRef("HelloWorld"), FRef(name), fielddesc))
   ; index-instr* := <exp-to-jbc> index
   ; load-array*  := <get-type; array-load-aux> name
@@ -189,18 +181,15 @@ rules
   
   exp-to-jbc: Var(v) -> instr //only local vars have indices
   with
-  <debug> ["exp-to-jbc:", <strip-annos> v]
-  ; instr := <if(<get-var-index> Var(v), <local-var-to-jbc> Var(v), <global-var-to-jbc> Var(v))>
+    instr := <if(<get-var-index> Var(v), <local-var-to-jbc> Var(v), <global-var-to-jbc> Var(v))>
     
   local-var-to-jbc: Var(v) -> instr //handles local vars
   with
-    <debug> ["local-var", <strip-annos> v]
-  ; index := <get-var-index> v // fails for non local variables
+    index := <get-var-index> v // fails for non local variables
   ; instr := <Fst> index //get load instr from index
     
   global-var-to-jbc: Var(v) -> instr //handles global vars
   with
-    <debug> ["global-var", <strip-annos> v]
-  ; fielddesc := <get-field-descriptor> v
+    fielddesc := <get-field-descriptor> v
   ;	instr     := [GETSTATIC(JBCFieldRef(CRef("HelloWorld"), FRef(v), fielddesc))]
    	
