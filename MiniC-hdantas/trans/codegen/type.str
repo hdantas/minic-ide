@@ -17,16 +17,20 @@ rules
   // Type: convert MiniC types to Jasmin's
   type-to-jbc: Int()   -> Int()
   type-to-jbc: Float() -> Float()
+  type-to-jbc: []      -> []
   
-  type-to-jbc: Field(f)   -> <get-type> f
-  // type-to-jbc: Var(v)     -> <get-type> v
-  type-to-jbc: Var(v)     -> instr
+  type-to-jbc: Field(f) -> <get-type> f
+
+  type-to-jbc: Var(v) -> instr
   with
-  	ty    := <get-type> v
-  ; instr := [<type-to-jbc> ty]
+  	type  := <get-type> v
+  ; instr := <type-to-jbc> type
     
   type-to-jbc: Struct(ty) -> instr
   with
     class  := $[HelloWorld/[ty]]
-  // ; instr* := Reference(CRef(class))
-  ; instr  := CRef(class)
+  ; instr  := Reference(CRef(class))
+    
+  type-array-to-jbc: Int()   -> IntName()
+  type-array-to-jbc: Float() -> FloatName()
+  

@@ -12,6 +12,7 @@ imports
 	trans/codegen/function
 	trans/codegen/stmt
 	trans/codegen/exp
+	trans/codegen/field
 	
 rules // Class files
 	      
@@ -91,5 +92,5 @@ rules // Auxiliary
   ; <refresh-workspace-file> filename
 
 
-  to-jbc = program-to-jbc + struct-to-jbc + function-to-jbc + stmt-to-jbc + exp-to-jbc
+  to-jbc = program-to-jbc + struct-to-jbc + field-to-jbc + function-to-jbc + stmt-to-jbc + exp-to-jbc
 

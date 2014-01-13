@@ -1,9 +1,9 @@
 C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\include/minic.ctree: \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/program.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/field.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/exp.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/stmt.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/type.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/field.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/function.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/struct.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/jasmin/JasminXT-pp.str \

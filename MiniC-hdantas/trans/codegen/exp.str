@@ -15,10 +15,6 @@ imports
   trans/codegen/type
 
 rules
-  exp-to-jbc: IntConst(i)   -> [LDC(i)]
-  exp-to-jbc: FloatConst(f) -> [LDC(f)]
-
-
 // recursive call for multiple expressions
   exp-to-jbc: [e, t | ts] -> instr*
   with
@@ -26,29 +22,40 @@ rules
   ; tail-exp* := <exp-to-jbc> [t | ts]
   ; instr*    := [head-exp*, tail-exp*]
   
-  exp-to-jbc: [e] -> [<exp-to-jbc> e]
-  exp-to-jbc: []  -> []   
+  exp-to-jbc: [e] -> <exp-to-jbc> e
     
+  exp-to-jbc: []  -> []   
+
+    
+  exp-to-jbc: IntConst(i)   -> [LDC(i)]
+  exp-to-jbc: FloatConst(f) -> [LDC(f)]
+      
   // Unary Expressions
   exp-to-jbc: UnExp(uop, e) -> instr*
   with
-    instr* := <op-to-jbc> UnExp(uop, e)
+    exp*   := <op-to-jbc> UnExp(uop, e)
+  ; instr* := [exp*]
+  ; <debug> instr*
 
   // Unary Operators
-  op-to-jbc: UnExp(UPLUS(), e)  -> <exp-to-jbc> e
+  op-to-jbc: UnExp(UPLUS(), e) -> instr*
+  with
+  	exp*   := <exp-to-jbc> e
+  ; instr* := [exp*]
   
-  op-to-jbc: UnExp(UMINUS(), e)  -> instr*
+  op-to-jbc: UnExp(UMINUS(), e) -> instr*
   with
     exp*   := <exp-to-jbc> e
   ; instr* := [LDC("0"), exp*, ISUB()]
   
+  
   op-to-jbc: UnExp(UNOT(), e)  -> instr*
   with
-    true-label  := <newname>
-  ; false-label := <newname>
+    false-label := <newname>
   ; end-label   := <newname>
+  ; exp*        := <exp-to-jbc> e
   ; instr*      := [
-      <exp-to-jbc> e
+      exp*
     , IFNE(LabelRef(false-label))
     , ICONST_1()
     , GOTO(LabelRef(end-label))
@@ -57,20 +64,22 @@ rules
     , JBCLabel(end-label)
   ]
     
-  op-to-jbc: UnExp(USIZEOF(), e) -> ["TODO USIZEOF()"] // TODO
+  op-to-jbc: UnExp(USIZEOF(), e) -> [NOP()] // TODO
 
   // Binary Expressions
   exp-to-jbc: BinExp(bop, e1, e2) -> instr*
   with
-  instr* := <op-to-jbc> BinExp(bop, e1, e2)
- 
+    exp*   := <op-to-jbc> BinExp(bop, e1, e2)
+  ; instr* := [exp*]
+  ; <debug> instr*
+   
   // Binary Operators
   op-to-jbc: BinExp(Plus(), e1, e2) -> instr*
   with
     exp1*  := <exp-to-jbc> e1
   ; exp2*  := <exp-to-jbc> e2
   ; instr* := [exp1*, exp2*, IADD()]
-  
+    
   op-to-jbc: BinExp(Minus(), e1, e2) -> instr*
   with
     exp1*  := <exp-to-jbc> e1
@@ -85,57 +94,113 @@ rules
     
   op-to-jbc: BinExp(And(), e1, e2) -> instr*
   with
-    exp1*     := <exp-to-jbc> e1
-  ; end-label := <newname>
-  ; instr*    := [
-      exp1*
-      , DUP()
-      , IFEQ(LabelRef(end-label))
-      , POP()
-      , <exp-to-jbc> e2
+    exp1*       := <exp-to-jbc> e1
+  ; exp2*       := <exp-to-jbc> e2
+  ; false-label := <newname>
+  ; end-label   := <newname>
+  ; instr*      := [
+        exp1*
+      , IFEQ(LabelRef(false-label))
+      , exp2*
+      , IFEQ(LabelRef(false-label))
+      , ICONST_1()
+      , GOTO(end-label)
+      , JBCLabel(false-label)
+      , ICONST_0()
       , JBCLabel(end-label) 
     ]
     
     
   op-to-jbc: BinExp(Lt(), e1, e2) -> instr*
   with
-    false-label := <newname>
-  ; end-label   := <newname>  
-  ; instr*      := [
-      <exp-to-jbc> e1
-    , <exp-to-jbc> e2
-    , IF_ICMPGE(LabelRef(false-label))
-    , ICONST_1()
-    , GOTO(LabelRef(end-label))
-    , JBCLabel(false-label)
+    true-label := <newname>
+  ; end-label  := <newname>
+  ; exp1*      := <exp-to-jbc> e1
+  ; exp2*      := <exp-to-jbc> e2
+  ; instr*     := [
+      exp1*
+    , exp2*
+    , IF_ICMPLT(LabelRef(true-label))
     , ICONST_0()
+    , GOTO(LabelRef(end-label))
+    , JBCLabel(true-label)
+    , ICONST_1()
     , JBCLabel(end-label)
     ]
 
   exp-to-jbc: Call(c, e) -> instr*
   with
-    // descr := <get-descriptor> c
-    args*  := <exp-to-jbc> e
-  ; descr  := [JBCMethodDesc([Void()], <get-type> c)]
-  ; call*  := [INVOKESTATIC(
+    args* := <exp-to-jbc> e
+  ; descr := <get-method-descriptor> c
+  ; call* := [INVOKEVIRTUAL(
       JBCMethodRef(
-        CRef("example/HelloWorld")
+        CRef("HelloWorld")
       , MRef(c)
       , descr
       )
     )]
   ; instr* := [args*, call*]
+  ; <debug> ["instr*: ", instr*]
   
-    // StructMember(Var("foo"), Field("a"))
   exp-to-jbc: StructMember(Var(v), Field(f)) -> instr*
-  with //GETFIELD(JBCFieldRef(CRef("HelloWorld/innerclasse"), FRef("innervar"), JBCFieldDesc(Int())))
-    fielddesc := JBCFieldDesc(<type-to-jbc> Field(f))
-  ; fieldref  := FRef(f)
-  ; classref  := <type-to-jbc> Var(v)
-  ; instr*    := JBCFieldRef(classref, fieldref, fielddesc)
-    
-    
-  exp-to-jbc: Var(v) -> instr
   with
-  	fielddesc := JBCFieldDesc(<type-to-jbc> Var(v))
-  ;	instr     := JBCFieldRef(CRef("HelloWorld"), FRef(v), fielddesc)
+    var-jbc*    := <exp-to-jbc> Var(v)
+  ; class-name  := $[HelloWorld/[<get-type; get-arguments; index(|1)> Var(v)]]
+  ; getter-name := $[get_[f]]
+  ; field-type  := <get-type> Field(f)
+  ; invoke-get  := INVOKESTATIC(
+	    JBCMethodRef(
+	      CRef(class-name)
+	    , MRef(getter-name)
+	    , JBCMethodDesc([Reference(CRef(class-name))], field-type)
+	    )
+    )
+  ; instr*      := [var-jbc*, invoke-get]
+  ; <debug> instr*
+    
+  exp-to-jbc: ArrayVar(name, index) -> instr //only local vars have indices
+  with //ArrayVar("global", IntConst("0"))
+  <debug> ["exp-to-jbc:", <strip-annos> name]
+  ; instr := <if(<get-var-index> name, <local-array-to-jbc> (name, index), <global-array-to-jbc> (name, index))>
+    
+  local-array-to-jbc: (name, index) -> instr* //handles local arrays
+  with
+    <debug> ["local-array", <strip-annos> name, index]
+  ; var-index    := <get-var-index> name
+  ; load-instr*  := <Fst> var-index //get load instr from index
+  ; index-instr* := <exp-to-jbc> index
+  ; <debug> ["var-index", <strip-annos> name, var-index]
+  ; load-array*  := <Third> var-index
+  ; instr*       := [load-instr*, index-instr*, load-array*]
+  
+  
+  global-array-to-jbc: (name, index) -> instr* //handles global arrays
+  with
+    <debug> ["global-array", <strip-annos> name, index]
+  ; fielddesc   := <get-field-descriptor> name
+  ; load-instr   := GETSTATIC(JBCFieldRef(CRef("HelloWorld"), FRef(name), fielddesc))
+  ; index-instr* := <exp-to-jbc> index
+  ; load-array*  := <get-type; array-load-aux> name
+  ; instr*       := [load-instr, index-instr*, load-array*]
+  
+  array-load-aux: Int()   -> [IALOAD()]
+  array-load-aux: Float() -> [FALOAD()]
+  
+  
+  exp-to-jbc: Var(v) -> instr //only local vars have indices
+  with
+  <debug> ["exp-to-jbc:", <strip-annos> v]
+  ; instr := <if(<get-var-index> Var(v), <local-var-to-jbc> Var(v), <global-var-to-jbc> Var(v))>
+    
+  local-var-to-jbc: Var(v) -> instr //handles local vars
+  with
+    <debug> ["local-var", <strip-annos> v]
+  ; index := <get-var-index> v // fails for non local variables
+  ; instr := <Fst> index //get load instr from index
+    
+  global-var-to-jbc: Var(v) -> instr //handles global vars
+  with
+    <debug> ["global-var", <strip-annos> v]
+  ; fielddesc := <get-field-descriptor> v
+  ;	instr     := [GETSTATIC(JBCFieldRef(CRef("HelloWorld"), FRef(v), fielddesc))]
+   	

@@ -15,13 +15,7 @@ imports
   trans/codegen/type
   trans/codegen/exp
 
-rules
 
-  stmt-to-jbc: PrintfInt(i)   -> Printf(Int(), <exp-to-jbc> i)
-  stmt-to-jbc: PrintfFloat(f) -> Printf(Float(), <exp-to-jbc> f)
-
-
-    // StructDec("foo", [FieldDec(Int(), "a")])
 rules // STATEMENTS 
   
   // Recursive call when multiple statements exist
@@ -31,37 +25,60 @@ rules // STATEMENTS
   ; tail-stmt* := <stmt-to-jbc> [t | ts]
   ; instr*     := [head-stmt*, tail-stmt*]
   
-  stmt-to-jbc: [s] -> [<stmt-to-jbc> s]
+  stmt-to-jbc: [s] -> <stmt-to-jbc> s
   stmt-to-jbc: []  -> []
   
 
+  stmt-to-jbc: PrintfInt(i) -> instr
+  with
+    instr := <printf-aux> i
+  ; <debug> instr
+  
+  stmt-to-jbc: PrintfFloat(f) -> instr
+  with
+    instr := <printf-aux> f
+  ; <debug> instr
+  
+  printf-aux: expression -> instr*
+  with
+    static := GETSTATIC(JBCFieldRef(CRef("java/lang/System"), FRef("out"), JBCFieldDesc(Reference(CRef("java/io/PrintStream")))))
+  ; exp*   := <exp-to-jbc> expression
+  ; invoke := INVOKEVIRTUAL(JBCMethodRef(CRef("java/io/PrintStream"), MRef("println"), JBCMethodDesc(<get-type> expression, Void())))
+  ; instr* := [static, exp*, invoke]
+  
   stmt-to-jbc: CodeBlock(c) -> [<stmt-to-jbc> c]
 
   stmt-to-jbc: IfElse(cond, if-stmt, else-stmt) -> instr*
   with
-    else-label := [<newname>]
-  ; end-label  := [<newname>]
-  ; instr*     := [
-      <exp-to-jbc> [cond]
+    else-label     := <newname>
+  ; end-label      := <newname>
+  ; jbc-cond*      := <exp-to-jbc> cond
+  ; jbc-if-stmt*   := <stmt-to-jbc> if-stmt
+  ; jbc-else-stmt* := <stmt-to-jbc> else-stmt  
+  ; instr*         := [
+      jbc-cond*
     , IFEQ(LabelRef(else-label))
-    , <stmt-to-jbc> [if-stmt]
+    , jbc-if-stmt*
     , GOTO(LabelRef(end-label))
     , JBCLabel(else-label)
-    , <stmt-to-jbc> [else-stmt]
+    , jbc-else-stmt*
     , JBCLabel(end-label)
     ]
+  
             
   stmt-to-jbc: While(cond, stmt) -> instr*
   with
-    cond-label := [<newname>]
-  ; loop-label := [<newname>]
-  ; end-label  := [<newname>]
+    cond-label := <newname>
+  ; loop-label := <newname>
+  ; end-label  := <newname>
+  ; jbc-stmt*  := <stmt-to-jbc> stmt
+  ; jbc-cond*  := <exp-to-jbc> cond
   ; instr*     := [
     GOTO(LabelRef(cond-label))
     , JBCLabel(loop-label)
-    , <stmt-to-jbc> [stmt]
+    , jbc-stmt*
     , JBCLabel(cond-label)
-    , <exp-to-jbc> [cond]
+    , jbc-cond*
     , IFNE(LabelRef(loop-label))
     , JBCLabel(end-label)
     ]
@@ -69,60 +86,107 @@ rules // STATEMENTS
     
 rules // Generate Code for Local Variables and Variable Access
 
-stmt-to-jbc: VarDec(Struct(ty), name) -> instr
+  stmt-to-jbc: VarDec(Struct(ty), name) -> instr //instr
   with
-    descript := <type-to-jbc> Struct(ty)
-  ; instr    := [JBCField([PRIVATE()], name, descript, None(), None())]
+    struct-name := $[HelloWorld/[ty]]
+  ; new-object := NEW(CRef(struct-name))
+  ; constructor := INVOKESPECIAL(
+	    JBCMethodRef(
+	    CRef(struct-name)
+	    , MRef(Init())
+	    , JBCMethodDesc(
+	        [Reference(CRef("HelloWorld")), Reference(CRef("HelloWorld"))]
+	      , Void()
+	      )
+	    )
+    )
+  ; index    := <get-var-index> name
+  ; store    := <Snd> index //retrieve store instr from index 
+  ; instr    := [new-object, DUP(), ALOAD_0(), ACONST_NULL(), constructor, store]
+
     
-  stmt-to-jbc: VarDec(ty, name) -> instr
+  stmt-to-jbc: VarDec(ty, name) -> []
+  stmt-to-jbc: ArrayDec(ty, name, size) -> instr*
   with
-    descript := JBCFieldDesc(<type-to-jbc> ty)
-  ; instr    := [JBCField([PRIVATE()], name, descript, None(), None())]
+    load-size*  := <exp-to-jbc> IntConst(<dec-string-to-int> size) // array size is always an integer constant
+  ; newarray    := NEWARRAY(<type-array-to-jbc> ty) // NEWARRAY(IntName()) 
+  ; var-index  := <get-var-index> name // fails for non local var
+  ; store-jbc* := <Snd> var-index //retrieve store instr from index
+  ; instr*     := [load-size*, newarray, store-jbc*]
 
 
 rules //assignments Assignment(Var("a"), IntConst("1"))
-  
+  // TODOs
   stmt-to-jbc: Assignment(StructMember(var, field), ArrayVar(array, index)) -> instr* //array assignments to fields
   with 
     fieldaccess  := <exp-to-jbc> StructMember(var, field)
   ; arrayaccess  := <exp-to-jbc> Var(array)
-  ; indexaccess* := [<exp-to-jbc> index, IALOAD()]
+  ; index*       := <exp-to-jbc> index
+  ; indexaccess* := [index*, IALOAD()]
   ; instr*       := [GETFIELD(arrayaccess), indexaccess*, PUTFIELD(fieldaccess)]
     
-  stmt-to-jbc: Assignment(StructMember(var, field), exp) -> instr*  //assignments to fields
+  stmt-to-jbc: Assignment(StructMember(var, Field(f)), exp) -> instr*  //assignments to fields
   with
-    fieldaccess := <exp-to-jbc> StructMember(var, field)
-  ; expaccess   := <exp-to-jbc> exp
-  ; instr*      := [<get-field-or-const> [exp, expaccess], PUTFIELD(fieldaccess)]
+    varaccess*  := <exp-to-jbc> var
+  ; <debug> ["varaccess*:", varaccess*]
+  ; expaccess*  := <exp-to-jbc> exp
+  ; class-name  := $[HelloWorld/[<get-type; get-arguments; index(|1)> var]]
+  ; <debug> ["class-name:", class-name]
+  ; setter-name := $[set_[f]]
+  ; exp-type    := <get-type> exp
+  ; instr*      := [varaccess*, expaccess*, INVOKESTATIC(
+		  JBCMethodRef(
+		    CRef(class-name)
+		  , MRef(setter-name)
+		  , JBCMethodDesc([Reference(CRef(class-name)), exp-type], exp-type)
+		  )
+		), POP()]
+	; <debug> instr*
 
+
+  stmt-to-jbc: Assignment(ArrayVar(arrayname, index), exp) -> instr*
+  with // Assignment(ArrayVar("global", IntConst("3")), IntConst("0"))
+    load-field*  := <exp-to-jbc> Var(arrayname)
+  ; load-index*  := <exp-to-jbc> index
+  ; load-exp*    := <exp-to-jbc> exp
+  ; store-field* := <get-type; array-store-aux> exp
+  ; instr*       := [load-field*, load-index*, load-exp*, store-field*]
+    
+  array-store-aux: Int() ->   [IASTORE()]
+  array-store-aux: Float() -> [FASTORE()]
+  
   stmt-to-jbc: Assignment(var, exp) -> instr
   with
-    expaccess := <exp-to-jbc> exp
-  ; varaccess := <exp-to-jbc> var
-  ; instr     := [<get-field-or-const> [exp, expaccess], PUTFIELD(varaccess)]
+  <debug> ["stmt-to-jbc:", <strip-annos> var]
+  //only local vars have indices
+  ; instr := <if(<get-var-index> var, <local-stmt-to-jbc> Assignment(var, exp), <global-stmt-to-jbc> Assignment(var, exp))>
+    
+  local-stmt-to-jbc: Assignment(var, exp) -> instr* // assignment to local var
+  with
+    <debug> ["local-stmt-to-jbc:", <strip-annos> var]
+  ; var-index  := <get-var-index> var // fails for non local var
+  ; exp-jbc*   := <exp-to-jbc> exp
+  ; store-jbc* := <Snd> var-index //retrieve store instr from index
+  ; instr*     := [exp-jbc*, store-jbc*]
+    
+  // store-aux: (index, Int())   -> [ISTORE(index)]
+  // store-aux: (index, Float()) -> [FSTORE(index)]
+  // store-aux: (index, otherty) -> [ASTORE(index)]
+    
+  global-stmt-to-jbc: Assignment(var, exp) -> instr* // assignment to global var
+  with
+    <debug> ["global-stmt-to-jbc:", <strip-annos> var]
+  ; expaccess* := <exp-to-jbc> exp
+  ; var-jbc    := <exp-to-jbc> var
+  ; varaccess  := <get-arguments; index(|1); get-arguments; index(|1)> var-jbc //remove outer "GETSTATIC()"
+  ; instr*     := [expaccess*, PUTSTATIC(varaccess)]
     
 rules // auxiliary
-  get-field-or-const: [IntConst(_), jbc] -> jbc // dont use GETFIELD() for constants 
-  get-field-or-const: [FloatConst(_), jbc] -> jbc
-  get-field-or-const: [var, jbc] -> GETFIELD(jbc)
-  
-overlays
-
-  Printf(type, i) = //printfInt or printfFloat
-  [
-    [GETSTATIC(
-      JBCFieldRef(
-        CRef("java/lang/System")
-      , FRef("out")
-      , JBCFieldDesc(Reference(CRef("java/io/PrintStream")))
-      )
-    )] // push System.out onto the stack
-  , [i] // push a string onto the stack
-  , [INVOKEVIRTUAL(
-      JBCMethodRef(
-        CRef("java/io/PrintStream")
-      , MRef("println")
-      , JBCMethodDesc(type, Void())
-      )
-    )]
-  ]
+  // get-field-or-const: [IntConst(_), jbc]   -> jbc // dont use GETSTATIC() for constants 
+  // get-field-or-const: [FloatConst(_), jbc] -> jbc // dont use GETSTATIC() for constants
+  // get-field-or-const: [var, jbc]           -> instr
+  // with
+  //   instr := <if(<get-var-index> var, <local-access> jbc, <field-access> jbc)>
+  //     
+  // field-access: jbc -> GETSTATIC(jbc)
+  // local-access: jbc -> jbc

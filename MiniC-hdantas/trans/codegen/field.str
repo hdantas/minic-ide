@@ -11,8 +11,100 @@ imports
   analysis/desugar
   analysis/names
   lib/jasmin/JasminXT
-  trans/codegen/-
+  
+  trans/codegen/type
 
 
 rules
+
+  // Recursive call when multiple field declarations exist
+  field-to-jbc: [f, t | ts] -> instr*
+  with
+    head-field* := <field-to-jbc> f
+  ; tail-field* := <field-to-jbc> [t | ts]
+  ; instr*      := [head-field*, tail-field*]
+  
+  field-to-jbc: [f] -> <field-to-jbc> f
+  field-to-jbc: []  -> []
+  
+  field-to-jbc: VarDec(ty, name) -> instr //global variables
+  with //VarDec(Struct("inner"), "globalobject")
+    descript := <get-field-descriptor> name
+  ; instr    := [JBCField([PRIVATE(), STATIC()], name, descript, None(), None())]
+
+  field-to-jbc: ArrayDec(ty, name, size) -> instr //global variables
+  with //ArrayDec(Int(), "global", "5")
+    descript := <get-field-descriptor> name
+  ; instr    := [JBCField([PRIVATE(), STATIC()], name, descript, None(), None())]
+
+
+  // for each field create a getter and setter method
+  field-to-jbc: FieldDec(ty, name) -> instr
+  with
+    descript := <get-field-descriptor> name
+  ; instr    := [JBCField([PRIVATE()], name, descript, None(), None())]
+    
+  constructor-to-jbc: fields -> instr //return constructor with all initialized objects
+  with
+    const*   := [ ALOAD_0(), INVOKESPECIAL(JBCMethodRef(CRef("java/lang/Object"), MRef(Init()), JBCMethodDesc([], Void())))]
+  ; others*  := <object-init-to-jbc> fields
+  ; methods* := [const*, others*, RETURN()]
+  ; instr    := JBCMethod(
+      [PUBLIC()]
+    , Init()
+    , JBCMethodDesc([], Void())
+    , methods*
+    )
+    
+  // Recursive call when multiple field declarations exist
+  object-init-to-jbc: [f, t | ts] -> instr*
+  with
+    head-field* := <object-init-to-jbc> f
+  ; tail-field* := <object-init-to-jbc> [t | ts]
+  ; instr*      := [head-field*, tail-field*]
+  
+  object-init-to-jbc: [f] -> <object-init-to-jbc> f
+  object-init-to-jbc: []  -> []
+  
+  object-init-to-jbc: VarDec(Struct(ty), field-name) -> instr //global variables
+  with //VarDec(Struct("inner"), "globalobject")
+    struct-name := $[HelloWorld/[ty]]
+  ; new-object  := NEW(CRef(struct-name))
+  ; constructor := INVOKESPECIAL(
+      JBCMethodRef(
+      CRef(struct-name)
+      , MRef(Init())
+      , JBCMethodDesc(
+          [Reference(CRef("HelloWorld")), Reference(CRef("HelloWorld"))]
+        , Void()
+        )
+      )
+    )
+  ; assign      := PUTFIELD(
+	    JBCFieldRef(
+	      CRef("HelloWorld")
+	    , FRef(field-name)
+	    , JBCFieldDesc(Reference(CRef(struct-name)))
+	    )
+	  )
+  ; instr       := [ALOAD_0(), new-object, DUP(), ALOAD_0(), ACONST_NULL(), constructor, assign]
+    
+  object-init-to-jbc: others -> [] //for fields and arrays no init is necessary
+  
+ rules
+  nabl-prop-site(|lang, ctx, uris, states, implicits): VarDec(ty, name) -> <fail>
+  where
+    descr := JBCFieldDesc(<type-to-jbc> ty)
+  ; <store-field-descriptor(|ctx, descr)> name
+
+  nabl-prop-site(|lang, ctx, uris, states, implicits): ArrayDec(ty, name, size) -> <fail>
+  where
+    descr := JBCFieldDesc(Array(<type-to-jbc> ty)) 
+  ; <store-field-descriptor(|ctx, descr)> name
+  ; <debug> ["Array:", <get-field-descriptor> name]
+    
+  nabl-prop-site(|lang, ctx, uris, states, implicits): FieldDec(ty, name) -> <fail>
+  where
+    descr := JBCFieldDesc(<type-to-jbc> ty) 
+  ; <store-field-descriptor(|ctx, descr)> name
 

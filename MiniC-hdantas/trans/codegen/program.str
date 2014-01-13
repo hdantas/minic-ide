@@ -13,67 +13,83 @@ imports
   trans/codegen/function
   trans/codegen/exp
   trans/codegen/struct
+  trans/codegen/field
+  trans/codegen/type
 
 rules
 
-program-to-jbc: File(structs, vars, functions, expression) -> instr*
+program-to-jbc: File(structs, vars, functions, expression) -> instr
   with
     header   := JBCHeader(
       None()
     , None()
-    , JBCClass([PUBLIC()], "example/HelloWorld")
+    , JBCClass([PUBLIC()], "HelloWorld")
     , JBCSuper("java/lang/Object")
     , []
     , None()
     , None()
     , None()
     )
-  ; fields*  := [<stmt-to-jbc> vars]
-  ; init        :=
-    JBCMethod(
-      [PUBLIC()]
-    , Init()
-    , JBCMethodDesc([], Void())
-    , [ ALOAD_0()
-      , INVOKESPECIAL(
-          JBCMethodRef(CRef("java/lang/Object"), MRef(Init()), JBCMethodDesc([], Void()))
-        )
-      , RETURN()
-      ]
-    )
-  ; fun*        := [<function-to-jbc> functions]
-  ; main*       := [Main-Constructor(<exp-to-jbc> expression, <get-type> expression)]
-  ; methods*    := [init, fun*, main*]
-  ; instr*      := JBCFile(header, fields*, methods*)
   ; <struct-to-jbc> structs
+  ; fields    := <field-to-jbc> vars
+  ; init      := <constructor-to-jbc> vars //see field.str
+  ; fun*      := <function-to-jbc> functions
+  ; main-body := <main-to-jbc> [vars, expression]
+  ; main      := Main-Constructor(main-body)
+  ; methods*  := [init, fun*, main]
+  ; instr     := JBCFile(header, fields, methods*)
 
+main-to-jbc: [vars, expression] -> instr*
+  with
+	  limit-stack* := [JBCLimitStack("2")] 
+	; object-init* := [NEW(CRef("HelloWorld")), DUP(),INVOKESPECIAL(JBCMethodRef(CRef("HelloWorld"), MRef(Init()), JBCMethodDesc([], Void()))),ASTORE_1()]
+	; array-init*  := <array-init-to-jbc> vars
+	; get-print*   := [GETSTATIC(JBCFieldRef(CRef("java/lang/System"), FRef("out"),JBCFieldDesc(Reference(CRef("java/io/PrintStream"))))), ALOAD_1()]
+  ; exp := <if(<eq>(<get-type; get-constructor> expression, "Struct"), <print-zero> expression, <print-exp> expression)> //cant print struct instances
+  ; return-exp*  := <Fst> exp
+  ; exp-type     := <Snd> exp    
+  ; invoke-print := INVOKEVIRTUAL(JBCMethodRef(CRef("java/io/PrintStream"), MRef("println"), JBCMethodDesc([exp-type], Void())))
+  ; instr*       := [limit-stack*, object-init*, array-init*, get-print*, return-exp*, invoke-print, RETURN()]
 
-overlays 
-
-
+  print-exp:  exp -> (return-exp*, exp-type)
+  with
+    return-exp* := <exp-to-jbc> exp
+  ; exp-type     := <get-type; type-to-jbc> exp     
   
-  Main-Constructor(return-exp, type) =
+  print-zero: exp -> (return-exp*, exp-type)
+  with
+    return-exp*  := [LDC(0)]
+  ; exp-type     := Int()
+    
+  array-init-to-jbc: [f, t | ts] -> instr*
+  with
+    head-field* := <array-init-to-jbc> f
+  ; tail-field* := <array-init-to-jbc> [t | ts]
+  ; instr*      := [head-field*, tail-field*]
+  
+  array-init-to-jbc: [f] -> <array-init-to-jbc> f
+  array-init-to-jbc: []  -> []
+  
+
+  array-init-to-jbc: ArrayDec(type, name, size) -> instr* //for non array fields no init is necessary
+  with
+   load-size*  := <exp-to-jbc> IntConst(<dec-string-to-int> size) // array size is always an integer constant
+  ; <debug> ["load-size: ", load-size*]
+  ; newarray    := NEWARRAY(<type-array-to-jbc> type) // NEWARRAY(IntName())
+  ; field-desc  := <get-field-descriptor> name
+  ; store-field := PUTSTATIC(JBCFieldRef(CRef("HelloWorld"), FRef(name), field-desc))
+  ; instr*      := [load-size*, newarray, store-field]
+  ; <debug> ["array-init: ", instr*]
+    
+  array-init-to-jbc: nonarraydecs -> [] //for non array fields no init is necessary
+  
+  
+overlays 
+  Main-Constructor(main-body) =
     JBCMethod(
       [PUBLIC(), STATIC()]
     , "main"
     , JBCMethodDesc([Array(Reference(CRef("java/lang/String")))], Void())
-    , [ JBCLimitStack("2")
-      , GETSTATIC(
-          JBCFieldRef(
-            CRef("java/lang/System")
-          , FRef("out")
-          , JBCFieldDesc(Reference(CRef("java/io/PrintStream")))
-          )
-        )
-      , return-exp
-      , INVOKEVIRTUAL(
-          JBCMethodRef(
-            CRef("java/io/PrintStream")
-          , MRef("println")
-          , JBCMethodDesc([type], Void())
-          )
-        )
-      , RETURN()
-      ]
-    )
-    
+    , main-body
+  )
+  

@@ -23,19 +23,21 @@ rules
   ; tail-fun* := <function-to-jbc> [t | ts]
   ; instr*    := [head-fun*, tail-fun*]
   
-  function-to-jbc: [FunctionDef(t, i, p, s, e)] -> [<function-to-jbc> FunctionDef(t, i, p, s, e)]
+  function-to-jbc: [FunctionDef(t, i, p, s, e)] -> <function-to-jbc> FunctionDef(t, i, p, s, e)
   function-to-jbc: [] -> []
   
   // function without parameters or local variables
   function-to-jbc: FunctionDef(t, i, p, s, e) -> instr*
   with
-    types  := [PUBLIC(), STATIC()]
-  ; descr  := <get-descriptor> i
-  ; stmts* := <stmt-to-jbc> s
-  ; instr* := Function-Constructor(types, i, descr, stmts*)
+    types         := [PUBLIC()]
+  ; stack-limit*  := <stack-limit> s //TODO
+  ; descr*        := <get-method-descriptor> i
+  ; stmts*        := <stmt-to-jbc> s
+  ; return-jbc*   := <return-aux> (e, <get-type> e)
+  ; method-stmts* := [stack-limit*, stmts*, return-jbc*]
+  ; <debug> method-stmts*
+  ; instr*        := Function-Constructor(types, i, descr*, method-stmts*)
   
-
-
 
 overlays
 
@@ -45,28 +47,80 @@ overlays
       types
     , name
     , descr
-    , [ JBCLimitStack("4"), JBCLimitLocals("2")
-        // JBCLimitStack(<stack-limit> [0, stmts])
-      , stmts
-      , RETURN()
-      ]
+    , stmts
     )
   ]
 
-
-
 rules
+	return-aux: (exp, Int()) -> instr*
+	with
+		jbc-exp* := <exp-to-jbc> exp
+  ; instr*   := [jbc-exp*, IRETURN()]
 
-    stack-limit: [previous-limit, statements] -> current-limit
+  return-aux: (exp, Float()) -> instr*
   with
-    //current-limit := <foldr(!0, add, inc)> statements
-    current-limit := "TODO STACK-LIMIT"
-
+    jbc-exp* := <exp-to-jbc> exp
+  ; instr*   := [jbc-exp*, FRETURN()]
+  
+  return-aux: (exp, type) -> instr* //struct instance
+  with
+    jbc-exp* := <exp-to-jbc> exp
+  ; instr*   := [jbc-exp*, ARETURN()]  
+    
+rules
   nabl-prop-site(|lang, ctx, uris, states, implicits): FunctionDef(ty, mname, param*, stmt*, exp) -> <fail>
   where
-    new-param := <map(get-type)> param*
-  ; descr := [JBCMethodDesc(new-param, ty)] // create descriptor
-  ; <store-descriptor(|ctx, descr)> mname
+    param-type    := <map(get-type; type-to-jbc)> param* //type descriptor
+  ; descr         := JBCMethodDesc(param-type, <type-to-jbc> ty) 
+  ; <store-method-descriptor(|ctx, descr)> mname
+  ; <debug> ["method-descriptor:", <strip-annos> mname, <get-method-descriptor> mname] 
+  
+  ; indexed-param := <map-with-index(id)> param* //parameter indices
+  ; <map(map-index(|ctx, 0))> indexed-param
+  
+  ; number-param  := <length> param*
+  ; cleaned-stmt := <retain-all(nmap-aux)> stmt* //remove non-declarations stmts from list
+  ; <debug> ["cleaned-stmt:", cleaned-stmt]
+  ; indexed-stmt  := <map-with-index(id)> cleaned-stmt //statement indices
+  ; <map(map-index(|ctx, number-param))> indexed-stmt //indices for locals start after args
     
+   nmap-aux: VarDec(t1, t2) -> VarDec(t1, t2) 
+   nmap-aux: ArrayDec(t1, t2, t3) -> ArrayDec(t1, t2, t3)
+   
+   
+rules // auxiliary    
+  map-index(|ctx, length): (index, VarDec(type, name)) -> ""
+  where
+    new-index := <add> (length, index)
+  ; instr     := <var-index-aux> (new-index, <get-type> name)
+  ; <store-var-index(|ctx, instr)> name
+  ; <debug> ["var-index:", <strip-annos> name, <get-var-index> name]
     
-    
+  map-index(|ctx, length): (index, ArrayDec(type, name, size)) -> ""
+  where
+    new-index := <add> (length, index)
+  ; instr     := <array-index-aux> (new-index, <get-type> name)
+  ; <store-var-index(|ctx, instr)> name
+  ; <debug> ["var-index:", <strip-annos> name, <get-var-index> name]    
+  
+  var-index-aux: (index, Int())   -> ([ILOAD(index)], [ISTORE(index)])
+  var-index-aux: (index, Float()) -> ([FLOAD(index)], [FSTORE(index)])
+  var-index-aux: (index, otherty) -> ([ALOAD(index)], [ASTORE(index)])
+
+  array-index-aux: (index, Int())   -> ([ALOAD(index)], [ASTORE(index)], [IALOAD()], [IASTORE()])
+  array-index-aux: (index, Float()) -> ([ALOAD(index)], [ASTORE(index)], [FALOAD()], [FASTORE()])
+  
+  map-index(|ctx, length): (index, _) -> "" //ignore other statements
+  
+rules // TODO
+  stack-limit: expressions -> [JBCLimitStack("8"), JBCLimitLocals("16")] // limit
+  // where
+  //   // limit := "TODO STACK-LIMIT"
+  //   limit-list := <map(stack-limit-aux)> expressions
+  // // ; <debug> ["limit-list: ", limit-list]  
+  // ; limit      := <foldr(!0, add)> limit-list
+  // // ; <debug> ["limit: ", limit]
+
+
+  stack-limit-aux: VarDec(_, _) -> 1
+  stack-limit-aux: anything -> 0

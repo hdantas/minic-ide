@@ -20,15 +20,20 @@ signature
 
 signature
   constructors
-    NablProp_parameter-types : Property
-    NablProp_descriptor      : Property
-    NablProp_var-index       : Property
+    NablProp_parameter-types   : Property
+    NablProp_method-descriptor : Property
+    NablProp_field-descriptor  : Property
+    NablProp_var-index         : Property
 
 
 rules
 
   nabl-custom-properties(add-properties) =
-    ![NablProp_parameter-types(), NablProp_descriptor(), NablProp_var-index()]
+    ![ NablProp_parameter-types()
+     , NablProp_method-descriptor()
+     , NablProp_field-descriptor()
+     , NablProp_var-index()
+     ]
     ; add-properties
 
   parameter-types-is(|task*) =
@@ -76,50 +81,95 @@ rules
     term -> <create-parameter-types-task(|partition)> term
     where NablProp_parameter-types() := kind
 
-  descriptor-is(|task*) =
+  method-descriptor-is(|task*) =
     nabl-prop-calc(|task*, [])
 
-  descriptor-is(|task*, dep*) =
+  method-descriptor-is(|task*, dep*) =
     nabl-prop-calc(|task*, dep*)
 
-  descriptor-list(|task*) =
+  method-descriptor-list(|task*) =
     nabl-prop-list(|task*, [])
 
-  descriptor-list(|task*, dep*) =
+  method-descriptor-list(|task*, dep*) =
     nabl-prop-list(|task*, dep*)
 
-  descriptor-lookup(|task*) =
-    nabl-prop-lookup(|NablProp_descriptor(), task*, [])
+  method-descriptor-lookup(|task*) =
+    nabl-prop-lookup(|NablProp_method-descriptor(), task*, [])
 
-  descriptor-lookup(|task*, dep*) =
-    nabl-prop-lookup(|NablProp_descriptor(), task*, dep*)
+  method-descriptor-lookup(|task*, dep*) =
+    nabl-prop-lookup(|NablProp_method-descriptor(), task*, dep*)
 
-  descriptor-match(|task*, expected) =
+  method-descriptor-match(|task*, expected) =
     nabl-prop-match(
-    | NablProp_descriptor()
+    | NablProp_method-descriptor()
     , task*
     , Eq()
     , expected
     )
 
-  descriptor-match(|task*, relation, expected) =
-    nabl-prop-match(|NablProp_descriptor(), task*, relation, expected)
+  method-descriptor-match(|task*, relation, expected) =
+    nabl-prop-match(|NablProp_method-descriptor(), task*, relation, expected)
 
-  create-descriptor-task(|task*) =
+  create-method-descriptor-task(|task*) =
     fail
 
-  get-descriptor =
-    get-property(|NablProp_descriptor())
+  get-method-descriptor =
+    get-property(|NablProp_method-descriptor())
 
-  store-descriptor(|partition, prop) =
+  store-method-descriptor(|partition, prop) =
     nabl-store-prop(
     | partition
-    , Prop(NablProp_descriptor(), prop, [])
+    , Prop(NablProp_method-descriptor(), prop, [])
     )
 
   create-property-task(|partition, kind):
-    term -> <create-descriptor-task(|partition)> term
-    where NablProp_descriptor() := kind
+    term -> <create-method-descriptor-task(|partition)> term
+    where NablProp_method-descriptor() := kind
+
+  field-descriptor-is(|task*) =
+    nabl-prop-calc(|task*, [])
+
+  field-descriptor-is(|task*, dep*) =
+    nabl-prop-calc(|task*, dep*)
+
+  field-descriptor-list(|task*) =
+    nabl-prop-list(|task*, [])
+
+  field-descriptor-list(|task*, dep*) =
+    nabl-prop-list(|task*, dep*)
+
+  field-descriptor-lookup(|task*) =
+    nabl-prop-lookup(|NablProp_field-descriptor(), task*, [])
+
+  field-descriptor-lookup(|task*, dep*) =
+    nabl-prop-lookup(|NablProp_field-descriptor(), task*, dep*)
+
+  field-descriptor-match(|task*, expected) =
+    nabl-prop-match(
+    | NablProp_field-descriptor()
+    , task*
+    , Eq()
+    , expected
+    )
+
+  field-descriptor-match(|task*, relation, expected) =
+    nabl-prop-match(|NablProp_field-descriptor(), task*, relation, expected)
+
+  create-field-descriptor-task(|task*) =
+    fail
+
+  get-field-descriptor =
+    get-property(|NablProp_field-descriptor())
+
+  store-field-descriptor(|partition, prop) =
+    nabl-store-prop(
+    | partition
+    , Prop(NablProp_field-descriptor(), prop, [])
+    )
+
+  create-property-task(|partition, kind):
+    term -> <create-field-descriptor-task(|partition)> term
+    where NablProp_field-descriptor() := kind
 
   var-index-is(|task*) =
     nabl-prop-calc(|task*, [])

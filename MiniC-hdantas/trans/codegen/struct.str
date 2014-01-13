@@ -12,64 +12,145 @@ imports
   analysis/names
   lib/jasmin/JasminXT
   trans/codegen/builders
+  trans/codegen/field
 
 
 
-  rules
+rules
 
   struct-to-jbc: [StructDec(name, fields), t | ts] -> instr*
   with
-    head-field* := [<struct-to-jbc> StructDec(name, fields)]
+    head-field* := <struct-to-jbc> StructDec(name, fields)
   ; tail-field* := <struct-to-jbc> [t | ts]
   ; instr*      := [head-field*, tail-field*]
   
-  struct-to-jbc: [StructDec(name, fields)] -> [<struct-to-jbc> StructDec(name, fields)]
+  struct-to-jbc: [StructDec(name, fields)] -> <struct-to-jbc> StructDec(name, fields)
   struct-to-jbc: []  -> []
   
-  
-  struct-to-jbc: StructDec(name, fields) -> ""
+
+  struct-to-jbc: StructDec(struct, fields) -> []
   with 
-    name-jbc    := [JBCClass([PUBLIC()], name)]
-  ; superclass  := [JBCSuper("java/lang/Object")]
-  ; fields-jbc* := <struct-to-jbc> fields
-  ; methods     := [] // structs dont have methods in C
-  ; instr*      := Class-Constructor(name-jbc, superclass, fields-jbc*, methods)
-  ; <write-file> (name, instr*)
-    
-    
-  struct-to-jbc: [FieldDec(ty, name), t | ts] -> instr*
+    name          := $[HelloWorld/[struct]]
+  ; this-field    := JBCField(
+      [FINAL()]
+    , "this"
+    , JBCFieldDesc(Reference(CRef("HelloWorld")))
+    , None()
+    , None()
+    )
+  ; this-construct1 := JBCMethod(
+		  [PRIVATE()]
+		, Init()
+		, JBCMethodDesc([Reference(CRef("HelloWorld"))], Void())
+		, [ JBCLimitStack("2")
+		  , ALOAD_0()
+		  , ALOAD_1()
+		  , PUTFIELD(
+		      JBCFieldRef(
+		        CRef(name)
+		      , FRef("this")
+		      , JBCFieldDesc(Reference(CRef("HelloWorld")))
+		      )
+		    )
+		  , ALOAD_0()
+		  , INVOKESPECIAL(
+		      JBCMethodRef(CRef("java/lang/Object"), MRef(Init()), JBCMethodDesc([], Void()))
+		    )
+		  , RETURN()
+		  ]
+		)
+  ; this-construct2 := JBCMethod(
+		  []
+		, Init()
+		, JBCMethodDesc(
+		    [Reference(CRef("HelloWorld")), Reference(CRef("HelloWorld"))]
+		  , Void()
+		  )
+		, [ JBCLimitStack("2")
+		  , ALOAD_0()
+		  , ALOAD_1()
+		  , INVOKESPECIAL(
+		      JBCMethodRef(
+		        CRef(name)
+		      , MRef(Init())
+		      , JBCMethodDesc([Reference(CRef("HelloWorld"))], Void())
+		      )
+		    )
+		  , RETURN()
+		  ]
+		)
+  ; aux-methods*  := <get-and-set-methods> (name, fields)
+  ; methods*      := [this-construct1, this-construct2, aux-methods*]
+  ; other-fields* := <field-to-jbc> fields
+  ; fields-jbc    := [this-field, other-fields*]
+  ; instr         := [Class-Constructor(name, fields-jbc, methods*)]
+  ; <write-file> (struct, instr)
+
+  
+  get-and-set-methods: (struct-ref, [FieldDec(ty, name), t | ts]) -> instr*
   with
-    head-field* := <struct-to-jbc> FieldDec(ty, name)
-  ; tail-field* := <struct-to-jbc> [t | ts]
+    head-field* := <get-and-set-methods> (struct-ref, FieldDec(ty, name))
+  ; tail-field* := <get-and-set-methods> (struct-ref, [t | ts])
   ; instr*      := [head-field*, tail-field*]
   
-  struct-to-jbc: [FieldDec(ty, name)] -> [<struct-to-jbc> FieldDec(ty, name)]
-  struct-to-jbc: []  -> []
-  
-  struct-to-jbc: FieldDec(ty, name) -> instr*
+  get-and-set-methods: (struct-ref, [FieldDec(ty, name)]) -> <get-and-set-methods> (struct-ref, FieldDec(ty, name))
+  get-and-set-methods: (struct-ref, [])  -> []
+    
+  get-and-set-methods: (struct-ref, FieldDec(ty, field-name)) -> instr //create a get and set method for each fields
   with
-    descript := JBCFieldDesc(ty)
-  ; instr*   := [JBCField([PRIVATE()], name, descript, None(), None())]
+    getter-name := $[get_[field-name]]
+  ; setter-name := $[set_[field-name]]
+  ; field-type  := ty
+  ; return-jbc  := <return-to-jbc> ty
+  ; get-method := getter-construct(getter-name, field-name, field-type, struct-ref, return-jbc)
+  ; set-method := setter-constructor(setter-name, field-name, field-type, struct-ref, return-jbc)
+  ; instr      := [get-method, set-method]
     
-    
+return-to-jbc: Int() -> IRETURN()
+return-to-jbc: Float() -> FRETURN()
+
 overlays
       
-Class-Constructor(name, superclass, JBCfields, JBCmethods) = //main-to-c
+Class-Constructor(name, fields, methods) = //main-to-c
   JBCFile(
     JBCHeader(
       None()
     , None()
-    , name 
-    , superclass
+    , JBCClass([], name) 
+    , JBCSuper("java/lang/Object")
     , []
     , None()
     , None()
     , None()
     )
-  , JBCfields
-  , JBCmethods
+  , fields
+  , methods
   )
   
-  
+setter-constructor(setter-name, field-name, field-type, struct-ref, return) =
+	JBCMethod(
+	  [STATIC()]
+	, setter-name
+	, JBCMethodDesc([Reference(CRef(struct-ref)), field-type], field-type)
+	, [ JBCLimitStack("3")
+	  , ALOAD_0()
+	  , ILOAD_1()
+	  , DUP_X1()
+	  , PUTFIELD(JBCFieldRef(CRef(struct-ref), FRef(field-name), JBCFieldDesc(field-type)))
+	  , return
+	  ]
+	)
+
+
+getter-construct(getter-name, field-name, field-type, struct-ref, return) =
+	JBCMethod(
+	  [STATIC()]
+	, getter-name
+	, JBCMethodDesc([Reference(CRef(struct-ref))], field-type)
+	, [ ALOAD_0()
+	  , GETFIELD(JBCFieldRef(CRef(struct-ref), FRef(field-name), JBCFieldDesc(field-type)))
+	  , return
+	  ]
+	)
   
   

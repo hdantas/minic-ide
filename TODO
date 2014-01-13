@@ -1,17 +1,17 @@
+define stack limits
+define local limits
+do sizeof operator
+debug information?
+Bonus?
+check everything
+
+
+ver cena do aconst_null
+
 DAY 10
-	Jasmin code examples
 	Automatic codegen? (from day 10)
 
-DAY 11
-	Jasmin code examples
-	reusable method descriptors (2 points)
-	stack limits (6 points)
-
-DAY 12
-	Jasmin Code examples
-	Generate Code for Local Variables and Variable Access
-	challenges (10 points)
-		reusable field descriptors (2 points)
-		reusable variable accessors (2 points)
-		debug information (6 points)
-
+DAY 12 challenges (10 points)
+	debug information (6 points)
+	Bonus
+		Generate Precise Ranges for Local Variables
