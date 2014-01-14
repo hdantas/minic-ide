@@ -42,7 +42,7 @@ program-to-jbc: File(structs, vars, functions, expression) -> instr
 
 main-to-jbc: [vars, expression] -> instr*
   with
-	  limit-stack* := [JBCLimitStack("2")] 
+	  limit-stack* := [JBCLimitStack("2"), JBCLimitLocals(2)] 
 	; object-init* := [NEW(CRef("HelloWorld")), DUP(),INVOKESPECIAL(JBCMethodRef(CRef("HelloWorld"), MRef(Init()), JBCMethodDesc([], Void()))),ASTORE_1()]
 	; array-init*  := <array-init-to-jbc> vars
 	; get-print*   := [GETSTATIC(JBCFieldRef(CRef("java/lang/System"), FRef("out"),JBCFieldDesc(Reference(CRef("java/io/PrintStream"))))), ALOAD_1()]
@@ -54,7 +54,7 @@ main-to-jbc: [vars, expression] -> instr*
 
   print-exp:  exp -> (return-exp*, exp-type)
   with
-    return-exp* := <exp-to-jbc> exp
+    return-exp*  := <exp-to-jbc> exp
   ; exp-type     := <get-type; type-to-jbc> exp     
   
   print-zero: exp -> (return-exp*, exp-type)

@@ -92,18 +92,32 @@ rules
   object-init-to-jbc: others -> [] //for fields and arrays no init is necessary
   
  rules
+
   nabl-prop-site(|lang, ctx, uris, states, implicits): VarDec(ty, name) -> <fail>
   where
-    descr := JBCFieldDesc(<type-to-jbc> ty)
+    descr    := JBCFieldDesc(<type-to-jbc> ty)
   ; <store-field-descriptor(|ctx, descr)> name
-
+  ; var-size := <type-to-int> ty
+  ; <store-size(|ctx, var-size)> name
+  
   nabl-prop-site(|lang, ctx, uris, states, implicits): ArrayDec(ty, name, size) -> <fail>
   where
-    descr := JBCFieldDesc(Array(<type-to-jbc> ty)) 
+    descr    := JBCFieldDesc(Array(<type-to-jbc> ty)) 
   ; <store-field-descriptor(|ctx, descr)> name
-    
+  ; var-size := <muli> (<type-to-int> ty, <dec-string-to-int> size)
+  ; <store-size(|ctx, var-size)> name
+
   nabl-prop-site(|lang, ctx, uris, states, implicits): FieldDec(ty, name) -> <fail>
   where
-    descr := JBCFieldDesc(<type-to-jbc> ty) 
+    descr    := JBCFieldDesc(<type-to-jbc> ty) 
   ; <store-field-descriptor(|ctx, descr)> name
+  ; var-size := <type-to-int> ty
+  ; <store-size(|ctx, var-size)> name
 
+  
+  nabl-prop-site(|lang, ctx, uris, states, implicits): FieldArrayDec(ty, name, size) -> <fail>
+  where
+    descr    := JBCFieldDesc(Array(<type-to-jbc> ty)) 
+  ; <store-field-descriptor(|ctx, descr)> name
+  ; var-size := <muli> (<type-to-int> ty, <dec-string-to-int> size)
+  ; <store-size(|ctx, var-size)> name

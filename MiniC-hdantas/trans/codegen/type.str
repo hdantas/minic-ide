@@ -30,7 +30,17 @@ rules
   with
     class  := $[HelloWorld/[ty]]
   ; instr  := Reference(CRef(class))
+   
     
   type-array-to-jbc: Int()   -> IntName()
   type-array-to-jbc: Float() -> FloatName()
+  
+  type-to-int: Int()   -> 4    
+  type-to-int: Float() -> 4
+  
+  type-to-int : Struct(name) -> <fail> // struct instances need to be treated differently
+  special-type-to-int : Struct(name) -> struct-size
+  with
+    list-struct-size := <get-size> Struct(name)
+  ; struct-size      := <sum> list-struct-size
   

@@ -13,7 +13,7 @@ imports
   lib/jasmin/JasminXT
   trans/codegen/builders
   trans/codegen/field
-
+  trans/codegen/type
 
 
 rules
@@ -25,7 +25,6 @@ rules
   ; instr*      := [head-field*, tail-field*]
   
   struct-to-jbc: [StructDec(name, fields)] -> <struct-to-jbc> StructDec(name, fields)
-  struct-to-jbc: []  -> []
   
 
   struct-to-jbc: StructDec(struct, fields) -> []
@@ -152,5 +151,12 @@ getter-construct(getter-name, field-name, field-type, struct-ref, return) =
 	  , return
 	  ]
 	)
+  
+rules
+  
+  nabl-prop-site(|lang, ctx, uris, states, implicits): StructDec(name, fields) -> <fail>
+  where
+    list-var-size := <map(get-size)> fields
+  ; <store-size(|ctx, list-var-size)> name
   
   

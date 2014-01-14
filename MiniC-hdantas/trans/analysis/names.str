@@ -24,6 +24,9 @@ signature
     NablProp_method-descriptor : Property
     NablProp_field-descriptor  : Property
     NablProp_var-index         : Property
+    NablProp_size              : Property
+    NablProp_size              : Property
+    NablProp_size              : Property
 
 
 rules
@@ -33,6 +36,9 @@ rules
      , NablProp_method-descriptor()
      , NablProp_field-descriptor()
      , NablProp_var-index()
+     , NablProp_size()
+     , NablProp_size()
+     , NablProp_size()
      ]
     ; add-properties
 
@@ -215,6 +221,141 @@ rules
   create-property-task(|partition, kind):
     term -> <create-var-index-task(|partition)> term
     where NablProp_var-index() := kind
+
+  size-is(|task*) =
+    nabl-prop-calc(|task*, [])
+
+  size-is(|task*, dep*) =
+    nabl-prop-calc(|task*, dep*)
+
+  size-list(|task*) =
+    nabl-prop-list(|task*, [])
+
+  size-list(|task*, dep*) =
+    nabl-prop-list(|task*, dep*)
+
+  size-lookup(|task*) =
+    nabl-prop-lookup(|NablProp_size(), task*, [])
+
+  size-lookup(|task*, dep*) =
+    nabl-prop-lookup(|NablProp_size(), task*, dep*)
+
+  size-match(|task*, expected) =
+    nabl-prop-match(
+    | NablProp_size()
+    , task*
+    , Eq()
+    , expected
+    )
+
+  size-match(|task*, relation, expected) =
+    nabl-prop-match(|NablProp_size(), task*, relation, expected)
+
+  create-size-task(|task*) =
+    fail
+
+  get-size =
+    get-property(|NablProp_size())
+
+  store-size(|partition, prop) =
+    nabl-store-prop(
+    | partition
+    , Prop(NablProp_size(), prop, [])
+    )
+
+  create-property-task(|partition, kind):
+    term -> <create-size-task(|partition)> term
+    where NablProp_size() := kind
+
+  size-is(|task*) =
+    nabl-prop-calc(|task*, [])
+
+  size-is(|task*, dep*) =
+    nabl-prop-calc(|task*, dep*)
+
+  size-list(|task*) =
+    nabl-prop-list(|task*, [])
+
+  size-list(|task*, dep*) =
+    nabl-prop-list(|task*, dep*)
+
+  size-lookup(|task*) =
+    nabl-prop-lookup(|NablProp_size(), task*, [])
+
+  size-lookup(|task*, dep*) =
+    nabl-prop-lookup(|NablProp_size(), task*, dep*)
+
+  size-match(|task*, expected) =
+    nabl-prop-match(
+    | NablProp_size()
+    , task*
+    , Eq()
+    , expected
+    )
+
+  size-match(|task*, relation, expected) =
+    nabl-prop-match(|NablProp_size(), task*, relation, expected)
+
+  create-size-task(|task*) =
+    fail
+
+  get-size =
+    get-property(|NablProp_size())
+
+  store-size(|partition, prop) =
+    nabl-store-prop(
+    | partition
+    , Prop(NablProp_size(), prop, [])
+    )
+
+  create-property-task(|partition, kind):
+    term -> <create-size-task(|partition)> term
+    where NablProp_size() := kind
+
+  size-is(|task*) =
+    nabl-prop-calc(|task*, [])
+
+  size-is(|task*, dep*) =
+    nabl-prop-calc(|task*, dep*)
+
+  size-list(|task*) =
+    nabl-prop-list(|task*, [])
+
+  size-list(|task*, dep*) =
+    nabl-prop-list(|task*, dep*)
+
+  size-lookup(|task*) =
+    nabl-prop-lookup(|NablProp_size(), task*, [])
+
+  size-lookup(|task*, dep*) =
+    nabl-prop-lookup(|NablProp_size(), task*, dep*)
+
+  size-match(|task*, expected) =
+    nabl-prop-match(
+    | NablProp_size()
+    , task*
+    , Eq()
+    , expected
+    )
+
+  size-match(|task*, relation, expected) =
+    nabl-prop-match(|NablProp_size(), task*, relation, expected)
+
+  create-size-task(|task*) =
+    fail
+
+  get-size =
+    get-property(|NablProp_size())
+
+  store-size(|partition, prop) =
+    nabl-store-prop(
+    | partition
+    , Prop(NablProp_size(), prop, [])
+    )
+
+  create-property-task(|partition, kind):
+    term -> <create-size-task(|partition)> term
+    where NablProp_size() := kind
 
 
 rules

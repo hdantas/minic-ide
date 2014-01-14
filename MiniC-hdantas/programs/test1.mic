@@ -1,9 +1,13 @@
+struct inner{int a[5];};
 
-int a[5];
+int global;
+
+struct inner object;
+float local[2];
 
 int foo() {
-
+  struct inner object;
   return 0;
 }
 
-foo()
+sizeof(1)

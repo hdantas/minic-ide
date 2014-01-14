@@ -4,9 +4,9 @@ C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas\include/minic.ct
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/exp.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/stmt.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/array.str \
-	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/type.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/stack.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/function.str \
+	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/type.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/trans/codegen/struct.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/jasmin/JasminXT-pp.str \
 	C:\Users\henrique\repos\compiler-construction-lab\MiniC-hdantas/lib/jasmin/JasminXT.str \

@@ -62,8 +62,22 @@ rules
     , ICONST_0()
     , JBCLabel(end-label)
   ]
+
+  op-to-jbc: UnExp(USIZEOF(), Var(v)) -> instr
+  with
+    instr := <if(<get-size> Var(v), <sizeof-aux> ("normal", Var(v)), <sizeof-aux> ("instance", Var(v)))>
     
-  op-to-jbc: UnExp(USIZEOF(), e) -> [NOP()] // TODO
+  sizeof-aux: ("instance", Var(v)) -> instr
+  with
+    instr := <exp-to-jbc> IntConst(<get-type; special-type-to-int> Var(v))
+      
+  sizeof-aux: ("normal", Var(v)) -> instr
+  with
+    instr := <exp-to-jbc> IntConst(<get-size> Var(v))
+  
+  op-to-jbc: UnExp(USIZEOF(), e) -> instr
+  with
+    instr := <exp-to-jbc> IntConst(<get-type; type-to-int> e)     
 
   // Binary Expressions
   exp-to-jbc: BinExp(bop, e1, e2) -> instr*

@@ -1,8 +1,6 @@
-define stack limits
-define local limits
-do sizeof operator
-debug information?
-Bonus?
+verify TODOs still around
+correct issues with todo1.mic and todo2.mic
+debug information
 check everything
 
 

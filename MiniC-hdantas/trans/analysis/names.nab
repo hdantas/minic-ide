@@ -17,6 +17,9 @@ properties
   method-descriptor of Variable: MethodDescriptor
   field-descriptor  of Field   : FieldDescriptor
   var-index         of Variable: Int
+  size              of Variable: Int
+  size              of Field   : Int
+  size              of Struct  : Int
   
 //in C functions and variables share the namespace
 binding rules // Files
