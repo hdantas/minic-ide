@@ -1,0 +1,6 @@
+[ ICONST_5()
+, NEWARRAY(IntName())
+, PUTSTATIC(
+    JBCFieldRef(CRef("HelloWorld"), FRef("global"), JBCFieldDesc(Array(Int())))
+  )
+]

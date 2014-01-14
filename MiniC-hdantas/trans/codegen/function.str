@@ -73,7 +73,7 @@ rules
 rules
   nabl-prop-site(|lang, ctx, uris, states, implicits): FunctionDef(ty, mname, param*, stmt*, exp) -> <fail>
   where
-    param-type    := <map(get-type; type-to-jbc)> param* //type descriptor
+    param-type    := <map(param-aux)> param* //type descriptor
   ; descr         := JBCMethodDesc(param-type, <type-to-jbc> ty) 
   ; <store-method-descriptor(|ctx, descr)> mname
   
@@ -88,7 +88,9 @@ rules
    nmap-aux: VarDec(t1, t2) -> VarDec(t1, t2) 
    nmap-aux: ArrayDec(t1, t2, t3) -> ArrayDec(t1, t2, t3)
    
-   
+   param-aux: Arg(ty, name) -> <get-type; type-to-jbc> Arg(ty, name)
+   param-aux: ArrayArg(ty, name) -> Array(<get-type; type-to-jbc> Arg(ty, name))
+     
 rules // auxiliary    
   map-index(|ctx, length): (index, VarDec(type, name)) -> ""
   where

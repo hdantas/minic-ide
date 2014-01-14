@@ -1,0 +1,7 @@
+[ NEW(CRef("HelloWorld"))
+, DUP()
+, INVOKESPECIAL(
+    JBCMethodRef(CRef("HelloWorld"), MRef(Init()), JBCMethodDesc([], Void()))
+  )
+, ASTORE_1()
+]

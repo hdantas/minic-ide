@@ -1,0 +1,6 @@
+JBCMethod(
+  [PUBLIC(), STATIC()]
+, "main"
+, JBCMethodDesc([Array(Reference(CRef("java/lang/String")))], Void())
+, [RETURN()]
+)

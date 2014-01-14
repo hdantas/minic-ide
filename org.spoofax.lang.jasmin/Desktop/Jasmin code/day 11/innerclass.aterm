@@ -1,0 +1,42 @@
+JBCFile(
+  JBCHeader(
+    None()
+  , None()
+  , JBCClass([], "HelloWorld/inner")
+  , JBCSuper("java/lang/Object")
+  , []
+  , None()
+  , None()
+  , None()
+  )
+, [ JBCField(
+      [FINAL()]
+    , "this"
+    , JBCFieldDesc(Reference(CRef("HelloWorld")))
+    , None()
+    , None()
+    )
+  ]
+, [ JBCMethod(
+      []
+    , Init()
+    , JBCMethodDesc([Reference(CRef("HelloWorld"))], Void())
+    , [ JBCLimitStack("2")
+      , ALOAD_0()
+      , ALOAD_1()
+      , PUTFIELD(
+          JBCFieldRef(
+            CRef("HelloWorld/inner")
+          , FRef("this")
+          , JBCFieldDesc(Reference(CRef("HelloWorld")))
+          )
+        )
+      , ALOAD_0()
+      , INVOKESPECIAL(
+          JBCMethodRef(CRef("java/lang/Object"), MRef(Init()), JBCMethodDesc([], Void()))
+        )
+      , RETURN()
+      ]
+    )
+  ]
+)

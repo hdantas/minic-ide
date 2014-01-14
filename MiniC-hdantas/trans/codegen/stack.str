@@ -12,12 +12,12 @@ imports
   analysis/names
   lib/jasmin/JasminXT
   
-  rules // TODO add arguments to locals limit
+  rules
   stack-limit: arg -> instr
   with
   <debug> "Doing stack and locals limits"  
-  ; parameter      := <Fst> arg
-  ; <debug> ["parameter: ", <strip-annos> parameter]
+  ; parameters     := <Fst> arg
+  ; <debug> ["parameter: ", <strip-annos> parameters]
   ; statements     := <Snd> arg
   ; <debug> ["statements: ", <strip-annos> statements]
   ; ret-expression := [<Third> arg]
@@ -29,7 +29,7 @@ imports
   ; stmt-stack-limit := <stmt-stack-limit-aux; try(list-max)> statements // try in case list is empty
   ; <debug> $[stmt-stack-limit: [stmt-stack-limit]]
      
-  ; locals-limit     := <addi> (<stmt-locals-limit-aux; sum> statements, 1) //add 1 to account for the this
+  ; locals-limit     := <addi> (<length> parameters, <addi> (<stmt-locals-limit-aux; sum> statements, 1)) //add 1 to account for the this
   ; <debug> $[locals-limit: [locals-limit]]
   
   ; stack-limit       := <max> (stmt-stack-limit, exp-stack-limit)

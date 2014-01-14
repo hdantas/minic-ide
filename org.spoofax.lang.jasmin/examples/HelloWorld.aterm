@@ -1,0 +1,48 @@
+JBCFile(
+  JBCHeader(
+    None()
+  , None()
+  , JBCClass([PUBLIC()], "example/HelloWorld")
+  , JBCSuper("java/lang/Object")
+  , []
+  , None()
+  , None()
+  , None()
+  )
+, []
+, [ JBCMethod(
+      [PUBLIC()]
+    , Init()
+    , JBCMethodDesc([], Void())
+    , [ ALOAD_0()
+      , INVOKESPECIAL(
+          JBCMethodRef(CRef("java/lang/Object"), MRef(Init()), JBCMethodDesc([], Void()))
+        )
+      , RETURN()
+      ]
+    )
+  , JBCMethod(
+      [PUBLIC(), STATIC()]
+    , "main"
+    , JBCMethodDesc([Array(Reference(CRef("java/lang/String")))], Void())
+    , [ JBCLimitStack("2")
+      , GETSTATIC(
+          JBCFieldRef(
+            CRef("java/lang/System")
+          , FRef("out")
+          , JBCFieldDesc(Reference(CRef("java/io/PrintStream")))
+          )
+        )
+      , LDC("42")
+      , INVOKEVIRTUAL(
+          JBCMethodRef(
+            CRef("java/io/PrintStream")
+          , MRef("println")
+          , JBCMethodDesc([Int()], Void())
+          )
+        )
+      , RETURN()
+      ]
+    )
+  ]
+)

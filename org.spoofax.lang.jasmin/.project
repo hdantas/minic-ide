@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>org.spoofax.lang.jasmin</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
+			<triggers>full,incremental,</triggers>
+			<arguments>
+				<dictionary>
+					<key>LaunchConfigHandle</key>
+					<value>&lt;project&gt;/.externalToolBuilders/JasminXT build.main.xml.launch</value>
+				</dictionary>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.ManifestBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.pde.SchemaBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.pde.PluginNature</nature>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>examples/day 10</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>examples/day 11</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>examples/day 12</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>examples/day 10/prints42.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2010/prints42.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 11/binaryexp&amp;&amp;.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2011/binaryexp&amp;&amp;.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 11/binaryexp+.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2011/binaryexp+.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 11/binaryexplt.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2011/binaryexplt.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 11/binaryexpmul.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2011/binaryexpmul.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 11/ifelse.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2011/ifelse.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 11/innerclass.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2011/innerclass.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 11/methodcall-noargs.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2011/methodcall-noargs.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 11/unaryexp!.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2011/unaryexp!.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 11/unaryexp+.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2011/unaryexp+.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 11/unaryexp-.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2011/unaryexp-.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 11/while.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2011/while.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 12/assign-readfield-readvar.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2012/assign-readfield-readvar.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 12/assignments.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2012/assignments.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 12/fields.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2012/fields.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 12/inner.j</name>
+			<type>1</type>
+			<locationURI>PARENT-3-ECLIPSE_HOME/Desktop/Jasmin%20code/day%2012/inner.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 12/methodcallwithargs.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2012/methodcallwithargs.j</locationURI>
+		</link>
+		<link>
+			<name>examples/day 12/methodswithparamandargs.j</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/Jasmin%20code/day%2012/methodswithparamandargs.j</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>

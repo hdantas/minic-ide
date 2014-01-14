@@ -1,0 +1,68 @@
+JBCFile(
+  JBCHeader(
+    None()
+  , None()
+  , JBCClass([PUBLIC()], "examples/Count")
+  , JBCSuper("java/lang/Object")
+  , []
+  , None()
+  , None()
+  , None()
+  )
+, []
+, [ JBCMethod(
+      [PUBLIC()]
+    , Init()
+    , JBCMethodDesc([], Void())
+    , [ ALOAD_0()
+      , INVOKESPECIAL(
+          JBCMethodRef(CRef("java/lang/Object"), MRef(Init()), JBCMethodDesc([], Void()))
+        )
+      , RETURN()
+      ]
+    )
+  , JBCMethod(
+      [PUBLIC(), STATIC()]
+    , "main"
+    , JBCMethodDesc([Array(Reference(CRef("java/lang/String")))], Void())
+    , [ JBCLimitLocals("4")
+      , JBCLimitStack("3")
+      , GETSTATIC(
+          JBCFieldRef(
+            CRef("java/lang/System")
+          , FRef("out")
+          , JBCFieldDesc(Reference(CRef("java/io/PrintStream")))
+          )
+        )
+      , ASTORE_1()
+      , BIPUSH("10")
+      , ISTORE_2()
+      , JBCLabel("Loop")
+      , BIPUSH("10")
+      , ILOAD_2()
+      , ISUB()
+      , INVOKESTATIC(
+          JBCMethodRef(
+            CRef("java/lang/String")
+          , MRef("valueOf")
+          , JBCMethodDesc([Int()], Reference(CRef("java/lang/String")))
+          )
+        )
+      , ASTORE_3()
+      , ALOAD_1()
+      , ALOAD_3()
+      , INVOKEVIRTUAL(
+          JBCMethodRef(
+            CRef("java/io/PrintStream")
+          , MRef("println")
+          , JBCMethodDesc([Reference(CRef("java/lang/String"))], Void())
+          )
+        )
+      , IINC(VarNum("2"), Neg("1"))
+      , ILOAD_2()
+      , IFNE(LabelRef("Loop"))
+      , RETURN()
+      ]
+    )
+  ]
+)

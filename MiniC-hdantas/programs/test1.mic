@@ -1,13 +1,9 @@
-struct inner{int a[5];};
+struct inner{int a;};
 
-int global;
-
-struct inner object;
-float local[2];
 
 int foo() {
-  struct inner object;
-  return 0;
+  struct inner instance;  
+  return instance.a;
 }
 
-sizeof(1)
+foo(1, 2)

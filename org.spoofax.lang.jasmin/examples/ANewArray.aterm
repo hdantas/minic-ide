@@ -1,0 +1,56 @@
+JBCFile(
+  JBCHeader(
+    None()
+  , None()
+  , JBCClass([PUBLIC()], "ANewArray")
+  , JBCSuper("java/lang/Object")
+  , []
+  , None()
+  , None()
+  , None()
+  )
+, []
+, [ JBCMethod(
+      [PUBLIC()]
+    , Init()
+    , JBCMethodDesc([], Void())
+    , [ ALOAD_0()
+      , INVOKESPECIAL(
+          JBCMethodRef(CRef("java/lang/Object"), MRef(Init()), JBCMethodDesc([], Void()))
+        )
+      , RETURN()
+      ]
+    )
+  , JBCMethod(
+      [PUBLIC(), STATIC()]
+    , "main"
+    , JBCMethodDesc([Array(Reference(CRef("java/lang/String")))], Void())
+    , [ JBCLimitStack("4")
+      , JBCLimitLocals("2")
+      , JBCVarDecl(
+          "1"
+        , "'ret'"
+        , JBCFieldDesc(Array(Reference(CRef("java/lang/String"))))
+        , LabelRef("start")
+        , LabelRef("end")
+        )
+      , JBCLabel("start")
+      , ICONST_2()
+      , ANEWARRAY(Array(Reference(CRef("java/lang/String"))))
+      , ASTORE_1()
+      , ALOAD_1()
+      , ICONST_0()
+      , BIPUSH("5")
+      , ANEWARRAY(CRef("java/lang/String"))
+      , AASTORE()
+      , ALOAD_1()
+      , ICONST_1()
+      , BIPUSH("5")
+      , ANEWARRAY(CRef("java/lang/String"))
+      , AASTORE()
+      , JBCLabel("end")
+      , RETURN()
+      ]
+    )
+  ]
+)
