@@ -46,33 +46,33 @@ rules // exp
     
   exp-stack-limit-aux(|i): BinExp(And(), e1, e2) -> limit
   with
-    limit-e1 := <exp-stack-limit-aux(|i)> e1
-  ; limit-e2 := <exp-stack-limit-aux(|i)> e2
-  ; limit := <max> (limit-e1, limit-e2)
+    limit-e1* := <exp-stack-limit-aux(|i)> e1
+  ; limit-e2* := <exp-stack-limit-aux(|i)> e2
+  ; limit     := [<list-max> [limit-e1*, limit-e2*]]
     
   exp-stack-limit-aux(|i): BinExp(Lt(), e1, e2) -> limit
   with
-    limit-e1 := <exp-stack-limit-aux(|i)> e1
-  ; limit-e2 := <exp-stack-limit-aux(|<addi> (i, 1))> e2
-  ; limit := <max> (limit-e1, limit-e2)
+    limit-e1* := <exp-stack-limit-aux(|i)> e1
+  ; limit-e2* := <exp-stack-limit-aux(|<addi> (i, 1))> e2
+  ; limit     := [<list-max> [limit-e1*, limit-e2*]]
       
   exp-stack-limit-aux(|i): BinExp(Plus(), e1, e2) -> limit
   with
-    limit-e1 := <exp-stack-limit-aux(|i)> e1
-  ; limit-e2 := <exp-stack-limit-aux(|<addi> (i, 1))> e2
-  ; limit    := <max> (limit-e1, limit-e2)
+    limit-e1* := <exp-stack-limit-aux(|i)> e1
+  ; limit-e2* := <exp-stack-limit-aux(|<addi> (i, 1))> e2
+  ; limit     := [<list-max> [limit-e1*, limit-e2*]]
     
   exp-stack-limit-aux(|i): BinExp(Minus(), e1, e2) -> limit
   with
-    limit-e1 := <exp-stack-limit-aux(|i)> e1
-  ; limit-e2 := <exp-stack-limit-aux(|<addi> (i, 1))> e2
-  ; limit    := <max> (limit-e1, limit-e2)
+    limit-e1* := <exp-stack-limit-aux(|i)> e1
+  ; limit-e2* := <exp-stack-limit-aux(|<addi> (i, 1))> e2
+  ; limit     := [<list-max> [limit-e1*, limit-e2*]]
     
   exp-stack-limit-aux(|i): BinExp(Mul(), e1, e2) -> limit
   with
-    limit-e1 := <exp-stack-limit-aux(|i)> e1
-  ; limit-e2 := <exp-stack-limit-aux(|<addi> (i, 1))> e2
-  ; limit    := <max> (limit-e1, limit-e2)
+    limit-e1* := <exp-stack-limit-aux(|i)> e1
+  ; limit-e2* := <exp-stack-limit-aux(|<addi> (i, 1))> e2
+  ; limit     := [<list-max> [limit-e1*, limit-e2*]]
     
 
   exp-stack-limit-aux(|i): UnExp(UNOT(), e)    -> <exp-stack-limit-aux(|i)> e
@@ -110,16 +110,16 @@ rules // statements
   
   stmt-stack-limit-aux: IfElse(cond, if-stmt, else-stmt) -> limit
   with
-    limit-cond := <exp-stack-limit-aux(|0)> cond
-  ; limit-if   := <stmt-stack-limit-aux> if-stmt
-  ; limit-else := <stmt-stack-limit-aux> else-stmt
-  ; limit      := [<list-max> [limit-if, limit-else, limit-cond]]
+    limit-cond* := <exp-stack-limit-aux(|0)> cond
+  ; limit-if*   := <stmt-stack-limit-aux> if-stmt
+  ; limit-else* := <stmt-stack-limit-aux> else-stmt
+  ; limit       := [<list-max> [limit-if*, limit-else*, limit-cond*]]
     
   stmt-stack-limit-aux: While(cond, stmt) -> limit
   with
-    limit-cond := <exp-stack-limit-aux(|0)> cond
-  ; while-stmt := <stmt-stack-limit-aux> stmt
-  ; limit       := [<list-max> [limit-cond, while-stmt]]
+    limit-cond* := <exp-stack-limit-aux(|0)> cond
+  ; while-stmt* := <stmt-stack-limit-aux> stmt
+  ; limit       := [<list-max> [limit-cond*, while-stmt*]]
     
   stmt-stack-limit-aux: VarDec(Struct(_), _)  -> [3]
   stmt-locals-limit-aux: VarDec(Struct(_), _) -> [1]
@@ -133,17 +133,17 @@ rules // statements
   
   stmt-stack-limit-aux: Assignment(StructMember(_, ArrayField(_, size)), exp) -> limit
   with
-    limit-size := <exp-stack-limit-aux(|1)> size
-  ; limit-exp  := <exp-stack-limit-aux(|2)> exp
-  ; limit      := [<max> (limit-size, limit-exp)]
+    limit-size* := <exp-stack-limit-aux(|1)> size
+  ; limit-exp*  := <exp-stack-limit-aux(|2)> exp
+  ; limit       := [<list-max> [limit-size*, limit-exp*]]
       
   stmt-stack-limit-aux: Assignment(StructMember(_, _), exp) -> <exp-stack-limit-aux(|1)> exp
   
   stmt-stack-limit-aux: Assignment(ArrayVar(name, index), exp) -> limit
   with
-    limit-index := <exp-stack-limit-aux(|1)> index
-  ; limit-exp   := <exp-stack-limit-aux(|2)> exp
-  ; limit       := [<max> (limit-index, limit-exp)]
+    limit-index* := <exp-stack-limit-aux(|1)> index
+  ; limit-exp*   := <exp-stack-limit-aux(|2)> exp
+  ; limit        := [<list-max> [limit-index*, limit-exp*]]
     
   stmt-stack-limit-aux: Assignment(var, exp) -> <exp-stack-limit-aux(|0)> exp
   
