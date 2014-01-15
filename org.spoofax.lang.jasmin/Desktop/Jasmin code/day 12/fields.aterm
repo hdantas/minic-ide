@@ -1,7 +1,0 @@
-JBCField(
-  [PRIVATE(), STATIC()]
-, "a"
-, JBCFieldDesc(Int())
-, None()
-, None()
-)

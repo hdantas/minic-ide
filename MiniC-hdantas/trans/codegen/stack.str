@@ -15,28 +15,14 @@ imports
   rules
   stack-limit: arg -> instr
   with
-  <debug> "Doing stack and locals limits"  
-  ; parameters     := <Fst> arg
-  ; <debug> ["parameter: ", <strip-annos> parameters]
+    parameters     := <Fst> arg
   ; statements     := <Snd> arg
-  ; <debug> ["statements: ", <strip-annos> statements]
   ; ret-expression := [<Third> arg]
-  ; <debug> ["ret-expression: ", <strip-annos> ret-expression]
-  
   ; exp-stack-limit  := <exp-stack-limit-aux; sum> ret-expression
-  ; <debug> $[exp-stack-limit: [exp-stack-limit]]
-  
   ; stmt-stack-limit := <stmt-stack-limit-aux; try(list-max)> statements // try in case list is empty
-  ; <debug> $[stmt-stack-limit: [stmt-stack-limit]]
-     
   ; locals-limit     := <addi> (<length> parameters, <addi> (<stmt-locals-limit-aux; sum> statements, 1)) //add 1 to account for the this
-  ; <debug> $[locals-limit: [locals-limit]]
-  
   ; stack-limit       := <max> (stmt-stack-limit, exp-stack-limit)
-  ; <debug> $[stack-limit: [stack-limit]]
-  
   ; instr             := [JBCLimitStack(stack-limit), JBCLimitLocals(locals-limit)]
-  ; <debug> ["instr: ", instr]
 
 rules // exp
   exp-stack-limit-aux: [e, t | ts] -> instr*
@@ -111,7 +97,7 @@ rules // statements
   ; while-stmt* := <stmt-stack-limit-aux> stmt
   ; limit       := [<list-max> [limit-cond*, while-stmt*]]
     
-  stmt-stack-limit-aux: VarDec(Struct(_), _)  -> [3] // TODO: whats up with the aconst_null?
+  stmt-stack-limit-aux: VarDec(Struct(_), _)  -> [3]
   stmt-locals-limit-aux: VarDec(Struct(_), _) -> [1]
   
   stmt-stack-limit-aux: VarDec(_, _)  -> [0]

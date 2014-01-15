@@ -11,10 +11,11 @@ imports
   analysis/desugar
   analysis/names
   lib/jasmin/JasminXT
+  
   trans/codegen/builders
   trans/codegen/field
   trans/codegen/type
-
+  trans/codegen/array
 
 rules
 
@@ -37,76 +38,27 @@ rules
     , None()
     , None()
     )
-  ; this-construct1 := JBCMethod(
-		  [PRIVATE()]
-		, Init()
-		, JBCMethodDesc([Reference(CRef("HelloWorld"))], Void())
-		, [ JBCLimitStack("2")
-		  , ALOAD_0()
+
+  ; limits*       := [JBCLimitStack("2"), JBCLimitLocals("2")]
+  ; this-init*    := [ALOAD_0()
 		  , ALOAD_1()
-		  , PUTFIELD(
-		      JBCFieldRef(
-		        CRef(name)
-		      , FRef("this")
-		      , JBCFieldDesc(Reference(CRef("HelloWorld")))
-		      )
-		    )
+		  , PUTFIELD(JBCFieldRef(CRef(name), FRef("this"), JBCFieldDesc(Reference(CRef("HelloWorld")))))
 		  , ALOAD_0()
-		  , INVOKESPECIAL(
-		      JBCMethodRef(CRef("java/lang/Object"), MRef(Init()), JBCMethodDesc([], Void()))
-		    )
-		  , RETURN()
+		  , INVOKESPECIAL(JBCMethodRef(CRef("java/lang/Object"), MRef(Init()), JBCMethodDesc([], Void())))
 		  ]
-		)
-  ; this-construct2 := JBCMethod(
+  ; array-inits*  := <array-init-to-jbc> fields
+  ; init-methods* := [this-init*, array-inits*, RETURN()]
+  ; class-construct := JBCMethod(
 		  []
 		, Init()
-		, JBCMethodDesc(
-		    [Reference(CRef("HelloWorld")), Reference(CRef("HelloWorld"))]
-		  , Void()
-		  )
-		, [ JBCLimitStack("2")
-		  , ALOAD_0()
-		  , ALOAD_1()
-		  , INVOKESPECIAL(
-		      JBCMethodRef(
-		        CRef(name)
-		      , MRef(Init())
-		      , JBCMethodDesc([Reference(CRef("HelloWorld"))], Void())
-		      )
-		    )
-		  , RETURN()
-		  ]
-		)
-  ; aux-methods*  := <get-and-set-methods> (name, fields)
-  ; methods*      := [this-construct1, this-construct2, aux-methods*]
+		, JBCMethodDesc([Reference(CRef("HelloWorld"))], Void())
+		, init-methods*
+	)
   ; other-fields* := <field-to-jbc> fields
   ; fields-jbc    := [this-field, other-fields*]
-  ; instr         := [Class-Constructor(name, fields-jbc, methods*)]
+  ; instr         := [Class-Constructor(name, fields-jbc, class-construct)]
   ; <write-file> (struct, instr)
 
-  
-  get-and-set-methods: (struct-ref, [FieldDec(ty, name), t | ts]) -> instr*
-  with
-    head-field* := <get-and-set-methods> (struct-ref, FieldDec(ty, name))
-  ; tail-field* := <get-and-set-methods> (struct-ref, [t | ts])
-  ; instr*      := [head-field*, tail-field*]
-  
-  get-and-set-methods: (struct-ref, [FieldDec(ty, name)]) -> <get-and-set-methods> (struct-ref, FieldDec(ty, name))
-  get-and-set-methods: (struct-ref, [])  -> []
-    
-  get-and-set-methods: (struct-ref, FieldDec(ty, field-name)) -> instr //create a get and set method for each fields
-  with
-    getter-name := $[get_[field-name]]
-  ; setter-name := $[set_[field-name]]
-  ; field-type  := ty
-  ; return-jbc  := <return-to-jbc> ty
-  ; get-method := getter-construct(getter-name, field-name, field-type, struct-ref, return-jbc)
-  ; set-method := setter-constructor(setter-name, field-name, field-type, struct-ref, return-jbc)
-  ; instr      := [get-method, set-method]
-    
-return-to-jbc: Int() -> IRETURN()
-return-to-jbc: Float() -> FRETURN()
 
 overlays
       
@@ -125,32 +77,6 @@ Class-Constructor(name, fields, methods) = //main-to-c
   , fields
   , methods
   )
-  
-setter-constructor(setter-name, field-name, field-type, struct-ref, return) =
-	JBCMethod(
-	  [STATIC()]
-	, setter-name
-	, JBCMethodDesc([Reference(CRef(struct-ref)), field-type], field-type)
-	, [ JBCLimitStack("3")
-	  , ALOAD_0()
-	  , ILOAD_1()
-	  , DUP_X1()
-	  , PUTFIELD(JBCFieldRef(CRef(struct-ref), FRef(field-name), JBCFieldDesc(field-type)))
-	  , return
-	  ]
-	)
-
-
-getter-construct(getter-name, field-name, field-type, struct-ref, return) =
-	JBCMethod(
-	  [STATIC()]
-	, getter-name
-	, JBCMethodDesc([Reference(CRef(struct-ref))], field-type)
-	, [ ALOAD_0()
-	  , GETFIELD(JBCFieldRef(CRef(struct-ref), FRef(field-name), JBCFieldDesc(field-type)))
-	  , return
-	  ]
-	)
   
 rules
   

@@ -93,14 +93,14 @@ rules // Generate Code for Local Variables and Variable Access
 	    CRef(struct-name)
 	    , MRef(Init())
 	    , JBCMethodDesc(
-	        [Reference(CRef("HelloWorld")), Reference(CRef("HelloWorld"))]
+	        [Reference(CRef("HelloWorld"))]
 	      , Void()
 	      )
 	    )
     )
   ; index    := <get-var-index> name
   ; store    := <Snd> index //retrieve store instr from index 
-  ; instr    := [new-object, DUP(), ALOAD_0(), ACONST_NULL(), constructor, store]
+  ; instr    := [new-object, DUP(), ALOAD_0(), constructor, store]
 
     
   stmt-to-jbc: VarDec(ty, name) -> []
@@ -114,38 +114,28 @@ rules // Generate Code for Local Variables and Variable Access
 
 
 rules //assignments Assignment(Var("a"), IntConst("1"))
-
-  stmt-to-jbc: Assignment(StructMember(var, field), ArrayVar(array, index)) -> instr* //array assignments to fields
+  stmt-to-jbc: Assignment(StructMember(var, ArrayField(fname, findex)), exp) -> instr* // assignments to array fields
   with 
-    fieldaccess  := <exp-to-jbc> StructMember(var, field)
-  ; arrayaccess  := <exp-to-jbc> Var(array)
-  ; index*       := <exp-to-jbc> index
-  ; indexaccess* := [index*, IALOAD()]
-  ; instr*       := [GETFIELD(arrayaccess), indexaccess*, PUTFIELD(fieldaccess)]
+    varaccess*   := <exp-to-jbc> StructMember(var, ArrayField(fname, findex))
+  ; expaccess*   := <exp-to-jbc> exp
+  ; store-field* := <get-type; array-store-aux> ArrayField(fname, findex)
+  ; instr*       := [varaccess*, expaccess*, store-field*]  
     
-  stmt-to-jbc: Assignment(StructMember(var, Field(f)), exp) -> instr*  //assignments to fields
-  with
-    varaccess*  := <exp-to-jbc> var
-  ; expaccess*  := <exp-to-jbc> exp
-  ; class-name  := $[HelloWorld/[<get-type; get-arguments; index(|1)> var]]
-  ; setter-name := $[set_[f]]
-  ; exp-type    := <get-type> exp
-  ; instr*      := [varaccess*, expaccess*, INVOKESTATIC(
-		  JBCMethodRef(
-		    CRef(class-name)
-		  , MRef(setter-name)
-		  , JBCMethodDesc([Reference(CRef(class-name)), exp-type], exp-type)
-		  )
-		), POP()]
 
+  stmt-to-jbc: Assignment(StructMember(var, Field(f)), exp) -> instr* //assignments to non-array fields
+  with 
+    [varaccess*, fieldref]   := <exp-to-jbc> StructMember(var, Field(f))
+  ; expaccess*   := <exp-to-jbc> exp
+  ; storefield   := PUTFIELD(<get-arguments; index(|1)> fieldref)
+  ; instr*       := [varaccess*, expaccess*, storefield]
 
+  
   stmt-to-jbc: Assignment(ArrayVar(arrayname, index), exp) -> instr*
   with // Assignment(ArrayVar("global", IntConst("3")), IntConst("0"))
-    load-field*  := <exp-to-jbc> Var(arrayname)
-  ; load-index*  := <exp-to-jbc> index
-  ; load-exp*    := <exp-to-jbc> exp
-  ; store-field* := <get-type; array-store-aux> exp
-  ; instr*       := [load-field*, load-index*, load-exp*, store-field*]
+    varaccess*   := <exp-to-jbc> ArrayVar(arrayname, index)
+  ; expaccess*   := <exp-to-jbc> exp
+  ; store-field* := <get-type; array-store-aux> ArrayVar(arrayname, index)
+  ; instr*       := [varaccess*, expaccess*, store-field*]
     
   array-store-aux: Int() ->   [IASTORE()]
   array-store-aux: Float() -> [FASTORE()]
@@ -161,10 +151,6 @@ rules //assignments Assignment(Var("a"), IntConst("1"))
   ; exp-jbc*   := <exp-to-jbc> exp
   ; store-jbc* := <Snd> var-index //retrieve store instr from index
   ; instr*     := [exp-jbc*, store-jbc*]
-    
-  // store-aux: (index, Int())   -> [ISTORE(index)]
-  // store-aux: (index, Float()) -> [FSTORE(index)]
-  // store-aux: (index, otherty) -> [ASTORE(index)]
     
   global-stmt-to-jbc: Assignment(var, exp) -> instr* // assignment to global var
   with

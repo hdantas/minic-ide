@@ -2,7 +2,6 @@ module trans/codegen/exp
 
 imports
   libstratego-gpp
-  lib/runtime/tmpl/pp
   include/MiniC
   include/MiniC-parenthesize
   runtime/nabl/-
@@ -144,30 +143,63 @@ rules
   with
     args* := <exp-to-jbc> e
   ; descr := <get-method-descriptor> c
-  ; call* := [INVOKEVIRTUAL(
+  ; call* := [
+    INVOKEVIRTUAL(
       JBCMethodRef(
         CRef("HelloWorld")
       , MRef(c)
       , descr
       )
     )]
-  ; instr* := [args*, call*]
+  ; instr* := [ALOAD_1(), args*, call*]
   
-  exp-to-jbc: StructMember(Var(v), Field(f)) -> instr*
+  exp-to-jbc: StructMember(Var(v), Field(f)) -> instr
   with
-    var-jbc*    := <exp-to-jbc> Var(v)
-  ; class-name  := $[HelloWorld/[<get-type; get-arguments; index(|1)> Var(v)]]
-  ; getter-name := $[get_[f]]
-  ; field-type  := <get-type> Field(f)
-  ; invoke-get  := INVOKESTATIC(
-	    JBCMethodRef(
-	      CRef(class-name)
-	    , MRef(getter-name)
-	    , JBCMethodDesc([Reference(CRef(class-name))], field-type)
-	    )
-    )
-  ; instr*      := [var-jbc*, invoke-get]
+  	instr := <if(<get-var-index> Var(v), <local-instance-to-jbc> (Var(v), Field(f)), <global-instance-to-jbc> (Var(v), Field(f)))>
+  
+  local-instance-to-jbc: (Var(v), Field(f)) -> instr //handles local struct instances
+  with
+    index     := <get-var-index> v // fails for non local variables
+  ; loadinstr := <Fst> index //get load instr from index
+  ; fielddesc := <get-field-descriptor> Field(f)
+  ; cref      := <get-type; type-to-jbc; get-arguments; index(|1); get-arguments; index(|1)> Var(v)
+  ; fieldref  := GETFIELD(JBCFieldRef(cref, FRef(f), fielddesc))
+  ; instr     := [loadinstr, fieldref]
+      
+  global-instance-to-jbc: (Var(v), Field(f)) -> instr //handles global struct instances
+  with
+    vardesc := <get-field-descriptor> v
+  ;	loadinstr := [ALOAD_0(), GETFIELD(JBCFieldRef(CRef("HelloWorld"), FRef(v), vardesc))]
+  ; fielddesc := <get-field-descriptor> Field(f)
+  ; cref      := <get-type; type-to-jbc; get-arguments; index(|1); get-arguments; index(|1)> Var(v)
+  ; fieldref  := GETFIELD(JBCFieldRef(cref, FRef(f), JBCFieldDesc(fielddesc)))
+  ; instr     := [loadinstr, fieldref]
+  
+  exp-to-jbc: StructMember(Var(v), ArrayField(f, index)) -> instr
+  with
+  	instr := <if(<get-var-index> Var(v), <local-array-instance-to-jbc> (Var(v), ArrayField(f, index)), <global-array-instance-to-jbc> (Var(v), ArrayField(f, index)))>
     
+  local-array-instance-to-jbc: (Var(name), ArrayField(f, index)) -> instr* //handles field arrays of local struct instances
+  with
+    varaccess*   := <local-instance-to-jbc> Var(name)
+  ; fielddesc    := <get-field-descriptor> f
+  ; load-instr   := GETFIELD(JBCFieldRef(CRef("HelloWorld"), FRef(f), fielddesc))
+  ; index-instr* := <exp-to-jbc> index
+  ; instr*       := [varaccess*, load-instr, index-instr*]
+  
+  
+  global-array-instance-to-jbc: (Var(name), ArrayField(f, index)) -> instr* //handles field arrays of global struct instances
+  with
+    varaccess*   := <global-instance-to-jbc> Var(name)
+  ; fielddesc    := <get-field-descriptor> f
+  ; load-instr   := GETFIELD(JBCFieldRef(CRef("HelloWorld"), FRef(f), fielddesc))
+  ; index-instr* := <exp-to-jbc> index
+  ; instr*       := [varaccess*, load-instr, index-instr*]
+    
+ 
+   
+   
+ 
   exp-to-jbc: ArrayVar(name, index) -> instr //only local vars have indices
   with //ArrayVar("global", IntConst("0"))
     instr := <if(<get-var-index> name, <local-array-to-jbc> (name, index), <global-array-to-jbc> (name, index))>

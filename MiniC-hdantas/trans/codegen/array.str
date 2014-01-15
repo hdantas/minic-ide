@@ -26,13 +26,21 @@ rules
   array-init-to-jbc: []  -> []
   
 
-  array-init-to-jbc: ArrayDec(type, name, size) -> instr* //for non array fields no init is necessary
+  array-init-to-jbc: ArrayDec(type, name, size) -> instr* //for non array var no init is necessary
   with
    load-size*  := <exp-to-jbc> IntConst(<dec-string-to-int> size) // array size is always an integer constant
   ; newarray    := NEWARRAY(<type-array-to-jbc> type) // NEWARRAY(IntName())
   ; field-desc  := <get-field-descriptor> name
   ; store-field := PUTSTATIC(JBCFieldRef(CRef("HelloWorld"), FRef(name), field-desc))
   ; instr*      := [load-size*, newarray, store-field]
+    
+  array-init-to-jbc: FieldArrayDec(type, name, size) -> instr* //for non array fields no init is necessary
+  with
+   load-size*  := <exp-to-jbc> IntConst(<dec-string-to-int> size) // array size is always an integer constant
+  ; newarray    := NEWARRAY(<type-array-to-jbc> type) // NEWARRAY(IntName())
+  ; field-desc  := <get-field-descriptor> name
+  ; store-field := PUTFIELD(JBCFieldRef(CRef("HelloWorld"), FRef(name), field-desc))
+  ; instr*      := [ALOAD_0(), load-size*, newarray, store-field]
     
   array-init-to-jbc: nonarraydecs -> [] //for non array fields no init is necessary
   
