@@ -36,7 +36,7 @@ rules
     types         := [PUBLIC()]
   ; stack-limit*  := <stack-limit> (p, s, e)
   ; descr*        := <get-method-descriptor> i
-  ; stmts*        := <stmt-to-jbc> s
+  ; stmts*        := <stmt-to-jbc-ln> s
   ; return-jbc*   := <return-aux> (e, <get-type> e)
   ; method-stmts* := [stack-limit*, stmts*, return-jbc*]
   ; instr*        := Function-Constructor(types, i, descr*, method-stmts*)
@@ -57,17 +57,17 @@ overlays
 rules
 	return-aux: (exp, Int()) -> instr*
 	with
-		jbc-exp* := <exp-to-jbc> exp
+		jbc-exp* := <exp-to-jbc-ln> exp
   ; instr*   := [jbc-exp*, IRETURN()]
 
   return-aux: (exp, Float()) -> instr*
   with
-    jbc-exp* := <exp-to-jbc> exp
+    jbc-exp* := <exp-to-jbc-ln> exp
   ; instr*   := [jbc-exp*, FRETURN()]
   
   return-aux: (exp, type) -> instr* //struct instance
   with
-    jbc-exp* := <exp-to-jbc> exp
+    jbc-exp* := <exp-to-jbc-ln> exp
   ; instr*   := [jbc-exp*, ARETURN()]  
     
 rules

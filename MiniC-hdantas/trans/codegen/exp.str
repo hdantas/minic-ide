@@ -10,10 +10,15 @@ imports
   analysis/desugar
   analysis/names
   lib/jasmin/JasminXT
-
+  runtime/editor/origins
   trans/codegen/type
 
 rules
+  
+  exp-to-jbc-ln: ast -> instr
+  with
+    instr := <exp-to-jbc; origin-line> ast
+    
 // recursive call for multiple expressions
   exp-to-jbc: [e, t | ts] -> instr*
   with

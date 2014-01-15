@@ -63,7 +63,7 @@ main-to-jbc: (vars, expression) -> instr*
   ; return-exp := <Fst> result
   ; exp-type   := <Snd> result
   
-  print-number:  (exp, exp-type) -> (<exp-to-jbc> exp, exp-type)
+  print-number:  (exp, exp-type) -> (<exp-to-jbc-ln> exp, exp-type)
   print-zero: (exp, exp-type)    -> ([ICONST_0()], exp-type)
     
  
