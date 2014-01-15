@@ -18,43 +18,69 @@ imports
     parameters     := <Fst> arg
   ; statements     := <Snd> arg
   ; ret-expression := [<Third> arg]
-  ; exp-stack-limit  := <exp-stack-limit-aux; sum> ret-expression
+  ; exp-stack-limit  := <exp-stack-limit-aux(|0); sum> ret-expression
   ; stmt-stack-limit := <stmt-stack-limit-aux; try(list-max)> statements // try in case list is empty
   ; locals-limit     := <addi> (<length> parameters, <addi> (<stmt-locals-limit-aux; sum> statements, 1)) //add 1 to account for the this
   ; stack-limit       := <max> (stmt-stack-limit, exp-stack-limit)
   ; instr             := [JBCLimitStack(stack-limit), JBCLimitLocals(locals-limit)]
 
 rules // exp
-  exp-stack-limit-aux: [e, t | ts] -> instr*
+  exp-stack-limit-aux(|i): [e, t | ts] -> instr*
   with
-    head-exp* := <exp-stack-limit-aux> e
-  ; tail-exp* := <exp-stack-limit-aux> [t | ts]
+    head-exp* := <exp-stack-limit-aux(|i)> e
+  ; tail-exp* := <exp-stack-limit-aux(|i)> [t | ts]
   ; instr*    := [head-exp*, tail-exp*]
   
-  exp-stack-limit-aux: [e] -> <exp-stack-limit-aux> e
-  exp-stack-limit-aux: []  -> [] 
+  exp-stack-limit-aux(|i): [e] -> <exp-stack-limit-aux(|i)> e
+  exp-stack-limit-aux(|i): []  -> [] 
 
 /* ************************************************************ */  
-  exp-stack-limit-aux: IntConst(_)        -> [1]
-  exp-stack-limit-aux: FloatConst(_)      -> [1]
-  exp-stack-limit-aux: Var(_)             -> [1]
-  exp-stack-limit-aux: StructMember(_, _) -> [1]  //TODO fix: invoking static calls when it shouldnt
-  exp-stack-limit-aux: ArrayVar(_, _)     -> [2]
-  // 1 is for loading $this
-  exp-stack-limit-aux: Call(_, e)         -> [<addi> (<length> e, 1)] //TODO fix: when invoking virtual load $this first
+  exp-stack-limit-aux(|i): IntConst(_)        -> [<addi> (i, 1)]
+  exp-stack-limit-aux(|i): FloatConst(_)      -> [<addi> (i, 1)]
+  exp-stack-limit-aux(|i): Var(_)             -> [<addi> (i, 1)]
+  exp-stack-limit-aux(|i): StructMember(_, _) -> [<addi> (i, 1)]
+  exp-stack-limit-aux(|i): ArrayVar(_, exp)   -> <exp-stack-limit-aux(|<addi>(i, 1))> exp
+
     
-  exp-stack-limit-aux: BinExp(And(), _, _)   -> [1]
-  exp-stack-limit-aux: BinExp(Lt(), _, _)    -> [2]
-  exp-stack-limit-aux: BinExp(Plus(), _, _)  -> [2]
-  exp-stack-limit-aux: BinExp(Minus(), _, _) -> [2]
-  exp-stack-limit-aux: BinExp(Mul(), _, _)   -> [2]
+  exp-stack-limit-aux(|i): Call(_, e)         -> [<addi> (<length> e, <addi> (1, i))] // the extra "1" is for loading $this var
+    
+  exp-stack-limit-aux(|i): BinExp(And(), e1, e2) -> limit
+  with
+    limit-e1 := <exp-stack-limit-aux(|i)> e1
+  ; limit-e2 := <exp-stack-limit-aux(|i)> e2
+  ; limit := <max> (limit-e1, limit-e2)
+    
+  exp-stack-limit-aux(|i): BinExp(Lt(), e1, e2) -> limit
+  with
+    limit-e1 := <exp-stack-limit-aux(|i)> e1
+  ; limit-e2 := <exp-stack-limit-aux(|<addi> (i, 1))> e2
+  ; limit := <max> (limit-e1, limit-e2)
+      
+  exp-stack-limit-aux(|i): BinExp(Plus(), e1, e2) -> limit
+  with
+    limit-e1 := <exp-stack-limit-aux(|i)> e1
+  ; limit-e2 := <exp-stack-limit-aux(|<addi> (i, 1))> e2
+  ; limit    := <max> (limit-e1, limit-e2)
+    
+  exp-stack-limit-aux(|i): BinExp(Minus(), e1, e2) -> limit
+  with
+    limit-e1 := <exp-stack-limit-aux(|i)> e1
+  ; limit-e2 := <exp-stack-limit-aux(|<addi> (i, 1))> e2
+  ; limit    := <max> (limit-e1, limit-e2)
+    
+  exp-stack-limit-aux(|i): BinExp(Mul(), e1, e2) -> limit
+  with
+    limit-e1 := <exp-stack-limit-aux(|i)> e1
+  ; limit-e2 := <exp-stack-limit-aux(|<addi> (i, 1))> e2
+  ; limit    := <max> (limit-e1, limit-e2)
+    
+
+  exp-stack-limit-aux(|i): UnExp(UNOT(), e)    -> <exp-stack-limit-aux(|i)> e
+  exp-stack-limit-aux(|i): UnExp(USIZEOF(), e) -> <exp-stack-limit-aux(|i)> e
+  exp-stack-limit-aux(|i): UnExp(UMINUS(), e)  -> <exp-stack-limit-aux(|<addi> (i, 1))> e
+  exp-stack-limit-aux(|i): UnExp(UPLUS(), e)   -> <exp-stack-limit-aux(|i)> e
   
-  exp-stack-limit-aux: UnExp(UNOT(), _)    -> [1]
-  exp-stack-limit-aux: UnExp(USIZEOF(), _) -> [1]
-  exp-stack-limit-aux: UnExp(UMINUS(), _)  -> [2]
-  exp-stack-limit-aux: UnExp(UPLUS(), _)   -> [1]
-  
-  exp-stack-limit-aux: remaining -> [0]
+  exp-stack-limit-aux(|i): remaining -> [i]
 
 rules // statements
   // stack
@@ -78,24 +104,22 @@ rules // statements
   stmt-locals-limit-aux: []  -> []
       
 /* ************************************************************ */
-  stmt-stack-limit-aux: PrintfInt(_)  -> [2]
-  stmt-locals-limit-aux: PrintfInt(_) -> [0]
+  stmt-stack-limit-aux: PrintfInt(e)  -> <exp-stack-limit-aux(|1)> e
   
-  stmt-stack-limit-aux: PrintfFloat(_)  -> [2]
-  stmt-locals-limit-aux: PrintfFloat(_) -> [0]
+  stmt-stack-limit-aux: PrintfFloat(e)  -> <exp-stack-limit-aux(|1)> e
   
   stmt-stack-limit-aux: IfElse(cond, if-stmt, else-stmt) -> limit
   with
-    limit-cond* := <exp-stack-limit-aux> cond
-  ; limit-if*   := <stmt-stack-limit-aux> if-stmt
-  ; limit-else* := <stmt-stack-limit-aux> else-stmt
-  ; limit       := [<list-max> [limit-if*, limit-else*, limit-cond*]]
+    limit-cond := <exp-stack-limit-aux(|0)> cond
+  ; limit-if   := <stmt-stack-limit-aux> if-stmt
+  ; limit-else := <stmt-stack-limit-aux> else-stmt
+  ; limit      := [<list-max> [limit-if, limit-else, limit-cond]]
     
   stmt-stack-limit-aux: While(cond, stmt) -> limit
   with
-    limit-cond* := <exp-stack-limit-aux> cond
-  ; while-stmt* := <stmt-stack-limit-aux> stmt
-  ; limit       := [<list-max> [limit-cond*, while-stmt*]]
+    limit-cond := <exp-stack-limit-aux(|0)> cond
+  ; while-stmt := <stmt-stack-limit-aux> stmt
+  ; limit       := [<list-max> [limit-cond, while-stmt]]
     
   stmt-stack-limit-aux: VarDec(Struct(_), _)  -> [3]
   stmt-locals-limit-aux: VarDec(Struct(_), _) -> [1]
@@ -106,28 +130,69 @@ rules // statements
   stmt-stack-limit-aux: ArrayDec(_, _, _)  -> [1]
   stmt-locals-limit-aux: ArrayDec(_, _, _) -> [1]
   
-  //TODO instance.a = array[3]; getfield+getstatic problem
-  stmt-stack-limit-aux: Assignment(StructMember(_, _), ArrayVar(_, _)) -> [3]
   
-  stmt-stack-limit-aux: Assignment(StructMember(_, _), exp) -> limit
+  stmt-stack-limit-aux: Assignment(StructMember(_, ArrayField(_, size)), exp) -> limit
   with
-    limit-var* := [1]
-  ; limit-exp* := <exp-stack-limit-aux> exp
-  ; limit      := [<sum> [limit-var*, limit-exp*]]
+    limit-size := <exp-stack-limit-aux(|1)> size
+  ; limit-exp  := <exp-stack-limit-aux(|2)> exp
+  ; limit      := [<max> (limit-size, limit-exp)]
+      
+  stmt-stack-limit-aux: Assignment(StructMember(_, _), exp) -> <exp-stack-limit-aux(|1)> exp
   
-  stmt-stack-limit-aux: Assignment(ArrayVar(name, _), exp) -> limit
+  stmt-stack-limit-aux: Assignment(ArrayVar(name, index), exp) -> limit
   with
-    limit-var* := [2]
-  ; limit-exp* := <exp-stack-limit-aux> exp
-  ; limit      := [<sum> [limit-var*, limit-exp*]]
+    limit-index := <exp-stack-limit-aux(|1)> index
+  ; limit-exp   := <exp-stack-limit-aux(|2)> exp
+  ; limit       := [<max> (limit-index, limit-exp)]
     
-  stmt-stack-limit-aux: Assignment(var, exp) -> limit
-  with
-    limit-var* := [0]
-  ; limit-exp* := <exp-stack-limit-aux> exp
-  ; limit      := [<list-max> [limit-var*, limit-exp*]]
+  stmt-stack-limit-aux: Assignment(var, exp) -> <exp-stack-limit-aux(|0)> exp
   
   stmt-stack-limit-aux: remaining  -> [0]
   stmt-locals-limit-aux: remaining -> [0]
   
   
+rules
+  init-stack-limit: fields -> instr
+  with
+    fields-stack-limit := <init-stack-limit-aux; try(list-max)> fields // try in case list is empty
+  ; stack-limit        := <max> (fields-stack-limit, 1)
+  ; instr              := [JBCLimitStack(stack-limit), JBCLimitLocals(1)]
+    
+  init-stack-limit-aux: [e, t | ts] -> instr*
+  with
+    head-exp* := <init-stack-limit-aux> e
+  ; tail-exp* := <init-stack-limit-aux> [t | ts]
+  ; instr*    := [head-exp*, tail-exp*]
+  
+  init-stack-limit-aux: [e] -> <init-stack-limit-aux> e
+  init-stack-limit-aux: []  -> []
+  
+  init-stack-limit-aux: VarDec(Struct(ty), name)  -> [4]
+  init-stack-limit-aux: remaining  -> [0]
+  
+rules
+  main-stack-limit: (fields*, exp*) -> instr
+  with
+    stmt*              := [fields*, exp*]
+  ; fields-stack-limit := <main-stack-limit-aux; try(list-max)> stmt* // try in case list is empty
+  ; stack-limit        := <max> (fields-stack-limit, 2)
+  ; instr              := [JBCLimitStack(stack-limit), JBCLimitLocals(2)]
+    
+  main-stack-limit-aux: [e, t | ts] -> instr*
+  with
+    head-exp* := <main-stack-limit-aux> e
+  ; tail-exp* := <main-stack-limit-aux> [t | ts]
+  ; instr*    := [head-exp*, tail-exp*]
+  
+  main-stack-limit-aux: [e] -> <main-stack-limit-aux> e
+  main-stack-limit-aux: []  -> []
+  
+  main-stack-limit-aux: ArrayDec(ty, name, size) -> [1]
+  main-stack-limit-aux: IntConst(_)   -> [2]
+  main-stack-limit-aux: FloatConst(_) -> [2]
+  main-stack-limit-aux: Call(c, arg)  -> limit
+  with
+    length := <length> arg
+  ; limit := [<addi> (length, 2)]
+  
+  main-stack-limit-aux: remaining  -> [0]

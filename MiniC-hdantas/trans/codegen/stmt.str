@@ -131,8 +131,8 @@ rules //assignments Assignment(Var("a"), IntConst("1"))
 
   
   stmt-to-jbc: Assignment(ArrayVar(arrayname, index), exp) -> instr*
-  with // Assignment(ArrayVar("global", IntConst("3")), IntConst("0"))
-    varaccess*   := <exp-to-jbc> ArrayVar(arrayname, index)
+  with
+    (varaccess*, lastelem)   := <exp-to-jbc; split-init-last> ArrayVar(arrayname, index) //remove last instruction (IFLOAD()) since this is an assignment
   ; expaccess*   := <exp-to-jbc> exp
   ; store-field* := <get-type; array-store-aux> ArrayVar(arrayname, index)
   ; instr*       := [varaccess*, expaccess*, store-field*]
@@ -159,12 +159,4 @@ rules //assignments Assignment(Var("a"), IntConst("1"))
   ; varaccess  := <get-arguments; index(|1); get-arguments; index(|1)> var-jbc //remove outer "GETSTATIC()"
   ; instr*     := [expaccess*, PUTSTATIC(varaccess)]
     
-rules // auxiliary
-  // get-field-or-const: [IntConst(_), jbc]   -> jbc // dont use GETSTATIC() for constants 
-  // get-field-or-const: [FloatConst(_), jbc] -> jbc // dont use GETSTATIC() for constants
-  // get-field-or-const: [var, jbc]           -> instr
-  // with
-  //   instr := <if(<get-var-index> var, <local-access> jbc, <field-access> jbc)>
-  //     
-  // field-access: jbc -> GETSTATIC(jbc)
-  // local-access: jbc -> jbc
+

@@ -19,29 +19,23 @@ rules // Class files
 	generate-class: // Generates the MiniC (single) class file and put in bin/
 		(selected, position, ast, path, project-path) -> None()
 		with
-		  (path', ast') := <generate-jbc> (selected, position, ast, path, project-path)
-		// ; path'         := <write-file> (path, ast')
-		;	parentdir     := <dirname> path
-		; dir           := $[[parentdir]/bin/[<base-filename> path']]
-		; <try(mkdir)> dir
-		;	<try(call)> ("java", ["-jar", $[[<project-path>]/lib/jasmin.jar], "-d", dir, path'])
-		where
-			cfname := <concat-strings ; guarantee-extension(|"class")> [project-path, "/", dir, "/", "Main"] ;
-			<refresh-workspace-file> cfname
+		  <generate-jbc> (selected, position, ast, path, project-path)
+		;	dir      := <project-path>
+		; src-dir  := $[[dir]/programs/src-gen/*.j]
+		; bin-dir  := $[[dir]/programs/bin/]
+		; file-path := $[[src-dir]/[<base-filename> path].j]
+		;	<call> ("java", ["-jar", $[[<project-path>]/lib/jasmin.jar], "-d", bin-dir, src-dir])
+    ; <refresh-workspace-file> bin-dir
 
 
-rules // Jamin bytecode
+rules // Jasmin bytecode
     
   generate-jbc: // Generates the Jasmin bytecode file and put in src-gen/
     (selected, position, ast, path, project-path) -> None() //(filename, result)
   with
     index-setup(|<language>, project-path); task-setup(|project-path)
-  ; parentdir := <dirname> path
-  ; dir       := $[[parentdir]/src-gen]
-  ; <try(mkdir)> dir
   ; filename  := <base-filename> path
-  ; jbc       := <program-to-jbc> ast
-  // ; result    := <pp-jasminxt-string> jbc
+  ; jbc       := <program-to-jbc; pp-jasminxt-string> ast
   ; <write-file> (filename, jbc)
 
     
@@ -57,26 +51,15 @@ rules // Jamin bytecode
 rules // Run class files
 
   execute-class:
-    (selected, position, ast, path, project-path) -> None()
+    (selected, position, ast, path, project-path) -> None() //(filename, result)
     with
-      <generate-class> (selected, position, ast, path, project-path);
-      cname := "Main" ;
-      dirname := <base-filename; guarantee-extension(|"j")> path;
-      cpath := <concat-strings> [<dirname> path, "/bin/", dirname] ;
-      <call> ("java", ["-cp", cpath, "Main"])
-      // <process-output> Output => result
-
-  process-output: Output(result, "") -> result
-
-  process-output: Output(result, error) -> $[[result] Runtime error: [error]]
-    where not (<""> error)
-         
-signature constructors
-  
-  Output: String * String -> Term
-
+      <generate-class> (selected, position, ast, path, project-path)
+    ; cname    := "HelloWorld"
+    ; cpath    := $[[<project-path>]/programs/bin/]
+    ; filename := <guarantee-extension(|"result.txt")> $[[cpath]/[cname]]
+    ; <call> ("java", ["-cp", cpath, cname]) => result
       
-    
+
 rules // Auxiliary
   
   write-file: (classname, jbc) -> filename

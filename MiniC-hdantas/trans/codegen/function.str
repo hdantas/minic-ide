@@ -92,12 +92,24 @@ rules
    param-aux: ArrayArg(ty, name) -> Array(<get-type; type-to-jbc> Arg(ty, name))
      
 rules // auxiliary    
+  map-index(|ctx, length): (index, Arg(type, name)) -> ""
+  where
+    new-index := <add> (length, index)
+  ; instr     := <var-index-aux> (new-index, <get-type> name)
+  ; <store-var-index(|ctx, instr)> name
+  
   map-index(|ctx, length): (index, VarDec(type, name)) -> ""
   where
     new-index := <add> (length, index)
   ; instr     := <var-index-aux> (new-index, <get-type> name)
   ; <store-var-index(|ctx, instr)> name
-    
+
+  map-index(|ctx, length): (index, ArrayArg(type, name)) -> ""
+  where
+    new-index := <add> (length, index)
+  ; instr     := <array-index-aux> (new-index, <get-type> name)
+  ; <store-var-index(|ctx, instr)> name
+        
   map-index(|ctx, length): (index, ArrayDec(type, name, size)) -> ""
   where
     new-index := <add> (length, index)

@@ -13,7 +13,7 @@ imports
   lib/jasmin/JasminXT
   
   trans/codegen/type
-
+  trans/codegen/stack
 
 rules
 
@@ -27,6 +27,11 @@ rules
   field-to-jbc: [f] -> <field-to-jbc> f
   field-to-jbc: []  -> []
   
+  field-to-jbc: VarDec(Struct(ty), name) -> instr //global variables
+  with
+    descript := <get-field-descriptor> name
+  ; instr    := [JBCField([], name, descript, None(), None())]
+
   field-to-jbc: VarDec(ty, name) -> instr //global variables
   with //VarDec(Struct("inner"), "globalobject")
     descript := <get-field-descriptor> name
@@ -52,7 +57,8 @@ rules
   with
     const*   := [ ALOAD_0(), INVOKESPECIAL(JBCMethodRef(CRef("java/lang/Object"), MRef(Init()), JBCMethodDesc([], Void())))]
   ; others*  := <object-init-to-jbc> fields
-  ; methods* := [const*, others*, RETURN()]
+  ; limits*  := <init-stack-limit> fields
+  ; methods* := [limits*, const*, others*, RETURN()]
   ; instr    := JBCMethod(
       [PUBLIC()]
     , Init()

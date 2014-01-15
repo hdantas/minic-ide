@@ -38,7 +38,6 @@ rules
     , None()
     , None()
     )
-
   ; limits*       := [JBCLimitStack("2"), JBCLimitLocals("2")]
   ; this-init*    := [ALOAD_0()
 		  , ALOAD_1()
@@ -46,8 +45,8 @@ rules
 		  , ALOAD_0()
 		  , INVOKESPECIAL(JBCMethodRef(CRef("java/lang/Object"), MRef(Init()), JBCMethodDesc([], Void())))
 		  ]
-  ; array-inits*  := <array-init-to-jbc> fields
-  ; init-methods* := [this-init*, array-inits*, RETURN()]
+	; array-inits*  := <array-init-to-jbc> (name, fields)
+  ; init-methods* := [limits*, this-init*, array-inits*, RETURN()]
   ; class-construct := JBCMethod(
 		  []
 		, Init()

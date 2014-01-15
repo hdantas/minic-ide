@@ -163,7 +163,7 @@ rules
   ; loadinstr := <Fst> index //get load instr from index
   ; fielddesc := <get-field-descriptor> Field(f)
   ; cref      := <get-type; type-to-jbc; get-arguments; index(|1); get-arguments; index(|1)> Var(v)
-  ; fieldref  := GETFIELD(JBCFieldRef(cref, FRef(f), fielddesc))
+  ; fieldref  := GETFIELD(JBCFieldRef(CRef(cref), FRef(f), fielddesc))
   ; instr     := [loadinstr, fieldref]
       
   global-instance-to-jbc: (Var(v), Field(f)) -> instr //handles global struct instances
@@ -172,7 +172,7 @@ rules
   ;	loadinstr := [ALOAD_0(), GETFIELD(JBCFieldRef(CRef("HelloWorld"), FRef(v), vardesc))]
   ; fielddesc := <get-field-descriptor> Field(f)
   ; cref      := <get-type; type-to-jbc; get-arguments; index(|1); get-arguments; index(|1)> Var(v)
-  ; fieldref  := GETFIELD(JBCFieldRef(cref, FRef(f), JBCFieldDesc(fielddesc)))
+  ; fieldref  := GETFIELD(JBCFieldRef(CRef(cref), FRef(f), JBCFieldDesc(fielddesc)))
   ; instr     := [loadinstr, fieldref]
   
   exp-to-jbc: StructMember(Var(v), ArrayField(f, index)) -> instr
@@ -181,19 +181,24 @@ rules
     
   local-array-instance-to-jbc: (Var(name), ArrayField(f, index)) -> instr* //handles field arrays of local struct instances
   with
-    varaccess*   := <local-instance-to-jbc> Var(name)
+    varaccess*   := <get-var-index; Fst> Var(name) //get load instr from index
   ; fielddesc    := <get-field-descriptor> f
-  ; load-instr   := GETFIELD(JBCFieldRef(CRef("HelloWorld"), FRef(f), fielddesc))
+  ; cref         := <get-type; type-to-jbc; get-arguments; index(|1); get-arguments; index(|1)> Var(name)
+  ; load-instr   := GETFIELD(JBCFieldRef(CRef(cref), FRef(f), fielddesc))
   ; index-instr* := <exp-to-jbc> index
+  ; load-array*  := <get-type; array-load-aux> f
   ; instr*       := [varaccess*, load-instr, index-instr*]
   
   
   global-array-instance-to-jbc: (Var(name), ArrayField(f, index)) -> instr* //handles field arrays of global struct instances
   with
-    varaccess*   := <global-instance-to-jbc> Var(name)
+    vardesc      := <get-field-descriptor> Var(name)
+  ; varaccess*   := [ALOAD_0(), GETFIELD(JBCFieldRef(CRef("HelloWorld"), FRef(name), vardesc))]
   ; fielddesc    := <get-field-descriptor> f
-  ; load-instr   := GETFIELD(JBCFieldRef(CRef("HelloWorld"), FRef(f), fielddesc))
+  ; cref         := <get-type; type-to-jbc; get-arguments; index(|1); get-arguments; index(|1)> Var(name)
+  ; load-instr   := GETFIELD(JBCFieldRef(CRef(cref), FRef(f), fielddesc))
   ; index-instr* := <exp-to-jbc> index
+  ; load-array*  := <get-type; array-load-aux> f
   ; instr*       := [varaccess*, load-instr, index-instr*]
     
  
@@ -227,7 +232,7 @@ rules
   
   exp-to-jbc: Var(v) -> instr //only local vars have indices
   with
-    instr := <if(<get-var-index> Var(v), <local-var-to-jbc> Var(v), <global-var-to-jbc> Var(v))>
+    instr := <if(<get-var-index> v, <local-var-to-jbc> Var(v), <global-var-to-jbc> Var(v))>
     
   local-var-to-jbc: Var(v) -> instr //handles local vars
   with
