@@ -35,13 +35,19 @@ rules
     types         := [PUBLIC()]
   ; stack-limit*  := <stack-limit> (p, s, e)
   ; descr*        := <get-method-descriptor> i
-  ; stmts-ln      := <stmt-to-jbc-ln> s
-  ; stmts*        := <linenumber-cleanup> ([], stmts-ln) //no more duplicate lines
+  ; stmts-ln      := <stmt-to-jbc-ln; flatten-list> s
+  ; stmts*        :=  <linenumber-cleanup; Third> ([], stmts-ln, []) //no more duplicate lines
   ; return-jbc*   := <return-aux> (e, <get-type> e)
   ; method-stmts* := [stack-limit*, stmts*, return-jbc*]
   ; instr*        := Function-Constructor(types, i, descr*, method-stmts*)
   
 
+	testingcenas(|list): [t | ts] -> ""
+	with
+	  <debug> "testing"
+	; <debug> list
+	; <testingcenas(| <concat> [[t], list])> ts
+	 	
 overlays
 
   Function-Constructor(types, name, descr, stmts) =
@@ -138,39 +144,30 @@ rules // auxiliary
 rules
   // JBCLines cleanup
   
-  linenumber-cleanup: (index, [t|ts]) -> instr*
+  linenumber-cleanup: (index, [t | ts], jbc*) -> instr
   with
-    <debug> ["t", t]
-  ; <debug> ["ts", ts];
     head-result := <linenumber-cleanup-aux> (index, t)
   ; newindex    := <Fst> head-result
-  ; head-list*   := <Snd> head-result
-  ; tail-result := <linenumber-cleanup> (newindex, ts)
-  ; tail-list*   := <Snd> tail-result
-
-  ; instr*     := [head-list*, tail-list*]
-  ; <debug> ["DONE", instr*]
-  
-  linenumber-cleanup: (index, instr) -> <linenumber-cleanup> [instr]
-  linenumber-cleanup: (index, []) -> (index, [])   
+  ; head-jbc*   := <Snd> head-result
+  ; new-jbc*    := [jbc*, head-jbc*]
+  ; instr       := <linenumber-cleanup> (newindex, ts, new-jbc*)
+    
+  linenumber-cleanup: (index, [], jbc) -> (index, [], jbc)
   linenumber-cleanup-aux: (index, []) -> (index, [])
-  
+  	
   linenumber-cleanup-aux: (index, JBCLine(i)) -> (newindex, instr)
   with
     result   := <if(<elem> (i, index), <add-to-list> (index, []), <add-to-list> (index, [JBCLine(i)]))>
   ; newindex := <Fst> result
   ; instr    := <Snd> result
-  ;  <debug> ["result", (newindex, instr)]
   
   linenumber-cleanup-aux: (index, instr) -> (index, [instr])
-  
+  	
   add-to-list: (index, [JBCLine(i)]) -> (newindex, [JBCLine(i)])
   with
-     <debug> ["add-to-list", index, i, JBCLine(i)]
-  ;  newindex := <concat> [index, [i]]
+    newindex := <concat> [index, [i]]
 
-  add-to-list: (index, instr) -> (index, instr)
-  
+  add-to-list: (index, []) -> (index, [])
 
      
      

@@ -2,5 +2,6 @@
 *.bak
 *.cache
 .metadata/
+.DS_Store
 MiniC-hdantas/programs
 spoofax-jasmin-master/org.spoofax.lang.jasmin/examples/

@@ -16,4 +16,4 @@ int foo(int x) {
   return 0;
 }
 
-xxx[-3 + xxx[4]]
+xxx[-3 + xxx[6]]
