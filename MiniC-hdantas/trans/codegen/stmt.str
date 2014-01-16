@@ -21,7 +21,7 @@ rules // STATEMENTS
   
   stmt-to-jbc-ln: ast -> instr
   with
-    instr := <stmt-to-jbc; origin-line> ast
+    instr := <stmt-to-jbc> ast
   
   // Recursive call when multiple statements exist
   stmt-to-jbc: [s, t | ts] -> instr*
@@ -91,14 +91,14 @@ rules // Generate Code for Local Variables and Variable Access
 
   stmt-to-jbc: VarDec(Struct(ty), name) -> instr //instr
   with
-    struct-name := $[HelloWorld/[ty]]
+    struct-name := $[ritchie/[ty]]
   ; new-object := NEW(CRef(struct-name))
   ; constructor := INVOKESPECIAL(
 	    JBCMethodRef(
 	    CRef(struct-name)
 	    , MRef(Init())
 	    , JBCMethodDesc(
-	        [Reference(CRef("HelloWorld"))]
+	        [Reference(CRef("ritchie"))]
 	      , Void()
 	      )
 	    )

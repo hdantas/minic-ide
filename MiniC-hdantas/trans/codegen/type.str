@@ -28,7 +28,7 @@ rules
     
   type-to-jbc: Struct(ty) -> instr
   with
-    class  := $[HelloWorld/[ty]]
+    class  := $[ritchie/[ty]]
   ; instr  := Reference(CRef(class))
    
     

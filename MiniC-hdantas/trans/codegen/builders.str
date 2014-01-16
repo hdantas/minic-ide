@@ -7,27 +7,41 @@ imports
 	lib/runtime/task/-
 	lib/runtime/index/-
 	
+	include/MiniC
+  
 	trans/codegen/program
 	trans/codegen/struct
 	trans/codegen/function
 	trans/codegen/stmt
 	trans/codegen/exp
 	trans/codegen/field
-	
+
 rules // Class files
 	      
 	generate-class: // Generates the MiniC (single) class file and put in bin/
 		(selected, position, ast, path, project-path) -> None()
 		with
 		  <generate-jbc> (selected, position, ast, path, project-path)
-		;	dir      := <project-path>
-		; src-dir  := $[[dir]/programs/src-gen/*.j]
-		; bin-dir  := $[[dir]/programs/bin/]
-		; file-path := $[[src-dir]/[<base-filename> path].j]
-		;	<call> ("java", ["-jar", $[[<project-path>]/lib/jasmin.jar], "-d", bin-dir, src-dir])
-    ; <refresh-workspace-file> bin-dir
+		;	dir            := <project-path>
+		; main-class     := <base-filename> path
+		; other-classes* := <ast-to-filename> ast
+		; filenames*     := [main-class, other-classes*]
+		; <debug> filenames*
+		; src-dir        := $[[dir]/programs/src-gen]
+		; bin-dir        := $[[dir]/programs/bin]
+		; <map(compile-files(|src-dir, bin-dir, main-class))> filenames*
+    
+  compile-files(|src-dir, bin-dir, main-class): file -> None()
+  with
+    filename := <guarantee-extension(|"j")> $[[src-dir]/[file]]
+  ; <call> ("java", ["-jar", $[[<project-path>]/lib/jasmin.jar], "-d", bin-dir, filename])
+  ; classname := <if(
+    	<eq> (<guarantee-extension(|"mic")> file, main-class),
+    	<refresh-workspace-file> $[[bin-dir]/[file].class],
+      <refresh-workspace-file> $[[bin-dir]/ritchie/[file].class]
+    )>
 
-
+  
 rules // Jasmin bytecode
     
   generate-jbc: // Generates the Jasmin bytecode file and put in src-gen/
@@ -54,7 +68,7 @@ rules // Run class files
     (selected, position, ast, path, project-path) -> None() //(filename, result)
     with
       <generate-class> (selected, position, ast, path, project-path)
-    ; cname    := "HelloWorld"
+    ; cname    := "ritchie"
     ; cpath    := $[[<project-path>]/programs/bin/]
     ; filename := <guarantee-extension(|"result.txt")> $[[cpath]/[cname]]
     ; <call> ("java", ["-cp", cpath, cname]) => result
@@ -75,5 +89,11 @@ rules // Auxiliary
   ; <refresh-workspace-file> filename
 
 
+  ast-to-filename: File(struct, _, _, _) -> filename
+  with
+    filename := <map(get-struct-name)> struct
+    
+  get-struct-name: StructDec(name, _) -> <strip-annos> name
+        
   to-jbc = program-to-jbc + struct-to-jbc + field-to-jbc + function-to-jbc + stmt-to-jbc + exp-to-jbc
 

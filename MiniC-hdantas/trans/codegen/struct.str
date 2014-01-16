@@ -30,18 +30,18 @@ rules
 
   struct-to-jbc: StructDec(struct, fields) -> []
   with 
-    name          := $[HelloWorld/[struct]]
+    name          := $[ritchie/[struct]]
   ; this-field    := JBCField(
       [FINAL()]
     , "this"
-    , JBCFieldDesc(Reference(CRef("HelloWorld")))
+    , JBCFieldDesc(Reference(CRef("ritchie")))
     , None()
     , None()
     )
   ; limits*       := [JBCLimitStack("2"), JBCLimitLocals("2")]
   ; this-init*    := [ALOAD_0()
 		  , ALOAD_1()
-		  , PUTFIELD(JBCFieldRef(CRef(name), FRef("this"), JBCFieldDesc(Reference(CRef("HelloWorld")))))
+		  , PUTFIELD(JBCFieldRef(CRef(name), FRef("this"), JBCFieldDesc(Reference(CRef("ritchie")))))
 		  , ALOAD_0()
 		  , INVOKESPECIAL(JBCMethodRef(CRef("java/lang/Object"), MRef(Init()), JBCMethodDesc([], Void())))
 		  ]
@@ -50,7 +50,7 @@ rules
   ; class-construct := JBCMethod(
 		  []
 		, Init()
-		, JBCMethodDesc([Reference(CRef("HelloWorld"))], Void())
+		, JBCMethodDesc([Reference(CRef("ritchie"))], Void())
 		, init-methods*
 	)
   ; other-fields* := <field-to-jbc> fields

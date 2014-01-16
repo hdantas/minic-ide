@@ -25,7 +25,7 @@ program-to-jbc: File(structs, vars, functions, expression) -> instr
     header   := JBCHeader(
       None()
     , None()
-    , JBCClass([PUBLIC()], "HelloWorld")
+    , JBCClass([PUBLIC()], "ritchie")
     , JBCSuper("java/lang/Object")
     , []
     , None()
@@ -44,8 +44,8 @@ program-to-jbc: File(structs, vars, functions, expression) -> instr
 main-to-jbc: (vars, expression) -> instr*
   with
 	  limit-stack* := <main-stack-limit> (vars, [expression]) 
-	; object-init* := [NEW(CRef("HelloWorld")), DUP(),INVOKESPECIAL(JBCMethodRef(CRef("HelloWorld"), MRef(Init()), JBCMethodDesc([], Void()))),ASTORE_1()]
-	; array-init*  := <array-init-to-jbc> ("HelloWorld", vars)
+	; object-init* := [NEW(CRef("ritchie")), DUP(),INVOKESPECIAL(JBCMethodRef(CRef("ritchie"), MRef(Init()), JBCMethodDesc([], Void()))),ASTORE_1()]
+	; array-init*  := <array-init-to-jbc> ("ritchie", vars)
 	; get-print*   := [GETSTATIC(JBCFieldRef(CRef("java/lang/System"), FRef("out"),JBCFieldDesc(Reference(CRef("java/io/PrintStream")))))]
   ; exp := <if(<eq>(<get-type; get-constructor> expression, "Struct"), <print-zero> (expression, Int()), <print-exp> expression)> //cant print struct instances
   ; return-exp*  := <Fst> exp

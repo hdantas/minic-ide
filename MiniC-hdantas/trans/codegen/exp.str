@@ -17,7 +17,7 @@ rules
   
   exp-to-jbc-ln: ast -> instr
   with
-    instr := <exp-to-jbc; origin-line> ast
+    instr := <exp-to-jbc> ast
     
 // recursive call for multiple expressions
   exp-to-jbc: [e, t | ts] -> instr*
@@ -151,7 +151,7 @@ rules
   ; call* := [
     INVOKEVIRTUAL(
       JBCMethodRef(
-        CRef("HelloWorld")
+        CRef("ritchie")
       , MRef(c)
       , descr
       )
@@ -174,7 +174,7 @@ rules
   global-instance-to-jbc: (Var(v), Field(f)) -> instr //handles global struct instances
   with
     vardesc := <get-field-descriptor> v
-  ;	loadinstr := [ALOAD_0(), GETFIELD(JBCFieldRef(CRef("HelloWorld"), FRef(v), vardesc))]
+  ;	loadinstr := [ALOAD_0(), GETFIELD(JBCFieldRef(CRef("ritchie"), FRef(v), vardesc))]
   ; fielddesc := <get-field-descriptor> Field(f)
   ; cref      := <get-type; type-to-jbc; get-arguments; index(|1); get-arguments; index(|1)> Var(v)
   ; fieldref  := GETFIELD(JBCFieldRef(CRef(cref), FRef(f), JBCFieldDesc(fielddesc)))
@@ -198,7 +198,7 @@ rules
   global-array-instance-to-jbc: (Var(name), ArrayField(f, index)) -> instr* //handles field arrays of global struct instances
   with
     vardesc      := <get-field-descriptor> Var(name)
-  ; varaccess*   := [ALOAD_0(), GETFIELD(JBCFieldRef(CRef("HelloWorld"), FRef(name), vardesc))]
+  ; varaccess*   := [ALOAD_0(), GETFIELD(JBCFieldRef(CRef("ritchie"), FRef(name), vardesc))]
   ; fielddesc    := <get-field-descriptor> f
   ; cref         := <get-type; type-to-jbc; get-arguments; index(|1); get-arguments; index(|1)> Var(name)
   ; load-instr   := GETFIELD(JBCFieldRef(CRef(cref), FRef(f), fielddesc))
@@ -226,7 +226,7 @@ rules
   global-array-to-jbc: (name, index) -> instr* //handles global arrays
   with
     fielddesc   := <get-field-descriptor> name
-  ; load-instr   := GETSTATIC(JBCFieldRef(CRef("HelloWorld"), FRef(name), fielddesc))
+  ; load-instr   := GETSTATIC(JBCFieldRef(CRef("ritchie"), FRef(name), fielddesc))
   ; index-instr* := <exp-to-jbc> index
   ; load-array*  := <get-type; array-load-aux> name
   ; instr*       := [load-instr, index-instr*, load-array*]
@@ -247,5 +247,5 @@ rules
   global-var-to-jbc: Var(v) -> instr //handles global vars
   with
     fielddesc := <get-field-descriptor> v
-  ;	instr     := [GETSTATIC(JBCFieldRef(CRef("HelloWorld"), FRef(v), fielddesc))]
+  ;	instr     := [GETSTATIC(JBCFieldRef(CRef("ritchie"), FRef(v), fielddesc))]
    	

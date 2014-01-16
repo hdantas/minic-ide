@@ -78,21 +78,21 @@ rules
   
   object-init-to-jbc: VarDec(Struct(ty), field-name) -> instr //global variables
   with //VarDec(Struct("inner"), "globalobject")
-    struct-name := $[HelloWorld/[ty]]
+    struct-name := $[ritchie/[ty]]
   ; new-object  := NEW(CRef(struct-name))
   ; constructor := INVOKESPECIAL(
       JBCMethodRef(
       CRef(struct-name)
       , MRef(Init())
       , JBCMethodDesc(
-          [Reference(CRef("HelloWorld"))]
+          [Reference(CRef("ritchie"))]
         , Void()
         )
       )
     )
   ; assign      := PUTFIELD(
 	    JBCFieldRef(
-	      CRef("HelloWorld")
+	      CRef("ritchie")
 	    , FRef(field-name)
 	    , JBCFieldDesc(Reference(CRef(struct-name)))
 	    )
