@@ -21,13 +21,12 @@ imports
 rules
 
   // recursive call for multiple functions
-  function-to-jbc: [FunctionDef(ty, i, p, s, e), t | ts] -> instr*
+  function-to-jbc: [FunctionDef(ty, i, p, s, e) | ts] -> instr*
   with
     head-fun* := <function-to-jbc> FunctionDef(ty, i, p, s, e)
-  ; tail-fun* := <function-to-jbc> [t | ts]
+  ; tail-fun* := <function-to-jbc> ts
   ; instr*    := [head-fun*, tail-fun*]
   
-  function-to-jbc: [FunctionDef(t, i, p, s, e)] -> <function-to-jbc> FunctionDef(t, i, p, s, e)
   function-to-jbc: [] -> []
   
   // function without parameters or local variables
@@ -36,7 +35,8 @@ rules
     types         := [PUBLIC()]
   ; stack-limit*  := <stack-limit> (p, s, e)
   ; descr*        := <get-method-descriptor> i
-  ; stmts*        := <stmt-to-jbc-ln> s
+  ; stmts-ln      := <stmt-to-jbc-ln> s
+  ; stmts*        := <linenumber-cleanup> ([], stmts-ln) //no more duplicate lines
   ; return-jbc*   := <return-aux> (e, <get-type> e)
   ; method-stmts* := [stack-limit*, stmts*, return-jbc*]
   ; instr*        := Function-Constructor(types, i, descr*, method-stmts*)
@@ -81,12 +81,21 @@ rules
   ; <map(map-index(|ctx, 0))> indexed-param
   
   ; number-param  := <length> param*
-  ; cleaned-stmt := <retain-all(nmap-aux)> stmt* //remove non-declarations stmts from list
+  ; cleaned-stmt  := <map(nmap-aux); flatten-list> stmt* //remove non-declarations stmts from list
   ; indexed-stmt  := <map-with-index(id)> cleaned-stmt //statement indices
   ; <map(map-index(|ctx, number-param))> indexed-stmt //indices for locals start after args
     
    nmap-aux: VarDec(t1, t2) -> VarDec(t1, t2) 
    nmap-aux: ArrayDec(t1, t2, t3) -> ArrayDec(t1, t2, t3)
+   nmap-aux: CodeBlock(s) -> <map(nmap-aux)> s
+   nmap-aux: While(_, s) -> <nmap-aux> s
+   nmap-aux: IfElse(_, s1, s2) -> instr*
+   with
+     l1* := <nmap-aux> s1
+   ; l2* := <nmap-aux> s2
+   ; instr* := [l1*, l2*]
+       
+   nmap-aux: _ -> []
    
    param-aux: Arg(ty, name) -> <get-type; type-to-jbc> Arg(ty, name)
    param-aux: ArrayArg(ty, name) -> Array(<get-type; type-to-jbc> Arg(ty, name))
@@ -126,3 +135,42 @@ rules // auxiliary
   map-index(|ctx, length): (index, _) -> "" //ignore other statements
   
 
+rules
+  // JBCLines cleanup
+  
+  linenumber-cleanup: (index, [t|ts]) -> instr*
+  with
+    <debug> ["t", t]
+  ; <debug> ["ts", ts];
+    head-result := <linenumber-cleanup-aux> (index, t)
+  ; newindex    := <Fst> head-result
+  ; head-list*   := <Snd> head-result
+  ; tail-result := <linenumber-cleanup> (newindex, ts)
+  ; tail-list*   := <Snd> tail-result
+
+  ; instr*     := [head-list*, tail-list*]
+  ; <debug> ["DONE", instr*]
+  
+  linenumber-cleanup: (index, instr) -> <linenumber-cleanup> [instr]
+  linenumber-cleanup: (index, []) -> (index, [])   
+  linenumber-cleanup-aux: (index, []) -> (index, [])
+  
+  linenumber-cleanup-aux: (index, JBCLine(i)) -> (newindex, instr)
+  with
+    result   := <if(<elem> (i, index), <add-to-list> (index, []), <add-to-list> (index, [JBCLine(i)]))>
+  ; newindex := <Fst> result
+  ; instr    := <Snd> result
+  ;  <debug> ["result", (newindex, instr)]
+  
+  linenumber-cleanup-aux: (index, instr) -> (index, [instr])
+  
+  add-to-list: (index, [JBCLine(i)]) -> (newindex, [JBCLine(i)])
+  with
+     <debug> ["add-to-list", index, i, JBCLine(i)]
+  ;  newindex := <concat> [index, [i]]
+
+  add-to-list: (index, instr) -> (index, instr)
+  
+
+     
+     

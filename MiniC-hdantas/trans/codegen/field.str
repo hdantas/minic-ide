@@ -18,13 +18,12 @@ imports
 rules
 
   // Recursive call when multiple field declarations exist
-  field-to-jbc: [f, t | ts] -> instr*
+  field-to-jbc: [t | ts] -> instr*
   with
-    head-field* := <field-to-jbc> f
-  ; tail-field* := <field-to-jbc> [t | ts]
+    head-field* := <field-to-jbc> t
+  ; tail-field* := <field-to-jbc> ts
   ; instr*      := [head-field*, tail-field*]
   
-  field-to-jbc: [f] -> <field-to-jbc> f
   field-to-jbc: []  -> []
   
   field-to-jbc: VarDec(Struct(ty), name) -> instr //global variables

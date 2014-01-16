@@ -20,8 +20,8 @@ rules
   create-type-task(|ctx) :
     UnExp(op, e1) -> <type-is(|ctx, [t0, expected-type, return-type, e1-type, eq0])> return-type
     where t0 := <type-task(|ctx)> op;
-          expected-type := <new-task(|ctx)> Rewrite("proj6", t0);
-          return-type := <new-task(|ctx)> Rewrite("proj7", t0);
+          expected-type := <new-task(|ctx)> Rewrite("proj8", t0);
+          return-type := <new-task(|ctx)> Rewrite("proj9", t0);
           e1-type := <type-task(|ctx)> e1;
           eq0 := <type-match(|ctx, e1-type)> expected-type;
           <task-create-error-on-failure(|ctx, eq0, ["Unexpected subexpression type for unary operator. Received ", e1-type, " expecting ", expected-type, "."])> e1
@@ -43,10 +43,10 @@ rules
     where id
   
   create-type-task(|ctx) :
-    BinExp(op, e1, e2) -> <type-is(|ctx, [t4, expected-type, return-type, e1-type, e2-type, eq1, eq2])> return-type
-    where t4 := <type-task(|ctx)> op;
-          expected-type := <new-task(|ctx)> Rewrite("proj4", t4);
-          return-type := <new-task(|ctx)> Rewrite("proj5", t4);
+    BinExp(op, e1, e2) -> <type-is(|ctx, [t11, expected-type, return-type, e1-type, e2-type, eq1, eq2])> return-type
+    where t11 := <type-task(|ctx)> op;
+          expected-type := <new-task(|ctx)> Rewrite("proj6", t11);
+          return-type := <new-task(|ctx)> Rewrite("proj7", t11);
           e1-type := <type-task(|ctx)> e1;
           e2-type := <type-task(|ctx)> e2;
           eq1 := <type-match(|ctx, e1-type)> expected-type;
@@ -139,14 +139,14 @@ rules
 rules // projections
   
   task-rewrite :
+    ("proj9", (expected-type, return-type)) -> return-type
+  
+  task-rewrite :
+    ("proj8", (expected-type, return-type)) -> expected-type
+  
+  task-rewrite :
     ("proj7", (expected-type, return-type)) -> return-type
   
   task-rewrite :
     ("proj6", (expected-type, return-type)) -> expected-type
-  
-  task-rewrite :
-    ("proj5", (expected-type, return-type)) -> return-type
-  
-  task-rewrite :
-    ("proj4", (expected-type, return-type)) -> expected-type
   

@@ -19,14 +19,13 @@ imports
 
 rules
 
-  struct-to-jbc: [StructDec(name, fields), t | ts] -> instr*
+  struct-to-jbc: [StructDec(name, fields) | ts] -> instr*
   with
     head-field* := <struct-to-jbc> StructDec(name, fields)
-  ; tail-field* := <struct-to-jbc> [t | ts]
+  ; tail-field* := <struct-to-jbc> ts
   ; instr*      := [head-field*, tail-field*]
   
-  struct-to-jbc: [StructDec(name, fields)] -> <struct-to-jbc> StructDec(name, fields)
-  
+  struct-to-jbc: [] -> []
 
   struct-to-jbc: StructDec(struct, fields) -> []
   with 
@@ -55,17 +54,17 @@ rules
 	)
   ; other-fields* := <field-to-jbc> fields
   ; fields-jbc    := [this-field, other-fields*]
-  ; instr         := [Class-Constructor(name, fields-jbc, class-construct)]
+  ; instr         := [Class-Constructor($[[struct].mic], name, fields-jbc, class-construct)]
   ; <write-file> (struct, instr)
 
 
 overlays
       
-Class-Constructor(name, fields, methods) = //main-to-c
+Class-Constructor(filename, name, fields, methods) = //main-to-c
   JBCFile(
     JBCHeader(
       None()
-    , None()
+    , JBCSource(filename)
     , JBCClass([], name) 
     , JBCSuper("java/lang/Object")
     , []

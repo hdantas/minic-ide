@@ -20,11 +20,11 @@ imports
 
 rules
 
-program-to-jbc: File(structs, vars, functions, expression) -> instr
+program-to-jbc(|filename): File(structs, vars, functions, expression) -> instr
   with
     header   := JBCHeader(
       None()
-    , None()
+    , JBCSource(filename)
     , JBCClass([PUBLIC()], "ritchie")
     , JBCSuper("java/lang/Object")
     , []

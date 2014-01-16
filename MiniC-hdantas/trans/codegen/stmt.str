@@ -18,22 +18,20 @@ imports
 
 
 rules // STATEMENTS 
-  
-  stmt-to-jbc-ln: ast -> instr
+      
+  stmt-to-jbc-ln: [t | ts] -> instr*
   with
-    instr := <stmt-to-jbc> ast
+    head-stmt* := <stmt-to-jbc> t
+  ; linenumber := JBCLine(<origin-line; inc> t)
+  ; tail-stmt* := <stmt-to-jbc-ln> ts
+  ; instr*     := [linenumber, head-stmt*, tail-stmt*]
   
-  // Recursive call when multiple statements exist
-  stmt-to-jbc: [s, t | ts] -> instr*
-  with
-    head-stmt* := <stmt-to-jbc> s
-  ; tail-stmt* := <stmt-to-jbc> [t | ts]
-  ; instr*     := [head-stmt*, tail-stmt*]
+  stmt-to-jbc-ln: [] -> []
+  stmt-to-jbc-ln: s -> <stmt-to-jbc-ln> [s]
   
-  stmt-to-jbc: [s] -> <stmt-to-jbc> s
-  stmt-to-jbc: []  -> []
+  stmt-to-jbc: [t | ts] -> <stmt-to-jbc-ln> [t | ts]
+  stmt-to-jbc: [] -> []
   
-
   stmt-to-jbc: PrintfInt(i) -> instr
   with
     instr := <printf-aux> i
@@ -111,14 +109,14 @@ rules // Generate Code for Local Variables and Variable Access
   stmt-to-jbc: VarDec(ty, name) -> []
   stmt-to-jbc: ArrayDec(ty, name, size) -> instr*
   with
-    load-size*  := <exp-to-jbc-ln> IntConst(<dec-string-to-int> size) // array size is always an integer constant
+    load-size*  := <exp-to-jbc> IntConst(<dec-string-to-int> size) // array size is always an integer constant
   ; newarray    := NEWARRAY(<type-array-to-jbc> ty) // NEWARRAY(IntName()) 
   ; var-index  := <get-var-index> name // fails for non local var
   ; store-jbc* := <Snd> var-index //retrieve store instr from index
   ; instr*     := [load-size*, newarray, store-jbc*]
 
 
-rules //assignments Assignment(Var("a"), IntConst("1"))
+rules
   stmt-to-jbc: Assignment(StructMember(var, ArrayField(fname, findex)), exp) -> instr* // assignments to array fields
   with 
     varaccess*   := <exp-to-jbc-ln> StructMember(var, ArrayField(fname, findex))

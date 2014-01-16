@@ -15,22 +15,20 @@ imports
 
 rules
   
-  exp-to-jbc-ln: ast -> instr
+  exp-to-jbc-ln: [t | ts] -> instr*
   with
-    instr := <exp-to-jbc> ast
-    
-// recursive call for multiple expressions
-  exp-to-jbc: [e, t | ts] -> instr*
-  with
-    head-exp* := <exp-to-jbc> e
-  ; tail-exp* := <exp-to-jbc> [t | ts]
-  ; instr*    := [head-exp*, tail-exp*]
+    head-stmt* := <exp-to-jbc> t
+  ; linenumber := JBCLine(<origin-line; inc> t)
+  ; tail-stmt* := <exp-to-jbc-ln> ts
+  ; instr*     := [linenumber, head-stmt*, tail-stmt*]
   
-  exp-to-jbc: [e] -> <exp-to-jbc> e
-    
-  exp-to-jbc: []  -> []   
-
-    
+  exp-to-jbc-ln: [] -> []
+  exp-to-jbc-ln: s -> <exp-to-jbc-ln> [s]
+  
+  exp-to-jbc: [t | ts] -> <exp-to-jbc-ln> [t | ts]
+  exp-to-jbc: [] -> []
+  
+  
   exp-to-jbc: IntConst(i)   -> [LDC(i)]
   exp-to-jbc: FloatConst(f) -> [LDC(f)]
       

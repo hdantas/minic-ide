@@ -26,7 +26,6 @@ rules // Class files
 		; main-class     := <base-filename> path
 		; other-classes* := <ast-to-filename> ast
 		; filenames*     := [main-class, other-classes*]
-		; <debug> filenames*
 		; src-dir        := $[[dir]/programs/src-gen]
 		; bin-dir        := $[[dir]/programs/bin]
 		; <map(compile-files(|src-dir, bin-dir, main-class))> filenames*
@@ -34,7 +33,7 @@ rules // Class files
   compile-files(|src-dir, bin-dir, main-class): file -> None()
   with
     filename := <guarantee-extension(|"j")> $[[src-dir]/[file]]
-  ; <call> ("java", ["-jar", $[[<project-path>]/lib/jasmin.jar], "-d", bin-dir, filename])
+  ; <try(call)> ("java", ["-jar", $[[<project-path>]/lib/jasmin.jar], "-d", bin-dir, filename])
   ; classname := <if(
     	<eq> (<guarantee-extension(|"mic")> file, main-class),
     	<refresh-workspace-file> $[[bin-dir]/[file].class],
@@ -49,7 +48,7 @@ rules // Jasmin bytecode
   with
     index-setup(|<language>, project-path); task-setup(|project-path)
   ; filename  := <base-filename> path
-  ; jbc       := <program-to-jbc; pp-jasminxt-string> ast
+  ; jbc       := <program-to-jbc(|filename); pp-jasminxt-string> ast
   ; <write-file> (filename, jbc)
 
     
@@ -58,7 +57,7 @@ rules // Jasmin bytecode
   with
   index-setup(|<language>, project-path); task-setup(|project-path)
   ; filename := <guarantee-extension(|"j")> path
-  ; jbc      := <to-jbc> selected
+  ; jbc      := <to-jbc(|<base-filename> path)> selected
   ; result   := <pp-jasminxt-string> jbc
   
 
@@ -71,7 +70,7 @@ rules // Run class files
     ; cname    := "ritchie"
     ; cpath    := $[[<project-path>]/programs/bin/]
     ; filename := <guarantee-extension(|"result.txt")> $[[cpath]/[cname]]
-    ; <call> ("java", ["-cp", cpath, cname]) => result
+    ; <try(call)> ("java", ["-cp", cpath, cname]) => result
       
 
 rules // Auxiliary
@@ -95,5 +94,5 @@ rules // Auxiliary
     
   get-struct-name: StructDec(name, _) -> <strip-annos> name
         
-  to-jbc = program-to-jbc + struct-to-jbc + field-to-jbc + function-to-jbc + stmt-to-jbc + exp-to-jbc
+  to-jbc(|filename) = program-to-jbc(|filename) + struct-to-jbc + field-to-jbc + function-to-jbc + stmt-to-jbc + exp-to-jbc
 
