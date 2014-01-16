@@ -1,0 +1,19 @@
+
+int xxx[5];
+
+
+int foo(int x) {
+  int a; a = 0;  int b;  b = 4;
+  while(a < 3){
+    int b; 
+    b = 1;
+    a = a + 1;
+    printf("%i", b);
+  }
+  a = xxx[0]; b =  xxx[5];
+  printf("%i", b);
+  
+  return 0;
+}
+
+xxx[-3 + xxx[4]]
