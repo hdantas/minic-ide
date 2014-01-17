@@ -3,17 +3,11 @@ int xxx[5];
 
 
 int foo(int x) {
-  int a; a = 0;  int b;  b = 4;
-  while(a < 3){{{{{
-    {int b; 
-    b = 1;}
-    a = a + 1;
-    printf("%i", b);
-  }}}}}
-  a = xxx[0]; 
-  printf("%i", b);
-  
-  return 0;
+  int a;
+  int b;
+  b = a;
+  int c;
+  c = 0;
+  return b;
 }
-
 foo(2)

@@ -76,7 +76,9 @@ rules
     param-type    := <map(param-aux)> param* //type descriptor
   ; descr         := JBCMethodDesc(param-type, <type-to-jbc> ty) 
   ; <store-method-descriptor(|ctx, descr)> mname
-  
+  ; <debug> "makelist"
+  ; aux-list*     := [param*, stmt*, exp]
+  ; makelist      := <makelist-aux> aux-list*
   ; indexed-param := <map-with-index(id)> param* //parameter indices
   ; <map(map-index(|ctx, 0))> indexed-param
   
@@ -163,5 +165,79 @@ rules
 
   add-to-list: (index, []) -> (index, [])
 
-     
-     
+rules
+  makelist-aux: list -> []
+  with
+    rlist := <reverse; strip-annos> list
+  ; varref := <varref-aux(|[])> rlist
+  ; indices := <reverse; myindex(|[])> varref
+    
+  varref-aux(|list): [t | ts] -> instr*
+  with
+    head-result := <varref-aux1(|list)> t
+  // ; <strip-annos; debug> ["head-result", head-result]
+  ; tail-result* := <varref-aux(|head-result)> ts
+  ; instr*       := [head-result, tail-result*]
+  // ; <strip-annos; debug> ["final instr", instr*]
+  
+  varref-aux(|list): [] -> []
+    
+  varref-aux1(|list): ArrayArg(type, name)       -> <my-remove-from-list(|list)> name
+  varref-aux1(|list): Arg(type, name)            -> <my-remove-from-list(|list)> name
+  varref-aux1(|list): VarDec(type, name)         -> <my-remove-from-list(|list)> name
+  varref-aux1(|list): ArrayDec(type, name, size) -> <my-remove-from-list(|list)> name
+  varref-aux1(|list): Var(name)                  -> <my-add-to-list(|list)> name
+  varref-aux1(|list): [] -> []
+  
+  varref-aux1(|list): other -> instr
+  with
+    // <debug> ["other", <strip-annos> other] ;
+    term  := <try(explode-term)> other
+  // ; <debug> ["term", <Snd> term]
+  ; instr := <Snd; map(varref-aux1(|list)); flatten-list; make-set> term
+  // ; <debug> ["instr", instr]
+  
+  
+  
+  my-remove-from-list(|list): name -> <remove-all(myequal(|name))> list
+  my-add-to-list(|list): member -> <concat; make-set> [list, [member]] //make-set eliminates duplicates
+  
+  myequal(|name): listmember -> <equal> (name, listmember)
+  myelem(|list): listmember  -> <if(
+                                  <elem> (listmember, list),
+                                  <debug> $[found [listmember]],
+                                  <debug> $[missing [listmember]]
+                                )>
+  
+  myindex(|free): list -> newlist
+  with
+   // result := <filter(myelem(|"a")); debug> ["a"] ;
+   newlist := <map(isort-list(LSort(string-gt)); myindex-aux(|[1]))> list
+  ; <debug> newlist
+
+  myindex-aux(|i): sublist -> result
+  with
+    newlist := []
+  ; <debug> "i"
+  ; <debug> i
+  ; newi := <concat> [i, [1, 2, 3]]
+  ; result := <myindex-aux-aux(|[])> sublist
+  ; <debug> "after"
+  ; usedvars := result
+  ; <debug> ["sublist", sublist]
+  ; <debug> ["result", result]
+  // ; <map(myelem(|sublist)); debug> usedvars
+      
+  myindex-aux-aux(|i): [t|ts] -> result
+  with
+    <debug> "start"
+  ; <debug> $[add [t] to index]
+  ; index-list  := <index> (1, i)
+  ; oldusedvars := <index> (2, i)
+  ; newusedvars := <concat> [oldusedvars, [t]]
+  ; newi := [index-list, newusedvars]
+  ; result      := <myindex-aux-aux(|newi)> ts
+  ; <debug> ["result", result]
+    
+    
+  myindex-aux-aux(|i): ([], usedvars) -> ([], usedvars)
