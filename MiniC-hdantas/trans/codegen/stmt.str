@@ -47,7 +47,7 @@ rules // STATEMENTS
   ; invoke := INVOKEVIRTUAL(JBCMethodRef(CRef("java/io/PrintStream"), MRef("println"), JBCMethodDesc(<get-type> expression, Void())))
   ; instr* := [static, exp*, invoke]
   
-  stmt-to-jbc: CodeBlock(c) -> [<stmt-to-jbc> c]
+  stmt-to-jbc: CodeBlock(c) -> <stmt-to-jbc> c
 
   stmt-to-jbc: IfElse(cond, if-stmt, else-stmt) -> instr*
   with
