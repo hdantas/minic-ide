@@ -80,7 +80,8 @@ rules
   ; aux-list*     := [param*, stmt*, exp]
    
   ; annotated-names   := <store-annotated-names> aux-list* //step 1 (only var declarations, no arg)
-  ; used-names        := <reverse; store-used-names(|[]); reverse> aux-list* //step 2
+  ; varref            := <store-varuse-and-vardecs> aux-list* //step 1.5 (flatten the AST and filter out non var declarations or var calls)
+  ; used-names        := <reverse; store-used-names(|[]); reverse> varref //step 2
   ; local-used-names  := <remove-global-vars> (annotated-names, used-names) //step 3
   ; available-indices := <make-list-indices(|[])> (<length> param*, <addi> (<length> param*, <length> annotated-names)) //make list [1 through # of VarDecs]
 

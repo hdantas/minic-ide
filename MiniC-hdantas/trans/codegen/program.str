@@ -53,6 +53,7 @@ main-to-jbc: (vars, expression) -> instr*
   ; invoke-print := INVOKEVIRTUAL(JBCMethodRef(CRef("java/io/PrintStream"), MRef("println"), JBCMethodDesc([exp-type], Void())))
   ; instr*       := [limit-stack*, object-init*, array-init*, get-print*, return-exp*, invoke-print, RETURN()]
 
+   
   print-exp:  exp -> (return-exp, exp-type)
   with
    	result     := <if(
@@ -63,8 +64,21 @@ main-to-jbc: (vars, expression) -> instr*
   ; return-exp := <Fst> result
   ; exp-type   := <Snd> result
   
-  print-number:  (exp, exp-type) -> (<exp-to-jbc-ln> exp, exp-type)
-  print-zero: (exp, exp-type)    -> ([ICONST_0()], exp-type)
+
+  print-number:  (exp, exp-type) -> (new-exp, exp-type)
+  with
+    new-exp := <if(<eq>(<get-constructor> exp, "Call"),
+      <print-number-call> exp,
+      <exp-to-jbc-ln> exp)>
+      
+  print-number-call:  exp -> instr
+  with
+    tmp := <exp-to-jbc-ln> exp
+  ; instr := [ALOAD_1(), <drop(|2)> tmp] // replace ALOAD_0() (used for functions) with ALOAD_1() used only in the main
+    
+  
+      
+  print-zero:    (exp, exp-type) -> ([ICONST_0()], exp-type)
     
  
   

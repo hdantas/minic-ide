@@ -24,32 +24,56 @@ rules
 	  
 	store-annotated-names: VarDec(type, name)         -> [name]
 	store-annotated-names: ArrayDec(type, name, size) -> [name]
-	store-annotated-names: other                      -> []
+	store-annotated-names: []                         -> []
+
+  store-annotated-names: other -> result
+  with
+    term        := <try(explode-term)> other
+  ; constructor := <Fst> term
+  ; args        := <Snd> term
+  ; result      := <store-annotated-names> args
 	
 	/**********************************************/
-	
+  rules
+  store-varuse-and-vardecs: [t | ts]  -> result* //step 1.5 (all varuse and varnames)
+  with
+    head-name* := <store-varuse-and-vardecs> t
+  ; tail-name* := <store-varuse-and-vardecs> ts
+  ; result*    := [head-name*, tail-name*]
+    
+  store-varuse-and-vardecs: VarDec(type, name)         -> [VarDec(type, name)]
+  store-varuse-and-vardecs: ArrayDec(type, name, size) -> [ArrayDec(type, name, size)]
+  store-varuse-and-vardecs: Var(name)                  -> [Var(name)]
+  store-varuse-and-vardecs: ArrayVar(name, size)       -> [ArrayVar(name, size)]
+  store-varuse-and-vardecs: Arg(type, name)            -> [Arg(type, name)]
+  store-varuse-and-vardecs: ArrayArg(type, name)       -> [ArrayArg(type, name)]
+  store-varuse-and-vardecs: []                         -> []
+
+  store-varuse-and-vardecs: other -> result
+  with
+    term        := <try(explode-term)> other
+  ; constructor := <Fst> term
+  ; args        := <Snd> term
+  ; result      := <store-varuse-and-vardecs> args
+  
+  /**********************************************/
+  
 	store-used-names(|list): [t | ts] -> result //step 2 store and propagate names
 	with
-	  head-name  := <strip-annos; store-used-names(|list)> t
+	  head-name  := <strip-annos; store-used-names(|list); make-set> t
 	; tail-name* := <store-used-names(|head-name)> ts
 	; result     := [head-name, tail-name*]
 	
 	store-used-names(|list): Var(name)            -> <concat> [[name], list]
-  store-used-names(|list): ArrayVar(name, _)    -> <concat> [[name], list]
-  store-used-names(|list): Arg(_, name)         -> <remove-all(equal(|name))> list
-  store-used-names(|list): ArrayArg(_, name)    -> <remove-all(equal(|name))> list
-  store-used-names(|list): VarDec(_, name)      -> <remove-all(equal(|name))> list
-  store-used-names(|list): ArrayDec(_, name, _) -> <remove-all(equal(|name))> list
+	store-used-names(|list): ArrayVar(name, _)    -> <concat> [[name], list]
+	store-used-names(|list): Arg(_, name)         -> <remove-all(equal(|name))> list
+	store-used-names(|list): ArrayArg(_, name)    -> <remove-all(equal(|name))> list
+	store-used-names(|list): VarDec(_, name)      -> <remove-all(equal(|name))> list
+	store-used-names(|list): ArrayDec(_, name, _) -> <remove-all(equal(|name))> list
 	store-used-names(|list): []                   -> [list]
-	
-	store-used-names(|list): other -> result
-	with
-	  term        := <try(explode-term)> other
-	; constructor := <Fst> term
-	; args        := <Snd> term
-	; result      := <store-used-names(|list); flatten-list; make-set; isort-list(LSort(string-gt))> args
-	             
-	
+
+
+
 	/**********************************************/
 	remove-global-vars: (annotated-names, [t | ts]) -> result //step 3 remove vars not declare inside the function
 	with
@@ -72,7 +96,7 @@ rules
 	
 	
 	/**********************************************/
-	make-list-indices(|list): (min, min)      -> list
+	make-list-indices(|list): (min, min)    -> list
 	make-list-indices(|list): (min, length) -> result //make list [min through length]
 	with
 	  newlist   := <concat> [[length], list]
@@ -149,14 +173,21 @@ rules
 	  <match-and-store-indices(|ctx, hashtable)> t
 	; <match-and-store-indices(|ctx, hashtable)> ts
 	  
-	match-and-store-indices(|ctx, hashtable): []                      -> []
   match-and-store-indices(|ctx, hashtable): VarDec(type, name)      -> <try(store-index(|ctx, <hashtable-get(|<strip-annos> name)> hashtable))> name
   match-and-store-indices(|ctx, hashtable): ArrayDec(type, name, _) -> <try(store-array-index(|ctx, <hashtable-get(|<strip-annos> name)> hashtable))> name
   match-and-store-indices(|ctx, hashtable): Arg(type, name)         -> <try(store-index(|ctx, <hashtable-get(|<strip-annos> name)> hashtable))> name
   match-and-store-indices(|ctx, hashtable): ArrayArg(type, name)    -> <try(store-array-index(|ctx, <hashtable-get(|<strip-annos> name)> hashtable))> name
-    
-  match-and-store-indices(|ctx, hashtable): other -> []
-  
+  match-and-store-indices(|ctx, hashtable): [] -> []    
+
+  match-and-store-indices(|ctx, hashtable): other -> result
+  with
+    term        := <try(explode-term)> other
+  ; constructor := <Fst> term
+  ; args        := <Snd> term
+  ; result      := <match-and-store-indices(|ctx, hashtable)> args
+
+
+
   store-array-index(|ctx, index): name -> []
   with
     instr := <array-index-aux> (index, <get-type> name)

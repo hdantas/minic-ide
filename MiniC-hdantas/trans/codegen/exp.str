@@ -154,7 +154,7 @@ rules
       , descr
       )
     )]
-  ; instr* := [ALOAD_1(), args*, call*]
+  ; instr* := [ALOAD_0(), args*, call*]
   
   exp-to-jbc: StructMember(Var(v), Field(f)) -> instr
   with

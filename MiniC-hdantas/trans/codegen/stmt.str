@@ -107,7 +107,15 @@ rules // Generate Code for Local Variables and Variable Access
 
     
   stmt-to-jbc: VarDec(ty, name) -> []
-  stmt-to-jbc: ArrayDec(ty, name, size) -> instr*
+  
+  stmt-to-jbc: ArrayDec(ty, name, size) -> instr* // if array stmt does not have an index it means it has not been used 
+  with
+    instr* := <if(<get-var-index> name,
+              <stmt-to-jbc-aux> ArrayDec(ty, name, size),
+              <concat> []
+              )>
+              
+  stmt-to-jbc-aux: ArrayDec(ty, name, size) -> instr*
   with
     load-size*  := <exp-to-jbc> IntConst(<dec-string-to-int> size) // array size is always an integer constant
   ; newarray    := NEWARRAY(<type-array-to-jbc> ty) // NEWARRAY(IntName()) 
@@ -159,7 +167,7 @@ rules
   with
     expaccess* := <exp-to-jbc-ln> exp
   ; var-jbc    := <exp-to-jbc-ln> var
-  ; varaccess  := <get-arguments; index(|1); get-arguments; index(|1)> var-jbc //remove outer "GETSTATIC()"
+  ; varaccess  := <get-arguments; index(|2); get-arguments; index(|1)> var-jbc //remove outer "GETSTATIC()"
   ; instr*     := [expaccess*, PUTSTATIC(varaccess)]
     
 

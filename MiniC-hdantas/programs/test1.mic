@@ -1,21 +1,27 @@
-
 int xxx[5];
 int d;
+
+int bar(int a){
+  d = 2;
+  return a;
+}
 
 int foo(int x, float l) {
   int a;
   a = 0;
   int b;
-  b = a;
-  // int array[5];
+  b = bar(0);
+  int array[5];
   
   if (1 < 3){
-    int e;
-    printf("%i", a + c);
+    printf("%i", a);
   }else
-    printf("%i", 1);
+    printf("%i", d);
+  
   int c;
-  // c = array[2];
-  return c;
+  c = x;
+  return 0;
 }
+
+// bar(1)
 foo(0, 1.0)
