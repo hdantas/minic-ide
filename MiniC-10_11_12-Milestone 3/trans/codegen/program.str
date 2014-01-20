@@ -1,0 +1,94 @@
+module trans/codegen/program
+
+imports
+  include/MiniC
+  runtime/nabl/-
+  runtime/task/-
+  runtime/types/-
+  analysis/desugar
+  analysis/names
+  lib/jasmin/JasminXT
+
+  trans/codegen/stmt
+  trans/codegen/function
+  trans/codegen/exp
+  trans/codegen/struct
+  trans/codegen/field
+  trans/codegen/type
+  trans/codegen/array
+  trans/codegen/stack
+
+rules
+
+program-to-jbc(|filename): File(structs, vars, functions, expression) -> instr
+  with
+    header   := JBCHeader(
+      None()
+    , JBCSource(filename)
+    , JBCClass([PUBLIC()], "ritchie")
+    , JBCSuper("java/lang/Object")
+    , []
+    , None()
+    , None()
+    , None()
+    )
+  ; <struct-to-jbc> structs
+  ; fields    := <field-to-jbc> vars
+  ; init      := <constructor-to-jbc> vars //see field.str
+  ; fun*      := <function-to-jbc> functions
+  ; main-body := <main-to-jbc> (vars, expression)
+  ; main      := Main-Constructor(main-body)
+  ; methods*  := [init, fun*, main]
+  ; instr     := JBCFile(header, fields, methods*)
+
+main-to-jbc: (vars, expression) -> instr*
+  with
+	  limit-stack* := <main-stack-limit> (vars, [expression]) 
+	; object-init* := [NEW(CRef("ritchie")), DUP(),INVOKESPECIAL(JBCMethodRef(CRef("ritchie"), MRef(Init()), JBCMethodDesc([], Void()))),ASTORE_1()]
+	; array-init*  := <array-init-to-jbc> ("ritchie", vars)
+	; get-print*   := [GETSTATIC(JBCFieldRef(CRef("java/lang/System"), FRef("out"),JBCFieldDesc(Reference(CRef("java/io/PrintStream")))))]
+  ; exp := <if(<eq>(<get-type; get-constructor> expression, "Struct"), <print-zero> (expression, Int()), <print-exp> expression)> //cant print struct instances
+  ; return-exp*  := <Fst> exp
+  ; exp-type     := <Snd> exp    
+  ; invoke-print := INVOKEVIRTUAL(JBCMethodRef(CRef("java/io/PrintStream"), MRef("println"), JBCMethodDesc([exp-type], Void())))
+  ; instr*       := [limit-stack*, object-init*, array-init*, get-print*, return-exp*, invoke-print, RETURN()]
+
+   
+  print-exp:  exp -> (return-exp, exp-type)
+  with
+   	result     := <if(
+  		<eq>(<get-type; get-constructor> exp, "Result"),
+  		<print-number> (exp, Int()),  //handle USizeof operator with non Int arguments
+  		<print-number> (exp, <get-type; type-to-jbc> exp)
+  	)>
+  ; return-exp := <Fst> result
+  ; exp-type   := <Snd> result
+  
+
+  print-number:  (exp, exp-type) -> (new-exp, exp-type)
+  with
+    new-exp := <if(<eq>(<get-constructor> exp, "Call"),
+      <print-number-call> exp,
+      <exp-to-jbc-ln> exp)>
+      
+  print-number-call:  exp -> instr
+  with
+    tmp := <exp-to-jbc-ln> exp
+  ; instr := [ALOAD_1(), <drop(|2)> tmp] // replace ALOAD_0() (used for functions) with ALOAD_1() used only in the main
+    
+  
+      
+  print-zero:    (exp, exp-type) -> ([ICONST_0()], exp-type)
+    
+ 
+  
+  
+overlays 
+  Main-Constructor(main-body) =
+    JBCMethod(
+      [PUBLIC(), STATIC()]
+    , "main"
+    , JBCMethodDesc([Array(Reference(CRef("java/lang/String")))], Void())
+    , main-body
+  )
+  

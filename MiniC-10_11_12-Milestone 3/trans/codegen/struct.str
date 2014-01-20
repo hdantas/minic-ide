@@ -1,0 +1,86 @@
+module trans/codegen/struct
+
+imports
+  libstratego-gpp
+  lib/runtime/tmpl/pp
+  include/MiniC
+  include/MiniC-parenthesize
+  runtime/nabl/-
+  runtime/task/-
+  runtime/types/-
+  analysis/desugar
+  analysis/names
+  lib/jasmin/JasminXT
+  
+  trans/codegen/builders
+  trans/codegen/field
+  trans/codegen/type
+  trans/codegen/array
+
+rules
+
+  struct-to-jbc: [StructDec(name, fields) | ts] -> instr*
+  with
+    head-field* := <struct-to-jbc> StructDec(name, fields)
+  ; tail-field* := <struct-to-jbc> ts
+  ; instr*      := [head-field*, tail-field*]
+  
+  struct-to-jbc: [] -> []
+
+  struct-to-jbc: StructDec(struct, fields) -> []
+  with 
+    name          := $[ritchie/[struct]]
+  ; this-field    := JBCField(
+      [FINAL()]
+    , "this"
+    , JBCFieldDesc(Reference(CRef("ritchie")))
+    , None()
+    , None()
+    )
+  ; limits*       := [JBCLimitStack("2"), JBCLimitLocals("2")]
+  ; this-init*    := [ALOAD_0()
+		  , ALOAD_1()
+		  , PUTFIELD(JBCFieldRef(CRef(name), FRef("this"), JBCFieldDesc(Reference(CRef("ritchie")))))
+		  , ALOAD_0()
+		  , INVOKESPECIAL(JBCMethodRef(CRef("java/lang/Object"), MRef(Init()), JBCMethodDesc([], Void())))
+		  ]
+	; array-inits*  := <array-init-to-jbc> (name, fields)
+  ; init-methods* := [limits*, this-init*, array-inits*, RETURN()]
+  ; class-construct := JBCMethod(
+		  []
+		, Init()
+		, JBCMethodDesc([Reference(CRef("ritchie"))], Void())
+		, init-methods*
+	)
+  ; other-fields* := <field-to-jbc> fields
+  ; fields-jbc    := [this-field, other-fields*]
+  ; instr         := [Class-Constructor($[[struct].mic], name, fields-jbc, class-construct)]
+  ; <write-file> (struct, instr)
+
+
+overlays
+      
+Class-Constructor(filename, name, fields, methods) = //main-to-c
+  JBCFile(
+    JBCHeader(
+      None()
+    , JBCSource(filename)
+    , JBCClass([], name) 
+    , JBCSuper("java/lang/Object")
+    , []
+    , None()
+    , None()
+    , None()
+    )
+  , fields
+  , methods
+  )
+  
+rules
+  
+  nabl-prop-site(|lang, ctx, uris, states, implicits): StructDec(name, fields) -> <fail>
+  where
+    list-var-size := <map(get-size)> fields
+  ; <store-size(|ctx, list-var-size)> name
+  
+  
