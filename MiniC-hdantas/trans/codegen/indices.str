@@ -1,0 +1,177 @@
+module trans/codegen/indices
+
+imports
+  libstratego-gpp
+  lib/runtime/tmpl/pp
+  include/MiniC
+  include/MiniC-parenthesize
+  runtime/nabl/-
+  runtime/task/-
+  runtime/types/-
+  runtime/nabl/utils
+  analysis/desugar
+  analysis/names
+  lib/jasmin/JasminXT
+
+  trans/codegen/type
+
+rules
+	store-annotated-names: [t | ts]  -> result* //step 1 (ondy var declarations)
+	with
+	  head-name* := <store-annotated-names> t
+	; tail-name* := <store-annotated-names> ts
+	; result*    := [head-name*, tail-name*]
+	  
+	store-annotated-names: VarDec(type, name)         -> [name]
+	store-annotated-names: ArrayDec(type, name, size) -> [name]
+	store-annotated-names: other                      -> []
+	
+	/**********************************************/
+	
+	store-used-names(|list): [t | ts] -> result //step 2 store and propagate names
+	with
+	  head-name  := <strip-annos; store-used-names(|list)> t
+	; tail-name* := <store-used-names(|head-name)> ts
+	; result     := [head-name, tail-name*]
+	
+	store-used-names(|list): Var(name)            -> <concat> [[name], list]
+  store-used-names(|list): ArrayVar(name, _)    -> <concat> [[name], list]
+  store-used-names(|list): Arg(_, name)         -> <remove-all(equal(|name))> list
+  store-used-names(|list): ArrayArg(_, name)    -> <remove-all(equal(|name))> list
+  store-used-names(|list): VarDec(_, name)      -> <remove-all(equal(|name))> list
+  store-used-names(|list): ArrayDec(_, name, _) -> <remove-all(equal(|name))> list
+	store-used-names(|list): []                   -> [list]
+	
+	store-used-names(|list): other -> result
+	with
+	  term        := <try(explode-term)> other
+	; constructor := <Fst> term
+	; args        := <Snd> term
+	; result      := <store-used-names(|list); flatten-list; make-set; isort-list(LSort(string-gt))> args
+	             
+	
+	/**********************************************/
+	remove-global-vars: (annotated-names, [t | ts]) -> result //step 3 remove vars not declare inside the function
+	with
+	  head-list  := <remove-global-vars-aux> (annotated-names, t)
+  ; tail-list* := <remove-global-vars> (annotated-names, ts)
+	; result     := [head-list, tail-list*]
+	
+	remove-global-vars: (annotated-names, []) -> []
+	
+	remove-global-vars-aux: (annotated-names, [t | ts]) -> result
+	with
+    head-list := <if(<elem> (<strip-annos> t, <strip-annos> annotated-names),
+	    <strip-annos> [t],
+	    <concat> []
+    )>
+  ; tail-list := <remove-global-vars-aux> (annotated-names, ts)
+  ; result    := <concat> [head-list, tail-list]  
+	
+	remove-global-vars-aux: (annotated-names, []) -> []
+	
+	
+	/**********************************************/
+	make-list-indices(|list): (min, min)      -> list
+	make-list-indices(|list): (min, length) -> result //make list [min through length]
+	with
+	  newlist   := <concat> [[length], list]
+	; newlength := <int-dec> length
+	; result    := <make-list-indices(|newlist)> (min, newlength)
+	  
+	
+	/**********************************************/
+	determine-index(|i): [list | ts] -> result // step 4 determine the index for each local var
+	with
+	  indices      := <Fst> i
+	; oldvars      := <Snd> i 
+	; hashtable    := <Third> i
+	; newindices   := <restoreindex(|(indices, list, hashtable))> oldvars // restore value i to index when member of oldvars (with index i) is not on sublist
+  ; finalindices := <assignindex(|(newindices, oldvars, hashtable))> list // assign 1st value from index when member of sublist is not on oldvars
+  ; newi         := (finalindices, list, hashtable)
+  ; <determine-index(|newi)> ts
+  ; result      := hashtable
+	
+	determine-index(|i): [] -> []
+	
+  restoreindex(|i): [listmember | ts] -> result
+  with
+    indices     := <Fst> i
+  ; list        := <Snd> i
+  ; hashtable   := <Third> i
+  ; newindices  := <if(
+      not(<elem> (listmember, list)),
+      <concat; isort-list(LSort(gt))> [[<hashtable-get(|listmember)> hashtable], indices],
+      <concat> [indices]
+    )>
+  ; newi       := (newindices, list, hashtable)
+  ; result     := <restoreindex(|newi)> ts
+      
+  restoreindex(|i): [] -> <Fst> i
+    
+  assignindex(|i): [var | ts] -> result
+  with
+    indices      := <Fst> i
+  ; list         := <Snd> i
+  ; hashtable    := <Third> i
+  ; newindices   := <if(
+      not(<elem> (var, list)),
+      <assignindex-aux> (indices, var, hashtable),
+      <concat> [indices]
+    )>
+  ; newi         := (newindices, list, hashtable)
+  ; result       := <assignindex(|newi)> ts
+      
+  assignindex(|i): [] -> <Fst> i
+  
+  assignindex-aux: (indices, var, hashtable) -> newindices
+  with
+  	index        := <index> (1, indices)
+  ; newindices   := <drop(|1)> indices
+  ; <hashtable-put(|var, index)> hashtable
+
+  /**********************************************/
+  
+  add-args-to-hashtable(|hashtable, i): [t | ts] -> [] // step 4.5 args get index according to their order so they are treated separately
+  with
+    <hashtable-put(|<get-arg-name> t, i)> hashtable
+  ; <add-args-to-hashtable(|hashtable, <inc> i)> ts
+  
+  add-args-to-hashtable(|hashtable, i): [] -> []
+  
+  get-arg-name: Arg(_, name)      -> <strip-annos> name
+  get-arg-name: ArrayArg(_, name) -> <strip-annos> name
+  
+  /**********************************************/
+
+	match-and-store-indices(|ctx, hashtable): [t | ts] -> [] // step 5 match generated hashtable with declarations so it has access to the necessary annotations
+	with
+	  <match-and-store-indices(|ctx, hashtable)> t
+	; <match-and-store-indices(|ctx, hashtable)> ts
+	  
+	match-and-store-indices(|ctx, hashtable): []                      -> []
+  match-and-store-indices(|ctx, hashtable): VarDec(type, name)      -> <try(store-index(|ctx, <hashtable-get(|<strip-annos> name)> hashtable))> name
+  match-and-store-indices(|ctx, hashtable): ArrayDec(type, name, _) -> <try(store-array-index(|ctx, <hashtable-get(|<strip-annos> name)> hashtable))> name
+  match-and-store-indices(|ctx, hashtable): Arg(type, name)         -> <try(store-index(|ctx, <hashtable-get(|<strip-annos> name)> hashtable))> name
+  match-and-store-indices(|ctx, hashtable): ArrayArg(type, name)    -> <try(store-array-index(|ctx, <hashtable-get(|<strip-annos> name)> hashtable))> name
+    
+  match-and-store-indices(|ctx, hashtable): other -> []
+  
+  store-array-index(|ctx, index): name -> []
+  with
+    instr := <array-index-aux> (index, <get-type> name)
+  ; <debug> ["stored array index", index, "var", <strip-annos> name]
+  ; <store-var-index(|ctx, instr)> name
+  
+  store-index(|ctx, index): name -> []
+  with
+    instr := <var-index-aux> (index, <get-type> name)
+  ; <debug> ["stored index", index, "var", <strip-annos> name]
+  ; <store-var-index(|ctx, instr)> name
+    
+  var-index-aux: (index, Int())     -> ([ILOAD(index)], [ISTORE(index)])
+  var-index-aux: (index, Float())   -> ([FLOAD(index)], [FSTORE(index)])
+  var-index-aux: (index, otherty)   -> ([ALOAD(index)], [ASTORE(index)])
+  array-index-aux: (index, Int())   -> ([ALOAD(index)], [ASTORE(index)], [IALOAD()], [IASTORE()])
+  array-index-aux: (index, Float()) -> ([ALOAD(index)], [ASTORE(index)], [FALOAD()], [FASTORE()])
+

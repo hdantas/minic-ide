@@ -1,2 +1,4 @@
-var range
+add arrays to must assign index or check if it has index before init
+problem with declaring variables inside ifs (does not assign index)
+do more tests
 check everything

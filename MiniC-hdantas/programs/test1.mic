@@ -1,13 +1,21 @@
 
 int xxx[5];
+int d;
 
-
-int foo(int x) {
+int foo(int x, float l) {
   int a;
+  a = 0;
   int b;
   b = a;
+  // int array[5];
+  
+  if (1 < 3){
+    int e;
+    printf("%i", a + c);
+  }else
+    printf("%i", 1);
   int c;
-  c = 0;
-  return b;
+  // c = array[2];
+  return c;
 }
-foo(2)
+foo(0, 1.0)
