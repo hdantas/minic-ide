@@ -173,7 +173,8 @@ rules
   with
     expaccess* := <exp-to-jbc> exp
   ; var-jbc    := <exp-to-jbc> var
-  ; varaccess  := <get-arguments; index(|2); get-arguments; index(|1)> var-jbc //remove outer "GETSTATIC()"
+  ; <debug> var-jbc
+  ; varaccess  := <get-arguments; index(|1); get-arguments; index(|1)> var-jbc //remove outer "GETSTATIC()"
   ; instr*     := [expaccess*, PUTSTATIC(varaccess)]
     
 
