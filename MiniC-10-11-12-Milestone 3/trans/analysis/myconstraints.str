@@ -1,0 +1,252 @@
+module analysis/myconstraints
+
+imports
+
+  include/MiniC
+  runtime/nabl/-
+  runtime/task/-
+  runtime/types/-
+  analysis/desugar
+  analysis/names
+ 
+
+strategies
+
+  nabl-check-disable-duplicate(|uri, ns) = id
+  nabl-check-disable-hiding(|uri, ns) = id
+  nabl-check-disable-unresolved = id
+
+
+rules // unresolved
+  nabl-constraint(|ctx): //unresolved struct
+    Struct(c) -> <fail>
+    where
+      <has-annotation(?Use(task))> c
+    ; msg  := $[Unresolved Struct [c].] 
+    ; <task-create-error-on-failure(|ctx, task, msg)> c
+
+
+  nabl-constraint(|ctx): //unresolved field
+    StructMember(s, Field(f)) -> <fail>
+    where
+      <has-annotation(?Use(task))> f
+    ; msg  := ["Unresolved Field ", f, " in Struct ", <strip-annos> s, "."] 
+    ; <task-create-error-on-failure(|ctx, task, msg)> f
+
+  nabl-constraint(|ctx): //unresolved array field
+    StructMember(s, ArrayField(f, e)) -> <fail>
+    where
+      <has-annotation(?Use(task))> f
+    ; msg  := ["Unresolved Array Field ", f, " in Struct ", <strip-annos> s, "."] 
+    ; <task-create-error-on-failure(|ctx, task, msg)> f
+      
+      
+  nabl-constraint(|ctx): //unresolved var
+    Var(v) -> <fail>
+    where
+      <has-annotation(?Use(task))> v
+    ; msg  := $[Unresolved Variable [v]] 
+    ; <task-create-error-on-failure(|ctx, task, msg)> v
+
+  // nabl-constraint(|ctx): //unresolved field
+  //   Field(f) -> <fail>
+  //   where
+  //     <has-annotation(?Use(task))> f
+  //   ; msg  := ["Unresolved Field ", f, ". Task: ", task] 
+  //   ; <task-create-error-on-failure(|ctx, task, msg)> f
+      
+  nabl-constraint(|ctx): //unresolved function call
+    Call(c, p) -> <fail>
+    where
+      <has-annotation(?Use(task))> c
+    ; param-types := <type-task(|ctx)> p
+    ; msg  := ["Unresolved Function Call to ", c, " with parameter types: ", param-types, "."] 
+    ; <task-create-error-on-failure(|ctx, task, msg)> c
+      
+
+rules //duplicates
+
+  nabl-constraint(|ctx): //duplicate struct
+    StructDec(c, _) -> <fail>
+    where
+      task := <nabl-lookup-local(|ctx)> c
+    ; msg  := $[Duplicate Structure [c]] 
+    ; <task-create-error-on-multiple(|ctx, task, msg)> c
+      
+  nabl-constraint(|ctx): //duplicate field
+    FieldDec(_, f) -> <fail>
+    where
+      task := <nabl-lookup-local(|ctx)> f
+    ; msg  := $[Duplicate Field [f]] 
+    ; <task-create-error-on-multiple(|ctx, task, msg)> f
+
+ nabl-constraint(|ctx): //duplicate field
+    FieldArrayDec(_, f, _) -> <fail>
+    where
+      task := <nabl-lookup-local(|ctx)> f
+    ; msg  := $[Duplicate Array Field [f]] 
+    ; <task-create-error-on-multiple(|ctx, task, msg)> f
+      
+  nabl-constraint(|ctx): //duplicate variable
+    VarDec(_, v) -> <fail>
+    where
+      task := <nabl-lookup-lexical(|ctx)> v
+    ; msg  := $[Duplicate Variable [v]] 
+    ; <task-create-error-on-multiple(|ctx, task, msg)> v      
+     
+  nabl-constraint(|ctx): //duplicate variable
+    ArrayDec(_, v, _) -> <fail>
+    where
+      task := <nabl-lookup-lexical(|ctx)> v
+    ; msg  := $[Duplicate Array Variable [v]] 
+    ; <task-create-error-on-multiple(|ctx, task, msg)> v      
+
+  nabl-constraint(|ctx): //duplicate variable
+    Arg(_, v) -> <fail>
+    where
+      task := <nabl-lookup-lexical(|ctx)> v
+    ; msg  := $[Duplicate Variable [v]] 
+    ; <task-create-error-on-multiple(|ctx, task, msg)> v      
+     
+  nabl-constraint(|ctx): //duplicate variable
+    ArrayArg(_, v) -> <fail>
+    where
+      task := <nabl-lookup-lexical(|ctx)> v
+    ; msg  := $[Duplicate Array Variable [v]] 
+    ; <task-create-error-on-multiple(|ctx, task, msg)> v 
+      
+  nabl-constraint(|ctx): //TODO duplicate function
+    FunctionDef(t, f, p, _, _) -> <fail>
+    where
+      type-local := <type-task(|ctx)> p                   // lookup parameter types current function
+    ; task := <nabl-lookup-lexical-parent(|ctx)> f        // Lookup other functions with the same name
+    ; type-other := <parameter-types-lookup(|ctx)> task   // Retrieve their parameter types
+    ; match := <type-match(|ctx, type-other)> type-local  // Check if they match with current function
+	; triggers := [Success(match)] 					      // If they do show an error
+    ; msg := ["Duplicate Function ", f, ". Found a previous function with the same signature: ", type-other, "."]
+    ; <task-create-error-on-triggers(|ctx, triggers, ["Triggers: ", msg])> f
+ // ; dbg  := ["Duplicate Function ", f, ". TYPE-local: ", type-local, ", TYPE-other: ", type-other, ", MATCH: ", match, "."] 
+ // ; <task-create-error-on-multiple(|ctx, type-other, ["Multiple: ", dbg])> f
+ // ; <task-create-error-on-success(|ctx, match, ["Success: ", dbg])> f
+ // ; <task-create-error-on-failure(|ctx, match, ["Failure: ", dbg])> f
+    
+
+  task-rewrite: 
+  ("parameter-types", sophisticated-type) -> parameter-types
+  where
+    parameter-types := <Snd> sophisticated-type
+    
+rules //hiding
+  
+    nabl-constraint(|ctx): //variable hiding other variable
+    VarDec(_, v) -> <fail>
+    where
+      task := <nabl-lookup-lexical-parent(|ctx)> v
+    ; msg  := $[Variable [v] is hiding previous definition] 
+    ; <task-create-warning-on-success(|ctx, task, msg)> v 
+
+    nabl-constraint(|ctx): //variable hiding other variable
+    ArrayDec(_, v, _) -> <fail>
+    where
+      task := <nabl-lookup-lexical-parent(|ctx)> v
+    ; msg  := $[Variable array [v] is hiding previous definition] 
+    ; <task-create-warning-on-success(|ctx, task, msg)> v
+      
+            
+    nabl-constraint(|ctx): //argument hiding other variable
+    Arg(_, v) -> <fail>
+    where
+      task := <nabl-lookup-lexical-parent(|ctx)> v
+    ; msg  := $[Argument [v] is hiding previous definition]
+    ; <task-create-warning-on-success(|ctx, task, msg)> v  
+      
+    nabl-constraint(|ctx): //argument hiding other variable
+    ArrayArg(_, v) -> <fail>
+    where
+      task := <nabl-lookup-lexical-parent(|ctx)> v
+    ; msg  := $[Argument array [v] is hiding previous definition]
+    ; <task-create-warning-on-success(|ctx, task, msg)> v
+      
+/* TS file already does this      
+rules //wrong types      
+    nabl-constraint(|ctx): //assigning wrong type
+    Assignment(v, e) -> <fail>
+    where
+      type-v := <type-lookup(|ctx)> v
+    ; type-e := <type-lookup(|ctx)> e
+    ; match  := <type-match(|ctx, type-v)> type-e
+    ; msg    := ["Error! Assigning expression of type ", type-e, " to variable of type ", type-v, "."]
+    ; <task-create-error-on-failure(|ctx, match, msg)> e
+        
+        
+    nabl-constraint(|ctx):
+    IfElse(e, _, _) -> <fail>
+    where
+      type  := <type-lookup(|ctx)> e
+    ; match := <type-match(|ctx, Int())> type
+    ; msg   := ["Error! If statement requires an Int. Received a ", type, "."]
+    ; <task-create-error-on-failure(|ctx, match, msg)> e    
+
+    nabl-constraint(|ctx):
+    While(e, _) -> <fail>
+    where
+      type  := <type-lookup(|ctx)> e
+    ; match := <type-match(|ctx, Int())> type
+    ; msg   := ["Error! While statement requires an Int. Received a ", type, "."]
+    ; <task-create-error-on-failure(|ctx, match, msg)> e
+
+    nabl-constraint(|ctx):
+    PrintfInt(e) -> <fail>
+    where
+      type  := <type-lookup(|ctx)> e
+    ; match := <type-match(|ctx, Int())> type
+    ; msg   := ["Error! %i expects an Int. Received a ", type, "."]
+    ; <task-create-error-on-failure(|ctx, match, msg)> e
+      
+    nabl-constraint(|ctx):
+    PrintfFloat(e) -> <fail>
+    where
+      type  := <type-lookup(|ctx)> e
+    ; match := <type-match(|ctx, Float())> type
+    ; msg   := ["Error! %i expects a Float. Received a ", type, "."]
+    ; <task-create-error-on-failure(|ctx, match, msg)> e
+      
+    nabl-constraint(|ctx): //checking return type of a function
+    FunctionDef(t, _, _, _, r) -> <fail>
+    where
+      ret-type := <type-lookup(|ctx)> r
+    ; match    := <type-match(|ctx, t)> ret-type
+    ; msg      := ["Error! Function should return type ", t, ". Returning ", ret-type, "."]
+    ; <task-create-error-on-failure(|ctx, match, msg)> r
+    
+ */
+ 
+ 
+ // subtyping
+ signature constructors
+
+  "<:" : Relation
+  
+rules 
+  create-subtype-task(|ctx):
+  ("<:", t1*, t2*) -> <type-is(|ctx, [m])> t*
+  where 
+     t* := <zip(create-subtype-task(|ctx, "<:"))> (t1*, t2*)
+  <+ t* := <map-with-index(create-subtype-task(|ctx, "<:", t2*))> t1*
+   ; l  := <new-task(|ctx)> Length(t2*)
+   ; m  := <type-match(|ctx, <length> t1*)> l 
+  <+ t* := <map-with-index(create-subtype-task(|ctx, "<:", t1*))> t2*
+   ; l  := <new-task(|ctx)> Length(t1*)
+   ; m  := <type-match(|ctx, <length> t2*)> l 
+
+create-subtype-task(|ctx, op):
+  (t1, t2) -> <create-subtype-task(|ctx)> (op, t1, t2)
+
+create-subtype-task(|ctx, op, t*):
+  (i, t) -> st
+  where
+    t' := <new-task(|ctx)> Index(i, t*)
+  ; st := <create-subtype-task(|ctx)> (op, t, t')    
+    
+          
+          

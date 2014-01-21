@@ -1,0 +1,87 @@
+module analysis/names
+
+imports
+  include/MiniC
+  analysis/types
+  analysis/desugar
+  
+namespaces
+  Struct
+  Field
+  Variable
+  // Function
+
+properties 
+
+  parameter-types   of Variable: List(Type)
+  method-descriptor of Variable: MethodDescriptor
+  field-descriptor  of Field   : FieldDescriptor
+  var-index         of Variable: Int
+  size              of Variable: Int
+  size              of Field   : Int
+  size              of Struct  : Int
+  
+//in C functions and variables share the namespace
+binding rules // Files
+   
+  File(_, _, _, _) : scopes Struct, Variable
+
+binding rules // Struct and Fields
+  StructDec(s, _) :
+    defines Struct s of type s //in subsequent scope
+    scopes Field
+
+  Struct(s): refers to Struct s
+
+  FieldDec(t, v)         : defines Field v of type t //in subsequent scope
+  FieldArrayDec(t, v, _) : defines Field v of type t //in subsequent scope
+  
+  StructMember(v, Field(f)):
+    refers to Field f in Struct s
+    where v has type Struct(s)
+
+  StructMember(v, ArrayField(f, _)):
+    refers to Field f in Struct s
+    where v has type Struct(s)
+        
+binding rules // Variable
+            
+  VarDec(t, v)      : defines Variable v of type t //in subsequent scope
+  ArrayDec(t, v, _) : defines Variable v of type t //in subsequent scope
+      
+  Arg(t, a)      : defines Variable a of type t //in subsequent scope
+  ArrayArg(t, a) : defines Variable a of type t //in subsequent scope
+
+  ArrayVar(v, _):
+    refers to Variable v
+         
+  Var(v):
+    refers to Variable v
+    
+  Field(f):
+    refers to Field f
+  
+  ArrayField(f, _):
+    refers to Field f
+   
+  CodeBlock(_): scopes Variable
+  
+binding rules // Function (shares the namespace with variable)
+  
+  FunctionDef(t, f, p*, _, _) :
+    defines Variable f
+      of type t 
+      of parameter-types pt*
+      //in subsequent scope
+    where
+      p* has type pt*
+    scopes Variable  
+  
+
+  // Call(c, _): refers to Variable c
+  
+	Call(c, args) : 
+	  refers to Variable c of parameter-types arg-types
+	  where args has type arg-types
+  
+

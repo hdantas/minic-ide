@@ -1,0 +1,62 @@
+module analysis/desugar
+
+imports
+
+  include/MiniC
+  
+signature
+
+  sorts
+  
+  
+  
+  constructors
+      
+	  Plus   : BinOp
+	  Minus  : BinOp
+	  Mul    : BinOp
+	  And    : BinOp
+	  Lt     : BinOp
+	
+	  UPLUS  : UnOp
+	  UMINUS : UnOp
+	  UNOT   : UnOp
+	  USIZEOF: UnOp
+	    
+	  BinExp : BinOp * Exp * Exp -> Exp
+	  UnExp  : UnOp  * Exp -> Exp
+	  
+	  Field       : Var -> Var
+	  ArrayField  : ID * index -> ArrayVar
+  
+rules
+
+  desugar: Uminus(e)        -> UnExp(UMINUS(), e)
+  desugar: Uplus(e)         -> UnExp(UPLUS(), e)
+  desugar: Not(e)           -> UnExp(UNOT(), e)
+  desugar: Sizeof(e)        -> UnExp(USIZEOF(), e)
+  
+  
+  desugar: Add(e1, e2)      -> BinExp(Plus(), e1, e2)
+  desugar: Subtract(e1, e2) -> BinExp(Minus(), e1, e2)
+  desugar: Multiply(e1, e2) -> BinExp(Mul(), e1, e2)
+  desugar: And(e1, e2)      -> BinExp(And(), e1, e2)
+  desugar: Lt(e1, e2)       -> BinExp(Lt(), e1, e2)
+  
+  desugar: OctalConst(e1)   -> IntConst(<oct-string-to-int; int-to-string > e1)
+  
+  // desugar: StructMemberAssignment(v, Var(f), e) -> StructMemberAssignment(v, Field(f), e)
+  desugar: StructMember(v, Var(f))              -> StructMember(v, Field(f))
+  desugar: StructMember(v, ArrayVar(f, exp))    -> StructMember(v, ArrayField(f, exp))
+  // desugar: ... -> ...
+  
+strategies
+  
+  // select one of these
+  desugar-all = innermost(desugar)
+  // desugar-all = topdown(desugar)
+  // desugar-all = topdown(try(desugar))
+  // desugar-all = bottomup(desugar)
+  // desugar-all = bottomup(try(desugar))
+  // desugar-all = alltd(desugar)
+   
