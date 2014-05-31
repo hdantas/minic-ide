@@ -21,6 +21,7 @@ start symbol Program
  
 // Field/Struct variables resolution was completed in Day 05: Testing Name Analysis
 
+// Method name resolution
 test method name resolution [[
   int [[foo]]() { return 0; }
   int main(){ return [[foo]](); }
@@ -28,9 +29,41 @@ test method name resolution [[
 ]] resolve #2 to #1
 
 test method name resolution [[
+  float [[foo]]() { return 4.2; }
+  float main(){ return [[foo]](); }
+  0
+]] resolve #2 to #1
+
+test method name resolution [[
+	struct foo {int bar;};
+	
+  struct foo [[foo]]() { struct foo bar; return bar; }
+  struct foo main(){ return [[foo]](); }
+  
+  0
+]] resolve #2 to #1
+
+
+test method name resolution [[
   int [[foo]]() { return 0; }
   int foo(int a) { return a; }
   int main(){ return [[foo]](); }
+  0
+]] resolve #2 to #1
+
+test method name resolution [[
+  float [[foo]]() { return 4.2; }
+  int foo(int a) { return a; }
+  float main(){ return [[foo]](); }
+  0
+]] resolve #2 to #1
+
+test method name resolution [[
+  struct bar {int foo;};
+  
+  float foo() { return 4.2;}
+  int [[foo]](struct bar a) { return a.foo; }
+  int main(struct bar a){ return [[foo]](a); }
   0
 ]] resolve #2 to #1
 
@@ -41,24 +74,35 @@ test method name resolution [[
   0
 ]] resolve #2 to #1
 
-// test method name resolution [[
-//   int foo() { return 0; }
-//   int main(){ return [[foo]](1); }
-//   int [[foo]](int a) { return a; }
-//   0
-// ]] resolve #1 to #2
-
-// test method name resolution [[
-//   int main(){ return [[foo]](1); }
-//   int foo() { return 0; }
-//   int [[foo]](int a) { return a; }
-//   0
-// ]] resolve #1 to #2
 
 test method name resolution [[
-  float foo(int a, float b) { return a; }
-  float [[foo]](float a, int b) { return a; }
-  float main(){ return [[foo]](1.0, 0); }
+	struct foo {float b;};
+	
+  float foo(int a, float b) { return b; }
+  float foo(float a, int b) { return a; }
+  float [[foo]](float a, int b, struct foo c) { return c.b; }
+  
+  float main(){ 
+  	struct foo bar;
+  	return [[foo]](1.0, 0, bar); }
+  
+  0
+]] resolve #2 to #1
+
+test method name resolution [[
+  struct foo {int foo;};
+  int bar(struct foo b){ return 0;}
+  int [[foo]](float a, int b){ return [[foo]](4.2, 4);}
+  0
+]] resolve #2 to #1
+
+test method name resolution [[
+  struct foo {int foo;};
+  int foo(int a){ return 0;}
+  int [[foo]](struct foo bar){
+  	struct foo foobar;
+  	return [[foo]](foobar);
+  }
   0
 ]] resolve #2 to #1
 
@@ -70,7 +114,9 @@ test method name resolution [[
 // you can pair up positive (0 errors) and negative test cases.
 
 // Day 05 Testing Name Analysis includes tests on forward declarations
-// Assuming method overloading is acceptable
+// Assuming method overloading is acceptable in MiniC
+
+// Missing method definition
 test correct program[[
   int foo(){return 0;}
   int foo(int a){return a;}
@@ -78,20 +124,45 @@ test correct program[[
   foo(1, 2)
 ]] 0 errors
 
+test correct program[[
+  int foo(){return 0;}
+  float foo(float a){return a;}
+  float foo(int a, float b){return b;}
+  foo(1, 4.2)
+]] 0 errors
+
+test correct program[[
+  struct foo {int foo;};
+  struct foo bar;
+  int foo(){return 0;}
+  float foo(float a){return a;}
+  float foo(int a, float b){return b;}
+  int foo(int a, struct foo b){return b.foo;}
+  int foo(float a, struct foo b){return b.foo;}
+  struct foo foo(struct foo foo){return foo;}
+  
+  foo(1, bar)
+]] 0 errors
+
+test correct program [[
+  struct foo {int foo;};
+  int bar(struct foo b){ return 0;}
+  int foo(float a, int b){ return foo(4.2, 4);}
+  0
+]] 0 errors
+
 test undefined function [[
   int foo(){
     return [[bar]](); 
   }
   0
-]] 1 error
+]] 2 errors // 1 error for missing function definition. 1 error for wrong/unkown return type
 
 test undefined function [[
-    int bar(int a) {return 0;}
-    int foo(){
-    return [[bar]](); 
-  }
+  int bar(int a) {return 0;}
+  int foo(){ return [[bar]]();}
   0
-]] 1 error
+]] 2 errors
 
 test undefined function [[
   int foo(int a, int b){
@@ -107,26 +178,62 @@ test undefined function [[
 ]] 1 error
 
 test undefined function [[
-  int foo(float a, int b){ return [[bar]]();}
-  int bar(){ return 0;}
+	struct foo {int foo;};
+  int bar(struct foo b){ return 0;}
+  int foo(float a, int b){ return [[foo]](1);}
+  0
+]] 2 errors
+
+test undefined function [[
+  struct foo {int foo;};
+  struct bar {int bar;};
+  struct foo foo(struct foo f, struct bar b){ return [[foo]](f);}
+  0
+]] 2 errors
+
+
+// Duplicate method definition
+test error on duplicate function [[
+  int foo(){return 0;}
+  int [[foo]](){return 0;}
   0
 ]] 1 error
 
-test error on duplicate function with same signature [[
-  int foo(){return 0;}
-  int foo(){return 0;}
+test error on duplicate function [[
+  
+  float foo(){return 4.2;}  
+  float [[foo]](){return 8.4;}
   0
-]] 2 errors
+]] 1 error
 
+test error on duplicate function [[
+  struct foo {int foo;};
+  struct bar {int bar;};
+  struct foo f;
+  struct bar b;
+  struct foo foo(){return f;}  
+  struct bar [[foo]](){return b;}
+  0
+]] 1 error
 
-test error on duplicate function with same signature [[
-  float foo(){return 0;}
+test error on duplicate function [[
   int foo(){return 0;}
+  float [[foo]](){return 0.0;}
   0
-]] 2 errors
+]] 1 error
 
-test error on duplicate function with same signature [[
-  float foo(int a, int b){return 0;}
-  int foo(int c, int d){return 0;}
+test error on duplicate function [[
+  float foo(int a, int b){return 4.3;}
+  int [[foo]](int c, int d){return 4;}
   0
-]] 2 errors
+]] 1 error
+
+test error on duplicate function [[
+  struct foo {int foo;};
+  float foo(){return 4.3;}
+  struct foo [[foo]](){
+  	struct foo f;
+  	return f;}
+  0
+]] 1 error
+

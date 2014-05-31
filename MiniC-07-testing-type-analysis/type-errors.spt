@@ -14,85 +14,124 @@ start symbol Program
 // Again, keep in mind that coverage is the main criterion for your grade.
 
 // %% Typing errors: assigning int to float or vice versa %%
-test type errors [[
-  float foo(float a) {return a;}
-  int main() {
-    float a; a = foo([[4]]);
-    return 0;
-  }
-  0
-]] 1 error // using int argument instead of float
 
-test type errors [[
-  int foo(int a) {return a;}
-  int main() {
-    float a; a = foo([[4.2]]);
-    return 0;
-  }
-  0
-]] 2 errors // using float argument instead of int
-
-test type errors [[
+// INCORRECT ASSIGNMENT TYPE
+test invalid assignment [[
   int main() {
     int a; a = [[4.2]];
     return 0;
   }
   0
-]] 1 error // assigning float to int
+]] 1 error
 
-test type errors [[
+test invalid assignment [[
   int main() {
     float a; a = [[4]];
     return 0;
   }
   0
-]] 1 error // assigning int to float
+]] 1 error
 
-test type errors [[
-  int main() { return [[4.2]]; }
-  0
-]] 1 error // returning float instead of int
-
-test type errors [[
-  float main() { return [[4]]; }
-  0
-]] 1 error // returning int instead of float
-
-test type errors [[
-  int main() { printf("%i", [[4.2]]); return 0; }
+test invalid assignment [[
+  struct foo {int bar;};
+  int number;
+  
+  int main() {
+    struct foo bar;
+    bar = [[number]];
+    return bar.bar;
+  }
   0
 ]] 1 error
 
-test type errors [[
-  int main() { printf("%f", [[4]]); return 0; }
-  0
-]] 1 error
-
-test type errors [[
+test invalid assignment [[
   struct foo {int a;};
   float main() {
     struct foo f;
     f.a = [[4.2]];
-    return f.a;
+    return 1.0;
   }
   0
 ]] 1 error
 
-test type errors [[
+test invalid assignment [[
   struct foo {float a;};
   int main() {
     struct foo f;
     f.a = [[4]];
-    return f.a;
+    return 4;
   }
   0
 ]] 1 error
 
-// %% Typing errors: using incompatible types %%
 
-// ints are allowed for ifs or whiles
+// INCORRECT RETURN TYPE
+test incorrect return type [[
+  int main() { return [[4.2]]; }
+  0
+]] 1 error
 
-test type errors [[
+test incorrect return type [[
+  float main() { return [[4]]; }
+  0
+]] 1 error
+
+test incorrect return type [[
+  struct foo {int bar;};
+  
+  float main() { 
+    struct foo f;
+    return [[f]]; }
+  0
+]] 1 error
+
+test incorrect return type [[
+  struct foo {int a;};
+  float main() {
+    struct foo f;
+    f.a = 4;
+    return [[f.a]];
+  }
+  0
+]] 1 error
+
+test incorrect return type [[
+  struct foo {float a;};
+  int main() {
+    struct foo f;
+    f.a = 4.2;
+    return [[f.a]];
+  }
+  0
+]] 1 error
+
+
+test incorrect return type [[
+  float foo() { return 4.2; }
+  int main() { return [[foo()]]; }
+  0
+]] 1 error
+
+test incorrect return type [[
+  struct foo {int a;};
+  struct foo main() { return [[0]]; }
+  0
+]] 1 error
+
+
+// INCORRECT ARGUMENT TYPE FOR PRINTFs, IFs & WHILEs
+test incorrect printf argument type [[
+  int main() { printf("%i", [[4.2]]); return 0; }
+  0
+]] 1 error
+
+test incorrect printf argument type [[
+  int main() { printf("%f", [[4]]); return 0; }
+  0
+]] 1 error
+
+
+test while statment [[
   int main() {
     int a; a = 0;
     while (1)
@@ -102,7 +141,29 @@ test type errors [[
   0
 ]] 0 errors
 
-test type errors [[
+test invalid while condition [[
+  int main() {
+    int a; a = 0;
+    while ([[4.2]])
+      a = a + 1;
+    return a;
+  }
+  0
+]] 1 errors
+
+test invalid while condition [[
+  struct foo {int bar;};
+  int main() {
+    struct foo bar;
+    int a;
+    while ([[bar]])
+      a = a + 1;
+    return a;
+  }
+  0
+]] 1 error
+
+test if [[
   int main() {
     int a;
     if (1) a = 0;
@@ -113,7 +174,7 @@ test type errors [[
 ]] 0 errors
 
 
-test type errors [[
+test if [[
   int main() {
     int a;
     if (2 + 2) a = 0;
@@ -123,19 +184,7 @@ test type errors [[
   0
 ]] 0 errors
 
-test type errors [[
-  int main() {
-    int a; a = 0;
-    while (4)
-      a = a + 1;
-    return a;
-  }
-  0
-]] 0 errors
-
-//floats are not allowed
-
-test type errors [[
+test invalid if condition [[
   int main() {
     int a;
     if ([[1.0]]) a = 0;
@@ -145,7 +194,7 @@ test type errors [[
   0
 ]] 1 error
 
-test type errors [[
+test invalid if condition [[
   int main() {
     int a;
     if ([[2 * 0.5]]) a = 0;
@@ -153,78 +202,43 @@ test type errors [[
     return 0;
   }
   0
+]] 2 errors
+
+
+// INCOMPATIBLE TYPES TO UNARY & BINARY OPERATORS
+test unary operator [[
+  !4
+]] 0 errors
+
+test unary operator [[
+  ![[4.2]]
+]] 0 errors
+
+test unary operator [[
+  struct foo {int bar;};
+  struct foo f;
+  ![[f]]
 ]] 1 error
 
-
-test type errors [[
-  int main() {
-    int a; a = 0;
-    while ([[4.2]])
-      a = a + 1;
-    return a;
-  }
-  0
+test unary operator [[
+  struct foo {int bar;};
+  struct foo f;
+  -[[f]]
 ]] 1 error
 
-test type errors [[
-  int main() { return ![[1.0]];}
-  0
+test unary operator [[
+  struct foo {int bar;};
+  struct foo f;
+  sizeof([[f]])
 ]] 1 error
 
-test type errors [[
-  int main() { return [[4.2 && 1]]; }
-  0
+test binary operator [[
+  1 < [[2.1]]
 ]] 1 error
 
-test type errors [[
-  int main() { return [[4.2]]; }
-  0
-]] 1 error
+test binary operator [[
+  struct foo {int bar;};
+  struct foo f;
+  [[f + 1]]
+]] 2 errors
 
-test type errors [[
-  float main() { return [[4]]; }
-  0
-]] 1 error
-
-test type errors [[
-  float foo() { return 4.2; }
-  int main() { return [[foo]](); }
-  0
-]] 1 error //wrong return type
-
-test type errors [[
-  struct foo {int a;};
-  struct foo main() { return [[0]]; }
-  0
-]] 1 error //wrong return type
-
-
-test type errors [[
-  int main() {
-    int a[1];
-    return a[ [[1.23 < 4.56]] ];
-  }
-  0
-]] 1 error
-
-// test type errors [[
-//   int main() {
-//     int a;
-//     int x[5];
-//     a = x[ [[1 < 2]] ];
-//     return 0;
-//   }
-//   0
-// ]] 1 error
-
-// test type errors [[
-//   int foo(int a){ return a;}
-//   int main() { return foo([[1 < 2]]); }
-//   0
-// ]] 1 error
-
-test type errors [[
-  float foo(float a){ return a;}
-  int main() { return foo([[1.0 < 2.0]]); }
-  0
-]] 1 error
