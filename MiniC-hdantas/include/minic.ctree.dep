@@ -15,18 +15,17 @@
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/analysis/types.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/analysis/names.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/editor/queue.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/editor/properties.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/editor/positions.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/editor/interop.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/editor/editor.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/editor/eclipse.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/editor/dynrule.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/editor/annotations.str \
-	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/types/query.str \
-	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/task/new-messages.str \
-	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/nabl/constraints.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/analysis/myconstraints.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/analysis/desugar.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/type-ts.generated.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/editor/builders.str \
-	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/editor/outline-library.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/editor/outline.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/MiniC-ContextFree.pp.generated.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/trans/MiniC-Lexical.pp.generated.str \
@@ -43,10 +42,15 @@
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/index/core.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/task/utils.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/task/tasks.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/task/primitives.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/task/new-messages.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/task/messages.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/task/interface.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/task/insert.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/task/debug.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/task/create.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/task/core.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/types/query.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/types/interface.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/types/collect.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/properties/tasks.str \
@@ -65,18 +69,26 @@
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/nabl/interface.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/nabl/incremental.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/nabl/entries.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/nabl/constraints.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/nabl/complete.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/nabl/collect.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/nabl/check.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/analysis/single.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/analysis/resolve.str \
-	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/analysis/defaults.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/analysis/reanalysis.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/analysis/multiple.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/analysis/interface.str \
-	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/analysis/core.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/analysis/defaults.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/analysis/debug.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/analysis/core.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/analysis/complete.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/relations/tasks.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/relations/query.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/relations/interface.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/relations/incremental.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/relations/entries.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/editor/outline-library.str \
+	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/analysis/analysis.str \
 	 \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/editor-common.generated.str \
 	/Users/nuno/repos/compiler-construction-lab/MiniC-hdantas/lib/runtime/editor/origins.str \

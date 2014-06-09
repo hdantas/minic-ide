@@ -13,9 +13,7 @@ start symbol Program
 // and method declarations. You should come up with test cases for such errors.
 // Again, keep in mind that coverage is the main criterion for your grade.
 
-// %% Typing errors: assigning int to float or vice versa %%
-
-// INCORRECT ASSIGNMENT TYPE
+// ASSIGNMENTS TO VARs/ARRAYVARs
 test invalid assignment [[
   int main() {
     int a; a = [[4.2]];
@@ -64,8 +62,17 @@ test invalid assignment [[
   0
 ]] 1 error
 
+test invalid assignment [[
+  int main() {
+    int a[5];
+    a[2] = [[4.2]];
+    return 0;
+  }
+  0
+]] 1 error
 
-// INCORRECT RETURN TYPE
+
+// FUNCTION RETURN
 test incorrect return type [[
   int main() { return [[4.2]]; }
   0
@@ -119,19 +126,42 @@ test incorrect return type [[
 ]] 1 error
 
 
-// INCORRECT ARGUMENT TYPE FOR PRINTFs, IFs & WHILEs
+// PRINTFs, WHILEs & IFELSESs
+
+test correct printf argument type [[
+  int main() { printf("%i", 1); return 0; }
+  0
+]] 0 errors
+
+test correct printf argument type [[
+  int main() { printf("%f", 4.2); return 0; }
+  0
+]] 0 errors
+
 test incorrect printf argument type [[
   int main() { printf("%i", [[4.2]]); return 0; }
   0
 ]] 1 error
 
 test incorrect printf argument type [[
-  int main() { printf("%f", [[4]]); return 0; }
+  float a;
+  int main() { printf("%i", [[a]]); return 0; }
   0
 ]] 1 error
 
 
-test while statment [[
+test incorrect printf argument type [[
+  int main() { printf("%f", [[4]]); return 0; }
+  0
+]] 1 error
+
+test incorrect printf argument type [[
+  int a;
+  int main() { printf("%f", [[a]]); return 0; }
+  0
+]] 1 error
+
+test valid while condition [[
   int main() {
     int a; a = 0;
     while (1)
@@ -141,7 +171,7 @@ test while statment [[
   0
 ]] 0 errors
 
-test invalid while condition [[
+test valid while condition [[
   int main() {
     int a; a = 0;
     while ([[4.2]])
@@ -149,7 +179,7 @@ test invalid while condition [[
     return a;
   }
   0
-]] 1 errors
+]] 0 errors
 
 test invalid while condition [[
   struct foo {int bar;};
@@ -163,7 +193,7 @@ test invalid while condition [[
   0
 ]] 1 error
 
-test if [[
+test valid ifelse condition [[
   int main() {
     int a;
     if (1) a = 0;
@@ -174,7 +204,7 @@ test if [[
 ]] 0 errors
 
 
-test if [[
+test valid ifelse condition [[
   int main() {
     int a;
     if (2 + 2) a = 0;
@@ -184,34 +214,45 @@ test if [[
   0
 ]] 0 errors
 
-test invalid if condition [[
+test valid ifelse condition [[
   int main() {
     int a;
-    if ([[1.0]]) a = 0;
+    if (1.0) a = 0;
+    else a = 1;
+    return 0;
+  }
+  0
+]] 0 errors
+
+test valid ifelse condition [[
+  int main() {
+    int a;
+    if (2 * 0.5) a = 0;
+    else a = 1;
+    return 0;
+  }
+  0
+]] 0 errors
+
+test invalid ifelse condition [[
+  struct foo {};
+  int main() {
+    struct foo f;
+    int a;
+    if ([[f]]) a = 0;
     else a = 1;
     return 0;
   }
   0
 ]] 1 error
 
-test invalid if condition [[
-  int main() {
-    int a;
-    if ([[2 * 0.5]]) a = 0;
-    else a = 1;
-    return 0;
-  }
-  0
-]] 2 errors
-
-
-// INCOMPATIBLE TYPES TO UNARY & BINARY OPERATORS
+// UNARY & BINARY OPERATORS (&&, <, +, -, *, !, sizeof)
 test unary operator [[
   !4
 ]] 0 errors
 
 test unary operator [[
-  ![[4.2]]
+  !4.2
 ]] 0 errors
 
 test unary operator [[
@@ -221,24 +262,94 @@ test unary operator [[
 ]] 1 error
 
 test unary operator [[
+  +4.2
+]] 0 errors
+
+test unary operator [[
+  struct foo {int bar;};
+  struct foo f;
+  +[[f]]
+]] 1 error
+
+test unary operator [[
+  -4.2
+]] 0 errors
+
+
+test unary operator [[
   struct foo {int bar;};
   struct foo f;
   -[[f]]
 ]] 1 error
 
 test unary operator [[
-  struct foo {int bar;};
+  float b;
+  sizeof(b)
+]] 0 errors
+
+test unary operator [[
+  struct foo{};
   struct foo f;
-  sizeof([[f]])
+  sizeof(f)
+]] 0 errors
+
+test binary operator [[
+  float b;
+  1 < b
+]] 0 errors
+
+test binary operator [[
+  struct foo {};
+  struct foo f;
+  1 < [[f]]
 ]] 1 error
 
 test binary operator [[
-  1 < [[2.1]]
-]] 1 error
+  float b;
+  b + b
+]] 0 errors
 
 test binary operator [[
   struct foo {int bar;};
   struct foo f;
   [[f + 1]]
+]] 2 errors
+
+test binary operator [[
+  struct foo {int a;};
+  struct foo f;
+  float b;
+  f.a - b
+]] 0 errors
+
+test binary operator [[
+  struct foo {int bar;};
+  struct foo f;
+  [[f - 1]]
+]] 2 errors
+
+test binary operator [[
+  struct foo {int a;};
+  struct foo f;
+  1.2 * f.a
+]] 0 errors
+
+test binary operator [[
+  struct foo {int bar;};
+  struct foo f;
+  [[f * f]]
+]] 2 errors
+
+test binary operator [[
+  struct foo {int a;};
+  struct foo f;
+  float b;
+  f.a && b
+]] 0 errors
+
+test binary operator [[
+  struct foo {int bar;};
+  struct foo f; 
+  [[f && 1]]
 ]] 2 errors
 

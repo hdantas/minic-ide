@@ -1,18 +1,10 @@
-struct call{};
 
 int foo(int x) {
    int o;
    int a;
    a = 0;
-   o = 1;
-   while(a < 5)
-   {
-     int o;
-     o = a;
-     printf("%i", o);
-     a = a + 1;
-   }
-   printf("%i", o);
+   o = 123;
+
    return o;
 }
 

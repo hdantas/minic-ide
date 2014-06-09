@@ -23,3 +23,5 @@ utils
 lib/runtime
 lib/*.generated.str
 lib-refactoring/*.generated.str
+/.cache
+/include

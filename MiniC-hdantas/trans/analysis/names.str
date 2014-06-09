@@ -6,375 +6,19 @@ imports
   lib/runtime/properties/-
   lib/runtime/types/-
   lib/runtime/editor/-
-  include/MiniC
-  analysis/types
-  analysis/desugar
-
-
-signature
-  constructors
-    NablNsStruct   : Namespace
-    NablNsField    : Namespace
-    NablNsVariable : Namespace
-
-
-signature
-  constructors
-    NablProp_parameter-types   : Property
-    NablProp_method-descriptor : Property
-    NablProp_field-descriptor  : Property
-    NablProp_var-index         : Property
-    NablProp_size              : Property
-    NablProp_size              : Property
-    NablProp_size              : Property
-
-
-rules
-
-  nabl-custom-properties(add-properties) =
-    ![ NablProp_parameter-types()
-     , NablProp_method-descriptor()
-     , NablProp_field-descriptor()
-     , NablProp_var-index()
-     , NablProp_size()
-     , NablProp_size()
-     , NablProp_size()
-     ]
-    ; add-properties
-
-  parameter-types-is(|task*) =
-    nabl-prop-calc(|task*, [])
-
-  parameter-types-is(|task*, dep*) =
-    nabl-prop-calc(|task*, dep*)
-
-  parameter-types-list(|task*) =
-    nabl-prop-list(|task*, [])
-
-  parameter-types-list(|task*, dep*) =
-    nabl-prop-list(|task*, dep*)
-
-  parameter-types-lookup(|task*) =
-    nabl-prop-lookup(|NablProp_parameter-types(), task*, [])
-
-  parameter-types-lookup(|task*, dep*) =
-    nabl-prop-lookup(|NablProp_parameter-types(), task*, dep*)
-
-  parameter-types-match(|task*, expected) =
-    nabl-prop-match(
-    | NablProp_parameter-types()
-    , task*
-    , Eq()
-    , expected
-    )
-
-  parameter-types-match(|task*, relation, expected) =
-    nabl-prop-match(|NablProp_parameter-types(), task*, relation, expected)
-
-  create-parameter-types-task(|task*) =
-    fail
-
-  get-parameter-types =
-    get-property(|NablProp_parameter-types())
-
-  store-parameter-types(|partition, prop) =
-    nabl-store-prop(
-    | partition
-    , Prop(NablProp_parameter-types(), prop, [])
-    )
-
-  create-property-task(|partition, kind):
-    term -> <create-parameter-types-task(|partition)> term
-    where NablProp_parameter-types() := kind
-
-  method-descriptor-is(|task*) =
-    nabl-prop-calc(|task*, [])
-
-  method-descriptor-is(|task*, dep*) =
-    nabl-prop-calc(|task*, dep*)
-
-  method-descriptor-list(|task*) =
-    nabl-prop-list(|task*, [])
-
-  method-descriptor-list(|task*, dep*) =
-    nabl-prop-list(|task*, dep*)
-
-  method-descriptor-lookup(|task*) =
-    nabl-prop-lookup(|NablProp_method-descriptor(), task*, [])
-
-  method-descriptor-lookup(|task*, dep*) =
-    nabl-prop-lookup(|NablProp_method-descriptor(), task*, dep*)
-
-  method-descriptor-match(|task*, expected) =
-    nabl-prop-match(
-    | NablProp_method-descriptor()
-    , task*
-    , Eq()
-    , expected
-    )
-
-  method-descriptor-match(|task*, relation, expected) =
-    nabl-prop-match(|NablProp_method-descriptor(), task*, relation, expected)
-
-  create-method-descriptor-task(|task*) =
-    fail
-
-  get-method-descriptor =
-    get-property(|NablProp_method-descriptor())
-
-  store-method-descriptor(|partition, prop) =
-    nabl-store-prop(
-    | partition
-    , Prop(NablProp_method-descriptor(), prop, [])
-    )
-
-  create-property-task(|partition, kind):
-    term -> <create-method-descriptor-task(|partition)> term
-    where NablProp_method-descriptor() := kind
-
-  field-descriptor-is(|task*) =
-    nabl-prop-calc(|task*, [])
-
-  field-descriptor-is(|task*, dep*) =
-    nabl-prop-calc(|task*, dep*)
-
-  field-descriptor-list(|task*) =
-    nabl-prop-list(|task*, [])
-
-  field-descriptor-list(|task*, dep*) =
-    nabl-prop-list(|task*, dep*)
-
-  field-descriptor-lookup(|task*) =
-    nabl-prop-lookup(|NablProp_field-descriptor(), task*, [])
-
-  field-descriptor-lookup(|task*, dep*) =
-    nabl-prop-lookup(|NablProp_field-descriptor(), task*, dep*)
-
-  field-descriptor-match(|task*, expected) =
-    nabl-prop-match(
-    | NablProp_field-descriptor()
-    , task*
-    , Eq()
-    , expected
-    )
-
-  field-descriptor-match(|task*, relation, expected) =
-    nabl-prop-match(|NablProp_field-descriptor(), task*, relation, expected)
-
-  create-field-descriptor-task(|task*) =
-    fail
-
-  get-field-descriptor =
-    get-property(|NablProp_field-descriptor())
-
-  store-field-descriptor(|partition, prop) =
-    nabl-store-prop(
-    | partition
-    , Prop(NablProp_field-descriptor(), prop, [])
-    )
-
-  create-property-task(|partition, kind):
-    term -> <create-field-descriptor-task(|partition)> term
-    where NablProp_field-descriptor() := kind
-
-  var-index-is(|task*) =
-    nabl-prop-calc(|task*, [])
-
-  var-index-is(|task*, dep*) =
-    nabl-prop-calc(|task*, dep*)
-
-  var-index-list(|task*) =
-    nabl-prop-list(|task*, [])
-
-  var-index-list(|task*, dep*) =
-    nabl-prop-list(|task*, dep*)
-
-  var-index-lookup(|task*) =
-    nabl-prop-lookup(|NablProp_var-index(), task*, [])
-
-  var-index-lookup(|task*, dep*) =
-    nabl-prop-lookup(|NablProp_var-index(), task*, dep*)
-
-  var-index-match(|task*, expected) =
-    nabl-prop-match(
-    | NablProp_var-index()
-    , task*
-    , Eq()
-    , expected
-    )
-
-  var-index-match(|task*, relation, expected) =
-    nabl-prop-match(|NablProp_var-index(), task*, relation, expected)
-
-  create-var-index-task(|task*) =
-    fail
-
-  get-var-index =
-    get-property(|NablProp_var-index())
-
-  store-var-index(|partition, prop) =
-    nabl-store-prop(
-    | partition
-    , Prop(NablProp_var-index(), prop, [])
-    )
-
-  create-property-task(|partition, kind):
-    term -> <create-var-index-task(|partition)> term
-    where NablProp_var-index() := kind
-
-  size-is(|task*) =
-    nabl-prop-calc(|task*, [])
-
-  size-is(|task*, dep*) =
-    nabl-prop-calc(|task*, dep*)
-
-  size-list(|task*) =
-    nabl-prop-list(|task*, [])
-
-  size-list(|task*, dep*) =
-    nabl-prop-list(|task*, dep*)
-
-  size-lookup(|task*) =
-    nabl-prop-lookup(|NablProp_size(), task*, [])
-
-  size-lookup(|task*, dep*) =
-    nabl-prop-lookup(|NablProp_size(), task*, dep*)
-
-  size-match(|task*, expected) =
-    nabl-prop-match(
-    | NablProp_size()
-    , task*
-    , Eq()
-    , expected
-    )
-
-  size-match(|task*, relation, expected) =
-    nabl-prop-match(|NablProp_size(), task*, relation, expected)
-
-  create-size-task(|task*) =
-    fail
-
-  get-size =
-    get-property(|NablProp_size())
-
-  store-size(|partition, prop) =
-    nabl-store-prop(
-    | partition
-    , Prop(NablProp_size(), prop, [])
-    )
-
-  create-property-task(|partition, kind):
-    term -> <create-size-task(|partition)> term
-    where NablProp_size() := kind
-
-  size-is(|task*) =
-    nabl-prop-calc(|task*, [])
-
-  size-is(|task*, dep*) =
-    nabl-prop-calc(|task*, dep*)
-
-  size-list(|task*) =
-    nabl-prop-list(|task*, [])
-
-  size-list(|task*, dep*) =
-    nabl-prop-list(|task*, dep*)
-
-  size-lookup(|task*) =
-    nabl-prop-lookup(|NablProp_size(), task*, [])
-
-  size-lookup(|task*, dep*) =
-    nabl-prop-lookup(|NablProp_size(), task*, dep*)
-
-  size-match(|task*, expected) =
-    nabl-prop-match(
-    | NablProp_size()
-    , task*
-    , Eq()
-    , expected
-    )
-
-  size-match(|task*, relation, expected) =
-    nabl-prop-match(|NablProp_size(), task*, relation, expected)
-
-  create-size-task(|task*) =
-    fail
-
-  get-size =
-    get-property(|NablProp_size())
-
-  store-size(|partition, prop) =
-    nabl-store-prop(
-    | partition
-    , Prop(NablProp_size(), prop, [])
-    )
-
-  create-property-task(|partition, kind):
-    term -> <create-size-task(|partition)> term
-    where NablProp_size() := kind
-
-  size-is(|task*) =
-    nabl-prop-calc(|task*, [])
-
-  size-is(|task*, dep*) =
-    nabl-prop-calc(|task*, dep*)
-
-  size-list(|task*) =
-    nabl-prop-list(|task*, [])
-
-  size-list(|task*, dep*) =
-    nabl-prop-list(|task*, dep*)
-
-  size-lookup(|task*) =
-    nabl-prop-lookup(|NablProp_size(), task*, [])
-
-  size-lookup(|task*, dep*) =
-    nabl-prop-lookup(|NablProp_size(), task*, dep*)
-
-  size-match(|task*, expected) =
-    nabl-prop-match(
-    | NablProp_size()
-    , task*
-    , Eq()
-    , expected
-    )
-
-  size-match(|task*, relation, expected) =
-    nabl-prop-match(|NablProp_size(), task*, relation, expected)
-
-  create-size-task(|task*) =
-    fail
-
-  get-size =
-    get-property(|NablProp_size())
-
-  store-size(|partition, prop) =
-    nabl-store-prop(
-    | partition
-    , Prop(NablProp_size(), prop, [])
-    )
-
-  create-property-task(|partition, kind):
-    term -> <create-size-task(|partition)> term
-    where NablProp_size() := kind
 
 
 rules
 
   nabl-scoping-site =
     ?File(_, _, _, _)
-    ; origin-track-forced(
-        nabl-scope(
-        | [NablNsStruct(), NablNsVariable()]
-        )
-      |
+    ; nabl-scope(
+      | [NablNsStruct(), NablNsVariable()]
       )
 
   nabl-get-scope =
     ?File(_, _, _, _)
     ; ![NablNsStruct(), NablNsVariable()]
-
-
-rules
 
   nabl-get-scope =
     ?StructDec(s, _)
@@ -406,24 +50,22 @@ rules
           )
         , id
         )
-        ; match(child-uris__|c-uri1__)
-        ; match(sibl-uris__|s-uri1__)
-        ; match(implicits__|[])
       |
       )
+    ; match(child-uris__|c-uri1__)
+    ; match(sibl-uris__|s-uri1__)
+    ; match(implicits__|[])
 
   nabl-prop-site(|lang__, partition__, uris__, states__, implicits__) =
     ?StructDec(s, _)
-    ; origin-track-forced(
-        StructDec(
-          nabl-store-props(
-          | partition__
-          , [Prop(Type(), s, [])]
-          )
-        , id
+    ; StructDec(
+        nabl-store-props(
+        | partition__
+        , [Prop(Type(), s, [])]
         )
-      |
+      , id
       )
+    ; fail
 
   nabl-get-name :
     Struct(s) -> s
@@ -479,24 +121,22 @@ rules
           , []
           )
         )
-        ; match(child-uris__|c-uri1__)
-        ; match(sibl-uris__|s-uri1__)
-        ; match(implicits__|[])
       |
       )
+    ; match(child-uris__|c-uri1__)
+    ; match(sibl-uris__|s-uri1__)
+    ; match(implicits__|[])
 
   nabl-prop-site(|lang__, partition__, uris__, states__, implicits__) =
     ?FieldDec(t, v)
-    ; origin-track-forced(
-        FieldDec(
-          id
-        , nabl-store-props(
-          | partition__
-          , [Prop(Type(), t, [])]
-          )
+    ; FieldDec(
+        id
+      , nabl-store-props(
+        | partition__
+        , [Prop(Type(), t, [])]
         )
-      |
       )
+    ; fail
 
   nabl-get-name :
     FieldArrayDec(t, v, _) -> v
@@ -525,25 +165,23 @@ rules
           )
         , id
         )
-        ; match(child-uris__|c-uri1__)
-        ; match(sibl-uris__|s-uri1__)
-        ; match(implicits__|[])
       |
       )
+    ; match(child-uris__|c-uri1__)
+    ; match(sibl-uris__|s-uri1__)
+    ; match(implicits__|[])
 
   nabl-prop-site(|lang__, partition__, uris__, states__, implicits__) =
     ?FieldArrayDec(t, v, _)
-    ; origin-track-forced(
-        FieldArrayDec(
-          id
-        , nabl-store-props(
-          | partition__
-          , [Prop(Type(), t, [])]
-          )
-        , id
+    ; FieldArrayDec(
+        id
+      , nabl-store-props(
+        | partition__
+        , [Prop(Type(), t, [])]
         )
-      |
+      , id
       )
+    ; fail
 
   nabl-get-name :
     StructMember(v, Field(f)) -> f
@@ -553,55 +191,13 @@ rules
 
   nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
     ?StructMember(v, Field(f))
+    ; where(r6-1-1-1__ := <get-or-create-property-task(|partition__, Type())> v)
+    ; where(r6-1-1-1-1__ := <new-task(|partition__)> Rewrite("match6-1-1-1-1", (r6-1-1-1__, [])))
     ; origin-track-forced(
-        where(r5-1-1-1__ := <get-property-task(|Type())> v)
-        ; where(r5-1-1-1-1__ := <new-task(|partition__)> Rewrite("match5-1-1-1-1", (r5-1-1-1__, [])))
-        ; StructMember(
-            id
-          , Field(
-              nabl-use(
-              | lang__
-              , partition__
-              , uniques__
-              , uris__
-              , [ UseCandidate(
-                    NablNsField()
-                  , []
-                  , Context(
-                      NablNsStruct()
-                    , r5-1-1-1-1__
-                    , []
-                    , Current()
-                    )
-                  , True()
-                  , [r5-1-1-1-1__]
-                  )
-                ]
-              )
-            )
-          )
-      |
-      )
-
-  task-rewrite :
-    ( "match5-1-1-1-1"
-    , (Struct(s), [])
-    ) -> s
-
-  nabl-get-name :
-    StructMember(v, ArrayField(f, _)) -> f
-
-  nabl-name-apply(s) =
-    StructMember(id, ArrayField(s, id))
-
-  nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
-    ?StructMember(v, ArrayField(f, _))
-    ; origin-track-forced(
-        where(r6-1-1-1__ := <get-property-task(|Type())> v)
-        ; where(r6-1-1-1-1__ := <new-task(|partition__)> Rewrite("match6-1-1-1-1", (r6-1-1-1__, [])))
-        ; StructMember(
-            id
-          , ArrayField(
+        StructMember(
+          id
+        , origin-track-forced(
+            Field(
               nabl-use(
               | lang__
               , partition__
@@ -621,9 +217,10 @@ rules
                   )
                 ]
               )
-            , id
             )
+          |
           )
+        )
       |
       )
 
@@ -632,8 +229,52 @@ rules
     , (Struct(s), [])
     ) -> s
 
+  nabl-get-name :
+    StructMember(v, ArrayField(f, _)) -> f
 
-rules
+  nabl-name-apply(s) =
+    StructMember(id, ArrayField(s, id))
+
+  nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
+    ?StructMember(v, ArrayField(f, _))
+    ; where(r7-1-1-1__ := <get-or-create-property-task(|partition__, Type())> v)
+    ; where(r7-1-1-1-1__ := <new-task(|partition__)> Rewrite("match7-1-1-1-1", (r7-1-1-1__, [])))
+    ; origin-track-forced(
+        StructMember(
+          id
+        , origin-track-forced(
+            ArrayField(
+              nabl-use(
+              | lang__
+              , partition__
+              , uniques__
+              , uris__
+              , [ UseCandidate(
+                    NablNsField()
+                  , []
+                  , Context(
+                      NablNsStruct()
+                    , r7-1-1-1-1__
+                    , []
+                    , Current()
+                    )
+                  , True()
+                  , [r7-1-1-1-1__]
+                  )
+                ]
+              )
+            , id
+            )
+          |
+          )
+        )
+      |
+      )
+
+  task-rewrite :
+    ( "match7-1-1-1-1"
+    , (Struct(s), [])
+    ) -> s
 
   nabl-get-name :
     VarDec(t, v) -> v
@@ -661,24 +302,22 @@ rules
           , []
           )
         )
-        ; match(child-uris__|c-uri1__)
-        ; match(sibl-uris__|s-uri1__)
-        ; match(implicits__|[])
       |
       )
+    ; match(child-uris__|c-uri1__)
+    ; match(sibl-uris__|s-uri1__)
+    ; match(implicits__|[])
 
   nabl-prop-site(|lang__, partition__, uris__, states__, implicits__) =
     ?VarDec(t, v)
-    ; origin-track-forced(
-        VarDec(
-          id
-        , nabl-store-props(
-          | partition__
-          , [Prop(Type(), t, [])]
-          )
+    ; VarDec(
+        id
+      , nabl-store-props(
+        | partition__
+        , [Prop(Type(), t, [])]
         )
-      |
       )
+    ; fail
 
   nabl-get-name :
     ArrayDec(t, v, _) -> v
@@ -707,25 +346,23 @@ rules
           )
         , id
         )
-        ; match(child-uris__|c-uri1__)
-        ; match(sibl-uris__|s-uri1__)
-        ; match(implicits__|[])
       |
       )
+    ; match(child-uris__|c-uri1__)
+    ; match(sibl-uris__|s-uri1__)
+    ; match(implicits__|[])
 
   nabl-prop-site(|lang__, partition__, uris__, states__, implicits__) =
     ?ArrayDec(t, v, _)
-    ; origin-track-forced(
-        ArrayDec(
-          id
-        , nabl-store-props(
-          | partition__
-          , [Prop(Type(), t, [])]
-          )
-        , id
+    ; ArrayDec(
+        id
+      , nabl-store-props(
+        | partition__
+        , [Prop(Type(), t, [])]
         )
-      |
+      , id
       )
+    ; fail
 
   nabl-get-name :
     Arg(t, a) -> a
@@ -753,24 +390,22 @@ rules
           , []
           )
         )
-        ; match(child-uris__|c-uri1__)
-        ; match(sibl-uris__|s-uri1__)
-        ; match(implicits__|[])
       |
       )
+    ; match(child-uris__|c-uri1__)
+    ; match(sibl-uris__|s-uri1__)
+    ; match(implicits__|[])
 
   nabl-prop-site(|lang__, partition__, uris__, states__, implicits__) =
     ?Arg(t, a)
-    ; origin-track-forced(
-        Arg(
-          id
-        , nabl-store-props(
-          | partition__
-          , [Prop(Type(), t, [])]
-          )
+    ; Arg(
+        id
+      , nabl-store-props(
+        | partition__
+        , [Prop(Type(), t, [])]
         )
-      |
       )
+    ; fail
 
   nabl-get-name :
     ArrayArg(t, a) -> a
@@ -798,24 +433,22 @@ rules
           , []
           )
         )
-        ; match(child-uris__|c-uri1__)
-        ; match(sibl-uris__|s-uri1__)
-        ; match(implicits__|[])
       |
       )
+    ; match(child-uris__|c-uri1__)
+    ; match(sibl-uris__|s-uri1__)
+    ; match(implicits__|[])
 
   nabl-prop-site(|lang__, partition__, uris__, states__, implicits__) =
     ?ArrayArg(t, a)
-    ; origin-track-forced(
-        ArrayArg(
-          id
-        , nabl-store-props(
-          | partition__
-          , [Prop(Type(), t, [])]
-          )
+    ; ArrayArg(
+        id
+      , nabl-store-props(
+        | partition__
+        , [Prop(Type(), t, [])]
         )
-      |
       )
+    ; fail
 
   nabl-get-name :
     ArrayVar(v, _) -> v
@@ -933,16 +566,10 @@ rules
 
   nabl-scoping-site =
     ?CodeBlock(_)
-    ; origin-track-forced(
-        nabl-scope(|[NablNsVariable()])
-      |
-      )
+    ; nabl-scope(|[NablNsVariable()])
 
   nabl-get-scope =
     ?CodeBlock(_) ; ![NablNsVariable()]
-
-
-rules
 
   nabl-get-scope =
     ?FunctionDef(t, f, p*, _, _)
@@ -977,30 +604,28 @@ rules
         , id
         , id
         )
-        ; match(child-uris__|c-uri1__)
-        ; match(sibl-uris__|s-uri1__)
-        ; match(implicits__|[])
       |
       )
+    ; match(child-uris__|c-uri1__)
+    ; match(sibl-uris__|s-uri1__)
+    ; match(implicits__|[])
 
   nabl-prop-site(|lang__, partition__, uris__, states__, implicits__) =
     ?FunctionDef(t, f, p*, _, _)
-    ; origin-track-forced(
-        where(r1-1-1__ := <get-property-task(|Type())> p*)
-        ; FunctionDef(
-            id
-          , nabl-store-props(
-            | partition__
-            , [ Prop(Type(), t, [r1-1-1__])
-              , Prop(NablProp_parameter-types(), r1-1-1__, [r1-1-1__])
-              ]
-            )
-          , id
-          , id
-          , id
-          )
-      |
-      )
+    ; (where(r17-1-1__ := <get-or-create-property-task(|partition__, Type())> p*)
+       ; FunctionDef(
+           id
+         , nabl-store-props(
+           | partition__
+           , [ Prop(Type(), t, [r17-1-1__])
+             , Prop(NablProp_parameter-types(), r17-1-1__, [r17-1-1__])
+             ]
+           )
+         , id
+         , id
+         , id
+         ))
+    ; fail
 
   nabl-get-name :
     Call(c, args) -> c
@@ -1010,24 +635,398 @@ rules
 
   nabl-use-site(|lang__, partition__, uniques__, uris__, states__) =
     ?Call(c, args)
+    ; where(r18-1-1-1__ := <get-or-create-property-task(|partition__, Type())> args)
     ; origin-track-forced(
-        where(r2-1-1-1__ := <get-property-task(|Type())> args)
-        ; Call(
-            nabl-use(
-            | lang__
-            , partition__
-            , uniques__
-            , uris__
-            , [ UseCandidate(
-                  NablNsVariable()
-                , [Prop(NablProp_parameter-types(), r2-1-1-1__, [])]
-                , Current()
-                , True()
-                , [r2-1-1-1__]
-                )
-              ]
-            )
-          , id
+        Call(
+          nabl-use(
+          | lang__
+          , partition__
+          , uniques__
+          , uris__
+          , [ UseCandidate(
+                NablNsVariable()
+              , [Prop(NablProp_parameter-types(), r18-1-1-1__, [])]
+              , Current()
+              , True()
+              , [r18-1-1-1__]
+              )
+            ]
           )
+        , id
+        )
       |
       )
+
+
+imports
+  include/MiniC
+  analysis/types
+  analysis/desugar
+
+
+signature
+  constructors
+    NablNsStruct   : Namespace
+    NablNsField    : Namespace
+    NablNsVariable : Namespace
+
+
+signature
+  constructors
+    NablProp_parameter-types   : Property
+    NablProp_method-descriptor : Property
+    NablProp_field-descriptor  : Property
+    NablProp_var-index         : Property
+    NablProp_size              : Property
+    NablProp_size              : Property
+    NablProp_size              : Property
+
+
+rules
+
+  nabl-custom-properties(add-properties) =
+    ![ NablProp_parameter-types()
+     , NablProp_method-descriptor()
+     , NablProp_field-descriptor()
+     , NablProp_var-index()
+     , NablProp_size()
+     , NablProp_size()
+     , NablProp_size()
+     ]
+    ; add-properties
+
+  parameter-types-is(|task*) =
+    nabl-prop-calc(|task*, [])
+
+  parameter-types-task(|task*) =
+    get-or-create-property-task(|task*, NablProp_parameter-types())
+
+  parameter-types-is(|task*, dep*) =
+    nabl-prop-calc(|task*, dep*)
+
+  parameter-types-list(|task*) =
+    nabl-prop-list(|task*, [])
+
+  parameter-types-list(|task*, dep*) =
+    nabl-prop-list(|task*, dep*)
+
+  parameter-types-lookup(|task*) =
+    nabl-prop-lookup(|NablProp_parameter-types(), task*, [])
+
+  parameter-types-lookup(|task*, dep*) =
+    nabl-prop-lookup(|NablProp_parameter-types(), task*, dep*)
+
+  parameter-types-match(|task*, expected) =
+    nabl-prop-match(
+    | NablProp_parameter-types()
+    , task*
+    , Eq()
+    , expected
+    )
+
+  parameter-types-match(|task*, relation, expected) =
+    nabl-prop-match(|NablProp_parameter-types(), task*, relation, expected)
+
+  create-parameter-types-task(|task*) =
+    fail
+
+  get-parameter-types =
+    get-property(|NablProp_parameter-types())
+
+  store-parameter-types(|partition, prop) =
+    nabl-store-prop(
+    | partition
+    , Prop(NablProp_parameter-types(), prop, [])
+    )
+
+  create-property-task(|partition, kind):
+    term -> <create-parameter-types-task(|partition)> term
+    where NablProp_parameter-types() := kind
+
+  method-descriptor-is(|task*) =
+    nabl-prop-calc(|task*, [])
+
+  method-descriptor-task(|task*) =
+    get-or-create-property-task(|task*, NablProp_method-descriptor())
+
+  method-descriptor-is(|task*, dep*) =
+    nabl-prop-calc(|task*, dep*)
+
+  method-descriptor-list(|task*) =
+    nabl-prop-list(|task*, [])
+
+  method-descriptor-list(|task*, dep*) =
+    nabl-prop-list(|task*, dep*)
+
+  method-descriptor-lookup(|task*) =
+    nabl-prop-lookup(|NablProp_method-descriptor(), task*, [])
+
+  method-descriptor-lookup(|task*, dep*) =
+    nabl-prop-lookup(|NablProp_method-descriptor(), task*, dep*)
+
+  method-descriptor-match(|task*, expected) =
+    nabl-prop-match(
+    | NablProp_method-descriptor()
+    , task*
+    , Eq()
+    , expected
+    )
+
+  method-descriptor-match(|task*, relation, expected) =
+    nabl-prop-match(|NablProp_method-descriptor(), task*, relation, expected)
+
+  create-method-descriptor-task(|task*) =
+    fail
+
+  get-method-descriptor =
+    get-property(|NablProp_method-descriptor())
+
+  store-method-descriptor(|partition, prop) =
+    nabl-store-prop(
+    | partition
+    , Prop(NablProp_method-descriptor(), prop, [])
+    )
+
+  create-property-task(|partition, kind):
+    term -> <create-method-descriptor-task(|partition)> term
+    where NablProp_method-descriptor() := kind
+
+  field-descriptor-is(|task*) =
+    nabl-prop-calc(|task*, [])
+
+  field-descriptor-task(|task*) =
+    get-or-create-property-task(|task*, NablProp_field-descriptor())
+
+  field-descriptor-is(|task*, dep*) =
+    nabl-prop-calc(|task*, dep*)
+
+  field-descriptor-list(|task*) =
+    nabl-prop-list(|task*, [])
+
+  field-descriptor-list(|task*, dep*) =
+    nabl-prop-list(|task*, dep*)
+
+  field-descriptor-lookup(|task*) =
+    nabl-prop-lookup(|NablProp_field-descriptor(), task*, [])
+
+  field-descriptor-lookup(|task*, dep*) =
+    nabl-prop-lookup(|NablProp_field-descriptor(), task*, dep*)
+
+  field-descriptor-match(|task*, expected) =
+    nabl-prop-match(
+    | NablProp_field-descriptor()
+    , task*
+    , Eq()
+    , expected
+    )
+
+  field-descriptor-match(|task*, relation, expected) =
+    nabl-prop-match(|NablProp_field-descriptor(), task*, relation, expected)
+
+  create-field-descriptor-task(|task*) =
+    fail
+
+  get-field-descriptor =
+    get-property(|NablProp_field-descriptor())
+
+  store-field-descriptor(|partition, prop) =
+    nabl-store-prop(
+    | partition
+    , Prop(NablProp_field-descriptor(), prop, [])
+    )
+
+  create-property-task(|partition, kind):
+    term -> <create-field-descriptor-task(|partition)> term
+    where NablProp_field-descriptor() := kind
+
+  var-index-is(|task*) =
+    nabl-prop-calc(|task*, [])
+
+  var-index-task(|task*) =
+    get-or-create-property-task(|task*, NablProp_var-index())
+
+  var-index-is(|task*, dep*) =
+    nabl-prop-calc(|task*, dep*)
+
+  var-index-list(|task*) =
+    nabl-prop-list(|task*, [])
+
+  var-index-list(|task*, dep*) =
+    nabl-prop-list(|task*, dep*)
+
+  var-index-lookup(|task*) =
+    nabl-prop-lookup(|NablProp_var-index(), task*, [])
+
+  var-index-lookup(|task*, dep*) =
+    nabl-prop-lookup(|NablProp_var-index(), task*, dep*)
+
+  var-index-match(|task*, expected) =
+    nabl-prop-match(
+    | NablProp_var-index()
+    , task*
+    , Eq()
+    , expected
+    )
+
+  var-index-match(|task*, relation, expected) =
+    nabl-prop-match(|NablProp_var-index(), task*, relation, expected)
+
+  create-var-index-task(|task*) =
+    fail
+
+  get-var-index =
+    get-property(|NablProp_var-index())
+
+  store-var-index(|partition, prop) =
+    nabl-store-prop(
+    | partition
+    , Prop(NablProp_var-index(), prop, [])
+    )
+
+  create-property-task(|partition, kind):
+    term -> <create-var-index-task(|partition)> term
+    where NablProp_var-index() := kind
+
+  size-is(|task*) =
+    nabl-prop-calc(|task*, [])
+
+  size-task(|task*) =
+    get-or-create-property-task(|task*, NablProp_size())
+
+  size-is(|task*, dep*) =
+    nabl-prop-calc(|task*, dep*)
+
+  size-list(|task*) =
+    nabl-prop-list(|task*, [])
+
+  size-list(|task*, dep*) =
+    nabl-prop-list(|task*, dep*)
+
+  size-lookup(|task*) =
+    nabl-prop-lookup(|NablProp_size(), task*, [])
+
+  size-lookup(|task*, dep*) =
+    nabl-prop-lookup(|NablProp_size(), task*, dep*)
+
+  size-match(|task*, expected) =
+    nabl-prop-match(
+    | NablProp_size()
+    , task*
+    , Eq()
+    , expected
+    )
+
+  size-match(|task*, relation, expected) =
+    nabl-prop-match(|NablProp_size(), task*, relation, expected)
+
+  create-size-task(|task*) =
+    fail
+
+  get-size =
+    get-property(|NablProp_size())
+
+  store-size(|partition, prop) =
+    nabl-store-prop(
+    | partition
+    , Prop(NablProp_size(), prop, [])
+    )
+
+  create-property-task(|partition, kind):
+    term -> <create-size-task(|partition)> term
+    where NablProp_size() := kind
+
+  size-is(|task*) =
+    nabl-prop-calc(|task*, [])
+
+  size-task(|task*) =
+    get-or-create-property-task(|task*, NablProp_size())
+
+  size-is(|task*, dep*) =
+    nabl-prop-calc(|task*, dep*)
+
+  size-list(|task*) =
+    nabl-prop-list(|task*, [])
+
+  size-list(|task*, dep*) =
+    nabl-prop-list(|task*, dep*)
+
+  size-lookup(|task*) =
+    nabl-prop-lookup(|NablProp_size(), task*, [])
+
+  size-lookup(|task*, dep*) =
+    nabl-prop-lookup(|NablProp_size(), task*, dep*)
+
+  size-match(|task*, expected) =
+    nabl-prop-match(
+    | NablProp_size()
+    , task*
+    , Eq()
+    , expected
+    )
+
+  size-match(|task*, relation, expected) =
+    nabl-prop-match(|NablProp_size(), task*, relation, expected)
+
+  create-size-task(|task*) =
+    fail
+
+  get-size =
+    get-property(|NablProp_size())
+
+  store-size(|partition, prop) =
+    nabl-store-prop(
+    | partition
+    , Prop(NablProp_size(), prop, [])
+    )
+
+  create-property-task(|partition, kind):
+    term -> <create-size-task(|partition)> term
+    where NablProp_size() := kind
+
+  size-is(|task*) =
+    nabl-prop-calc(|task*, [])
+
+  size-task(|task*) =
+    get-or-create-property-task(|task*, NablProp_size())
+
+  size-is(|task*, dep*) =
+    nabl-prop-calc(|task*, dep*)
+
+  size-list(|task*) =
+    nabl-prop-list(|task*, [])
+
+  size-list(|task*, dep*) =
+    nabl-prop-list(|task*, dep*)
+
+  size-lookup(|task*) =
+    nabl-prop-lookup(|NablProp_size(), task*, [])
+
+  size-lookup(|task*, dep*) =
+    nabl-prop-lookup(|NablProp_size(), task*, dep*)
+
+  size-match(|task*, expected) =
+    nabl-prop-match(
+    | NablProp_size()
+    , task*
+    , Eq()
+    , expected
+    )
+
+  size-match(|task*, relation, expected) =
+    nabl-prop-match(|NablProp_size(), task*, relation, expected)
+
+  create-size-task(|task*) =
+    fail
+
+  get-size =
+    get-property(|NablProp_size())
+
+  store-size(|partition, prop) =
+    nabl-store-prop(
+    | partition
+    , Prop(NablProp_size(), prop, [])
+    )
+
+  create-property-task(|partition, kind):
+    term -> <create-size-task(|partition)> term
+    where NablProp_size() := kind

@@ -27,7 +27,7 @@ test const exp[[
   struct foo{};
   struct foo bar;
   [[bar]]
-]] run get-type to Struct("foo"{_}) //TODO check
+]] run get-type to Struct("foo"{_})
 
 
 // && EXPRESSIONS
@@ -36,6 +36,12 @@ test and exp[[
  [[1 && 2]]
 ]] run get-type to Int()
 
+test and exp[[
+  struct foo {int b;};
+  int a;
+  struct foo bar;
+ [[a && bar.b]]
+]] run get-type to Int()
 
 // < EXPRESSIONS
 
@@ -51,6 +57,12 @@ test less than exp[[
   [[1 < 1.2]]
 ]] run get-type to Int()
 
+test less than exp[[
+  struct foo {int a;};
+  struct foo f;
+  float b;
+  [[f.a < b]]
+]] run get-type to Int()
 
 // ADD/SUBTRACT/MULTIPLY EXPRESSIONS
 
@@ -91,11 +103,18 @@ test binary exp [[
 ]] run get-type to Float()
 
 test binary exp [[
-  int a;
+  struct foo {int c;};
   float b;
-  [[a - b * 3]];
+  struct foo d;
+  [[b * d.c]]
 ]]  run get-type to Float()
 
+test binary exp [[
+  struct foo {int c;};
+  float b;
+  struct foo d;
+  [[1 + b * d.c]]
+]]  run get-type to Float()
 
 // ! EXPRESSIONS
 
@@ -182,14 +201,14 @@ test unary exp [[
 
 
 test unary exp [[
-  int main(float a){
+  float main(float a){
     return [[+a]];
   } 
   0
 ]] run get-type to Float()
 
 test unary exp [[
-  int main(float a){
+  float main(float a){
     return [[-a]];
   } 
   0
@@ -229,7 +248,6 @@ test parentheses [[
 test field access [[
   struct foo {int a;};
   struct foo f;
-
   [[f.a]]
 ]] run get-type to Int()
 
@@ -243,28 +261,24 @@ test field access [[
 test field access [[
   struct foo {int a[5];};
   struct foo f;
-
   [[f.a]]
 ]] run get-type to Int()
 
 test field access [[
   struct foo {float a[5];};
   struct foo f;
-
   [[f.a]]
 ]] run get-type to Float()
 
 test field access [[
   struct foo {int a[5];};
   struct foo f;
-
   [[f.a[1] ]]
 ]] run get-type to Int()
 
 test field access [[
   struct foo {float a[5];};
   struct foo f;
-
   [[f.a[1] ]]
 ]] run get-type to Float()
 
@@ -288,7 +302,7 @@ test method call [[
     return f;
   }
   [[bar()]]
-]] run get-type to Struct("foo"{_}) //TODO check
+]] run get-type to Struct("foo"{_})
 
 
 // VAR/ARRAYVAR EXPRESSIONS

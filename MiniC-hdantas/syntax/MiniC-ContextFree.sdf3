@@ -42,7 +42,6 @@ module MiniC-ContextFree
     ArrayType.Float                   = <float>
     Type.Int                          = <int>
     Type.Float                        = <float>
-    // Type.Struct                       = <struct <ID; text="StructName">>
     Type.Struct                       = <struct <ID; text="StructName">>
 
     Statement                         = <<VarDec>>
